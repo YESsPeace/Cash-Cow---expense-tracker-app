@@ -1,0 +1,171 @@
+MainMenuWidget:
+
+<CategoriesMenu>:
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    AnchorLayout:
+        Button:
+            text: "Stat"
+            size_hint: None, None
+            size: "300dp", "300dp"
+
+        GridLayout:
+            row_default_height: "225dp"
+            row_force_default: True
+
+            cols:  4
+            rows: 4
+
+            Button:
+                text: "1"
+
+            Button:
+                text: "2"
+
+            Button:
+                text: "3"
+
+            Button:
+                text: "4"
+
+            Button:
+                text: "5"
+
+            Label:
+
+            Label:
+
+            Button:
+                text: "6"
+
+            Button:
+                text: "7"
+
+            Label:
+
+            Label:
+
+            Button:
+                text: "+"
+
+<MainMenuWidget>:
+
+    BoxLayout:
+        orientation: "vertical"
+
+        AnchorLayout:
+            id: top_AnchorLayout
+            size_hint: 1, None
+            height: "125dp"
+
+            canvas.before:
+                Color:
+                    rgba: .11, .11, .11, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            BoxLayout:
+
+                orientation: "vertical"
+
+                BoxLayout:
+                    size_hint: 1, None
+                    height: "75dp"
+
+                    Button:
+                        background_normal: "Icons/menu.png"
+                        size_hint: None, 1
+                        width: "75dp"
+
+                    BoxLayout:
+                        orientation: "vertical"
+
+                        Label:
+                            text: "1630 руб."
+                            font_size: 24
+
+                    Button:
+                        background_normal: "Icons/pencil.png"
+
+                        size_hint: None, 1
+                        width: "75dp"
+
+
+                BoxLayout:
+                    size_hint: 1, None
+                    height: "50dp"
+
+                    Button:
+                        background_normal: "Icons/next - Copy.png"
+                        size_hint: None, 1
+                        width: "50dp"
+
+                    Button:
+                        text: "|31| MAY 2022 \/"
+                        background_color: .11, .11, .11, 1
+                        background_normal: "None"
+
+                    Button:
+                        background_normal: "Icons/next.png"
+                        size_hint: None, 1
+                        width: "50dp"
+        PageLayout:
+            id: my_PageLayout
+
+            page: 1
+
+            Label:
+                text: "Accounts"
+                canvas.before:
+                    Color:
+                        rgba: .15, .15, .15, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            CategoriesMenu:
+
+
+            Label:
+                text: "Transaction"
+                canvas.before:
+                    Color:
+                        rgba: .25, .25, .25, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            Label:
+                text: "Budget"
+                canvas.before:
+                    Color:
+                        rgba: .3, .3, .3, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+
+        BoxLayout:
+            size_hint: 1, None
+            height: "50dp"
+
+            Button:
+                text: "Accounts"
+                on_press: my_PageLayout.page = 0
+
+            Button:
+                text: "Categories"
+                on_press: my_PageLayout.page = 1
+
+            Button:
+                text: "Transaction"
+                on_press: my_PageLayout.page = 2
+
+            Button:
+                text: "Budget"
+                on_press: my_PageLayout.page = 3

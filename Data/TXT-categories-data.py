@@ -1,0 +1,1 @@
+categories_data_file = open('categories-data.txt', 'a')
