@@ -9,48 +9,76 @@ MainMenuWidget:
             pos: self.pos
     AnchorLayout:
         Button:
-            text: "Stat"
+            text: "stat"
             size_hint: None, None
-            size: "300dp", "300dp"
+            size: "350dp", "360dp"
 
         GridLayout:
-            row_default_height: "225dp"
+            row_default_height: "175dp"
             row_force_default: True
 
-            cols:  4
+            padding: "25dp"
+            spacing: '25dp'
+
+            cols:  1
             rows: 4
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
 
-            Button:
-                text: "1"
+                Button:
+                    text: str(root.categories_list[0])
 
-            Button:
-                text: "2"
+                Button:
+                    text: str(root.categories_list[1])
 
-            Button:
-                text: "3"
+                Button:
+                    text: str(root.categories_list[2])
 
-            Button:
-                text: "4"
+                Button:
+                    text: str(root.categories_list[3])
 
-            Button:
-                text: "5"
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
 
-            Label:
+                Button:
+                    text: str(root.categories_list[4])
 
-            Label:
+                Label:
+                Label:
 
-            Button:
-                text: "6"
+                Button:
+                    text: str(root.categories_list[5])
 
-            Button:
-                text: "7"
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
 
-            Label:
+                Button:
+                    text: str(root.categories_list[6])
 
-            Label:
+                Label:
+                Label:
 
-            Button:
-                text: "+"
+                Button:
+                    text: str(root.categories_list[7])
+
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
+
+                Button:
+                    text: str(root.categories_list[8])
+
+                Button:
+                    text: str(root.categories_list[9])
+
+                Button:
+                    text: str(root.categories_list[10])
+
+                Button:
+                    text: str(root.categories_list[11])
 
 <MainMenuWidget>:
 
@@ -79,6 +107,8 @@ MainMenuWidget:
 
                     Button:
                         background_normal: "Icons/menu.png"
+                        background_down: "Icons/menu_down.png"
+
                         size_hint: None, 1
                         width: "75dp"
 
@@ -91,29 +121,45 @@ MainMenuWidget:
 
                     Button:
                         background_normal: "Icons/pencil.png"
+                        background_down: "Icons/pencil_down.png"
 
                         size_hint: None, 1
                         width: "75dp"
 
 
                 BoxLayout:
+                    id: middle_top_layout
+
+                    orientation: "horizontal"
+
                     size_hint: 1, None
                     height: "50dp"
 
                     Button:
+                        id: left_btn
+
                         background_normal: "Icons/next - Copy.png"
+                        background_down: "Icons/next - Copy_down.png"
+
                         size_hint: None, 1
                         width: "50dp"
 
                     Button:
+                        id: middle_btn
+
                         text: "|31| MAY 2022 \/"
                         background_color: .11, .11, .11, 1
                         background_normal: "None"
 
                     Button:
+                        id: right_btn
+
                         background_normal: "Icons/next.png"
+                        background_down: "Icons/next_down.png"
+
                         size_hint: None, 1
                         width: "50dp"
+
         PageLayout:
             id: my_PageLayout
 
@@ -129,7 +175,6 @@ MainMenuWidget:
                         pos: self.pos
 
             CategoriesMenu:
-
 
             Label:
                 text: "Transaction"
@@ -152,20 +197,24 @@ MainMenuWidget:
 
         BoxLayout:
             size_hint: 1, None
-            height: "50dp"
+            height: "75dp"
 
             Button:
                 text: "Accounts"
                 on_press: my_PageLayout.page = 0
+                on_press: root.change_the_middle_top_layout()
 
             Button:
                 text: "Categories"
                 on_press: my_PageLayout.page = 1
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
 
             Button:
                 text: "Transaction"
                 on_press: my_PageLayout.page = 2
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
 
             Button:
                 text: "Budget"
                 on_press: my_PageLayout.page = 3
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
