@@ -81,23 +81,26 @@ MainMenuWidget:
                     text: str(root.categories_list[11])
 
 <MainMenuWidget>:
-
     BoxLayout:
+
+        id: MainMenuWidget
+
         orientation: "vertical"
 
         AnchorLayout:
-            id: top_AnchorLayout
             size_hint: 1, None
             height: "125dp"
 
             canvas.before:
                 Color:
-                    rgba: .11, .11, .11, 1
+                    rgba: .5, .5, .5, 1
                 Rectangle:
                     size: self.size
                     pos: self.pos
 
             BoxLayout:
+
+                id: top_layout
 
                 orientation: "vertical"
 
@@ -147,9 +150,12 @@ MainMenuWidget:
                     Button:
                         id: middle_btn
 
-                        text: "|31| MAY 2022 \/"
-                        background_color: .11, .11, .11, 1
+                        text: "MAY 2022"
+                        background_color: .5, .5, .5, 1
                         background_normal: "None"
+                        background_down: "Icons/down_Layer.png"
+
+                        on_press: root.click_on_month_in_main()
 
                     Button:
                         id: right_btn

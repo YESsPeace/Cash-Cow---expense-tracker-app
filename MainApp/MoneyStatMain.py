@@ -38,7 +38,6 @@ class MainMenuWidget(BoxLayout):
         self.toggle_button2 = ToggleButton(text='', group='sex', size_hint=(None, 1), width=dp(50),
                                            allow_no_selection=False, background_normal='Icons/statistica.png',
                                            background_down='Icons/statistica_down.png')
-
     def change_the_middle_top_layout(self):
         # removing widgets which were before
         self.ids.middle_top_layout.remove_widget(self.ids.left_btn)
@@ -57,6 +56,9 @@ class MainMenuWidget(BoxLayout):
             self.ids.middle_top_layout.add_widget(self.ids.left_btn)
             self.ids.middle_top_layout.add_widget(self.ids.middle_btn)
             self.ids.middle_top_layout.add_widget(self.ids.right_btn)
+    def click_on_month_in_main(self):
+        self.ids.top_layout.remove_widget(self.ids.middle_top_layout)
+        self.ids.MainMenuWidget.remove_widget(self.ids.my_PageLayout)
 
 
 class MoneyStatApp(App):
