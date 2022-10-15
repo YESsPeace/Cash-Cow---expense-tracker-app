@@ -1,0 +1,226 @@
+MainMenuWidget:
+
+<CategoriesMenu>:
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    AnchorLayout:
+        Button:
+            text: "stat"
+            size_hint: None, None
+            size: "350dp", "360dp"
+
+        GridLayout:
+            row_default_height: "175dp"
+            row_force_default: True
+
+            padding: "25dp"
+            spacing: '25dp'
+
+            cols:  1
+            rows: 4
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
+
+                Button:
+                    text: str(root.categories_list[0])
+
+                Button:
+                    text: str(root.categories_list[1])
+
+                Button:
+                    text: str(root.categories_list[2])
+
+                Button:
+                    text: str(root.categories_list[3])
+
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
+
+                Button:
+                    text: str(root.categories_list[4])
+
+                Label:
+                Label:
+
+                Button:
+                    text: str(root.categories_list[5])
+
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
+
+                Button:
+                    text: str(root.categories_list[6])
+
+                Label:
+                Label:
+
+                Button:
+                    text: str(root.categories_list[7])
+
+            BoxLayout:
+                spacing: '25dp'
+                orientation: "horizontal"
+
+                Button:
+                    text: str(root.categories_list[8])
+
+                Button:
+                    text: str(root.categories_list[9])
+
+                Button:
+                    text: str(root.categories_list[10])
+
+                Button:
+                    text: str(root.categories_list[11])
+
+<MainMenuWidget>:
+    BoxLayout:
+
+        id: MainMenuWidget
+
+        orientation: "vertical"
+
+        AnchorLayout:
+            size_hint: 1, None
+            height: "125dp"
+
+            canvas.before:
+                Color:
+                    rgba: .5, .5, .5, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            BoxLayout:
+
+                id: top_layout
+
+                orientation: "vertical"
+
+                BoxLayout:
+                    size_hint: 1, None
+                    height: "75dp"
+
+                    Button:
+                        background_normal: "Icons/menu.png"
+                        background_down: "Icons/menu_down.png"
+
+                        size_hint: None, 1
+                        width: "75dp"
+
+                    BoxLayout:
+                        orientation: "vertical"
+
+                        Label:
+                            text: "1630 руб."
+                            font_size: 24
+
+                    Button:
+                        background_normal: "Icons/pencil.png"
+                        background_down: "Icons/pencil_down.png"
+
+                        size_hint: None, 1
+                        width: "75dp"
+
+
+                BoxLayout:
+                    id: middle_top_layout
+
+                    orientation: "horizontal"
+
+                    size_hint: 1, None
+                    height: "50dp"
+
+                    Button:
+                        id: left_btn
+
+                        background_normal: "Icons/next - Copy.png"
+                        background_down: "Icons/next - Copy_down.png"
+
+                        size_hint: None, 1
+                        width: "50dp"
+
+                    Button:
+                        id: middle_btn
+
+                        text: "MAY 2022"
+                        background_color: .5, .5, .5, 1
+                        background_normal: "None"
+                        background_down: "Icons/down_Layer.png"
+
+                        on_press: root.click_on_month_in_main()
+
+                    Button:
+                        id: right_btn
+
+                        background_normal: "Icons/next.png"
+                        background_down: "Icons/next_down.png"
+
+                        size_hint: None, 1
+                        width: "50dp"
+
+        PageLayout:
+            id: my_PageLayout
+
+            page: 1
+
+            Label:
+                text: "Accounts"
+                canvas.before:
+                    Color:
+                        rgba: .15, .15, .15, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            CategoriesMenu:
+
+            Label:
+                text: "Transaction"
+                canvas.before:
+                    Color:
+                        rgba: .25, .25, .25, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+            Label:
+                text: "Budget"
+                canvas.before:
+                    Color:
+                        rgba: .3, .3, .3, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+
+
+        BoxLayout:
+            size_hint: 1, None
+            height: "75dp"
+
+            Button:
+                text: "Accounts"
+                on_press: my_PageLayout.page = 0
+                on_press: root.change_the_middle_top_layout()
+
+            Button:
+                text: "Categories"
+                on_press: my_PageLayout.page = 1
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
+
+            Button:
+                text: "Transaction"
+                on_press: my_PageLayout.page = 2
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
+
+            Button:
+                text: "Budget"
+                on_press: my_PageLayout.page = 3
+                on_press: root.remove_the_changes_of_the_middle_top_layout()
