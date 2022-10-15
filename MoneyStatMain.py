@@ -12,16 +12,26 @@ os.system('Data\CSV-transaction-history.py')
 def get_names_from_categories_data_txt():
     list_of_categories_name = []
 
-    categories_data_file = open('Data/data_files/categories-data.txt', 'r+')
+    try:
+        categories_data_file = open('Data/data_files/categories-data.txt', 'r+')
 
-    for line in categories_data_file:
-        list_of_categories_name.append(line.split('-')[1][:-1])
+        for line in categories_data_file:
+            list_of_categories_name.append(line.split('-')[1][:-1])
 
-    categories_data_file.close()
+        categories_data_file.close()
 
-    print(list_of_categories_name)
+        print('# list of categories name:', list_of_categories_name)
 
-    return list_of_categories_name
+        return list_of_categories_name
+
+    except FileNotFoundError:
+        print("\033[36m{}".format('# [') + "\033[31m{}".format('ERROR') + "\033[36m{}".format('] ') +
+              "\033[36m{}".format('[') + "\033[31m{}".format('DataFileNotFound') + "\033[36m{}".format('] ') +
+              "\033[36m{}".format('categories_data.txt is not founded. Check if the TXT-categories-data.py is here'))
+
+        print('# by default list of categories name:', list_of_categories_name)
+
+        return [i for i in range(1, 13)]
 
 
 class CategoriesMenu(BoxLayout):

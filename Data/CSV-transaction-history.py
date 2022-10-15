@@ -2,17 +2,23 @@ import csv
 
 print('# Csv-transaction-history.py is open')
 
-transaction_history_file = open('Data\data_files\\transaction-history.csv', 'a')
-transaction_history_file.close()
+try:
+    file = open('Data\data_files\\transaction-history.csv', 'w', encoding="UTF8")
 
-print('# transaction-history.csv is done')
+    print('# data_file: transaction-history.csv is open')
 
-file = open('Data\data_files\\transaction-history.csv', 'w', encoding="UTF8")
+except FileNotFoundError:
+    transaction_history_file = open('Data\data_files\\transaction-history.csv', 'a')
+    transaction_history_file.close()
 
-writer = csv.writer(file)
+    print('# transaction-history.csv is done')
 
-writer.writerow(
-    ['ДАТА'] + ['ТИП'] + ['СО СЧЁТА'] + ['НА СЧЁТ / НА КАТЕГОРИЮ'] + ['СУММА'] + ['ВАЛЮТА'] + ['СУММА 2'] +
-    ['ВАЛЮТА 2'] + ['МЕТКИ'] + ['ЗАМЕТКИ'])
+    file = open('Data\data_files\\transaction-history.csv', 'w', encoding="UTF8")
 
-print('# transaction-history.csv is written')
+    writer = csv.writer(file)
+
+    writer.writerow(
+        ['ДАТА'] + ['ТИП'] + ['СО СЧЁТА'] + ['НА СЧЁТ / НА КАТЕГОРИЮ'] + ['СУММА'] + ['ВАЛЮТА'] + ['СУММА 2'] +
+        ['ВАЛЮТА 2'] + ['МЕТКИ'] + ['ЗАМЕТКИ'])
+
+    print('# data_file: transaction-history.csv is open')
