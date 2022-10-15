@@ -13,7 +13,7 @@ def get_names_from_categories_data_txt():
     list_of_categories_name = []
 
     try:
-        categories_data_file = open('Data/data_files/categories-data.txt', 'r+')
+        categories_data_file = open('Data/data_files/categories-data.txt', 'r+', encoding="UTF8")
 
         for line in categories_data_file:
             list_of_categories_name.append(line.split('-')[1][:-1])
@@ -31,7 +31,7 @@ def get_names_from_categories_data_txt():
 
         print('# by default list of categories name:', list_of_categories_name)
 
-        return [i for i in range(1, 13)]
+        return ['error' for _ in range(12)]
 
 
 class CategoriesMenu(BoxLayout):
