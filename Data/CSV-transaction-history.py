@@ -3,7 +3,7 @@ import csv
 print('# Csv-transaction-history.py is open')
 
 try:
-    file = open('Data\data_files\\transaction-history.csv', 'w', encoding="UTF8")
+    file = open('Data\data_files\\transaction-history.csv', 'r', encoding="UTF8")
 
     print('# data_file: transaction-history.csv is open')
 

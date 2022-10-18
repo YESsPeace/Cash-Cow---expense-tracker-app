@@ -1,5 +1,8 @@
 MainMenuWidget:
 
+<MonthsMenu>
+
+
 <CategoriesMenu>:
     canvas.before:
         Color:
@@ -114,8 +117,6 @@ MainMenuWidget:
                     Button:
                         id: top_menu_btn
 
-                        on_press: root.click_on_menu_btn()
-
                         background_normal: "Icons/menu.png"
                         background_down: "Icons/menu_down.png"
 
@@ -220,6 +221,7 @@ MainMenuWidget:
                 text: "Accounts"
                 on_press: my_PageLayout.page = 0
                 on_press: root.change_the_middle_top_layout()
+                on_press: root.return_page_layout()
 
             Button:
                 text: "Categories"
@@ -231,8 +233,10 @@ MainMenuWidget:
                 text: "Transaction"
                 on_press: my_PageLayout.page = 2
                 on_press: root.remove_the_changes_of_the_middle_top_layout()
+                on_press: root.return_page_layout()
 
             Button:
                 text: "Budget"
                 on_press: my_PageLayout.page = 3
                 on_press: root.remove_the_changes_of_the_middle_top_layout()
+                on_press: root.return_page_layout()

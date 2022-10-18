@@ -2,6 +2,7 @@ from kivy.app import App
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
+from warnings import warn
 import os
 
 os.system('Data\TXT-categories-data.py')
@@ -13,7 +14,7 @@ def get_names_from_categories_data_txt():
     list_of_categories_name = []
 
     try:
-        categories_data_file = open('Data/data_files/categories-data.txtf', 'r+', encoding="UTF8")
+        categories_data_file = open('Data/data_files/categories-data.txt', 'r+', encoding="UTF8")
 
         for line in categories_data_file:
             list_of_categories_name.append(line.split('-')[1][:-1])
@@ -25,16 +26,24 @@ def get_names_from_categories_data_txt():
         return list_of_categories_name
 
     except FileNotFoundError:
-        print("\033[36m{}".format('# [') + "\033[31m{}".format('ERROR') + "\033[36m{}".format('] ') +
-              "\033[36m{}".format('[') + "\033[31m{}".format('DataFileNotFound') + "\033[36m{}".format('] ') +
-              "\033[36m{}".format('categories_data.txt is not founded. Check if the TXT-categories-data.py is here'))
-
+        warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here', DataFileIsNotFounded)
+        # warning message and return standard list
         return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
+
+
+class DataFileIsNotFounded(UserWarning):  # Warning message, my type
+    pass
+
+
+class MonthsMenu(BoxLayout):
+    pass
+
 
 class CategoriesMenu(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.categories_list = get_names_from_categories_data_txt()
+
 
 class MainMenuWidget(BoxLayout):
     def __init__(self, **kwargs):
@@ -67,18 +76,23 @@ class MainMenuWidget(BoxLayout):
     def click_on_month_in_main(self):
         self.ids.top_layout.remove_widget(self.ids.middle_top_layout)
         self.ids.MainMenuWidget.remove_widget(self.ids.my_PageLayout)
+        self.ids.MainMenuWidget.remove_widget(self.ids.bottom_navigation_layout)
 
         self.ids.top_layout_background.height = dp(125 * 0.6)
+        self.ids.MainMenuWidget.add_widget(MonthsMenu())
+        self.ids.MainMenuWidget.add_widget(self.ids.bottom_navigation_layout)
+
     def return_page_layout(self):
         if not self.ids.my_PageLayout in self.ids.MainMenuWidget.children:
+            self.ids.MainMenuWidget.clear_widgets()
 
-            self.ids.MainMenuWidget.remove_widget(self.ids.bottom_navigation_layout)
-
+            self.ids.MainMenuWidget.add_widget(self.ids.top_layout_background)
             self.ids.top_layout.add_widget(self.ids.middle_top_layout)
             self.ids.MainMenuWidget.add_widget(self.ids.my_PageLayout)
             self.ids.MainMenuWidget.add_widget(self.ids.bottom_navigation_layout)
 
             self.ids.top_layout_background.height = dp(125)
+
 
 class MoneyStatApp(App):
     pass
