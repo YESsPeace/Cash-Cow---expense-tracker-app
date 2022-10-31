@@ -10,20 +10,28 @@ os.system('Data\TXT-accounts.py')
 os.system('Data\CSV-transaction-history.py')
 
 
-def get_names_from_categories_data_txt():
+def get_names_from_categories_data_txt(path):
+    return_list = []
+
     list_of_categories_name = []
+    list_of_categories_color = []
 
     try:
-        categories_data_file = open('Data/data_files/categories-data.txt', 'r+', encoding="UTF8")
+        categories_data_file = open(path, 'r+', encoding="UTF8")
 
         for line in categories_data_file:
-            list_of_categories_name.append(line.split('-')[1][:-1])
+            list_of_categories_name.append(line.split('-')[1])
+            list_of_categories_color.append(line.split('-')[2][:-1])
 
         categories_data_file.close()
 
-        print('# list of categories name:', list_of_categories_name)
+        return_list.append(list_of_categories_name)
+        return_list.append(list_of_categories_color)
 
-        return list_of_categories_name
+        print('# list of categories name:', list_of_categories_name)
+        print('# list of categories color:', list_of_categories_color)
+
+        return return_list
 
     except FileNotFoundError:
         warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here', DataFileIsNotFounded)
@@ -42,8 +50,8 @@ class MonthsMenu(BoxLayout):
 class CategoriesMenu(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.categories_list = get_names_from_categories_data_txt()
-
+        self.categories_list, self.categories_list_color = get_names_from_categories_data_txt(
+            'Data/data_files/categories-data.txt')
 
 class MainMenuWidget(BoxLayout):
     def __init__(self, **kwargs):

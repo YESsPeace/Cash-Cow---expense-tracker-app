@@ -31,15 +31,23 @@ MainMenuWidget:
 
                 Button:
                     text: str(root.categories_list[0])
+                    background_color: tuple(float(item) for item in root.categories_list_color[0].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[1])
+                    background_color: tuple(float(item) for item in root.categories_list_color[1].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[2])
+                    background_color: tuple(float(item) for item in root.categories_list_color[2].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[3])
+                    background_color: tuple(float(item) for item in root.categories_list_color[3].split(','))
+                    background_normal: ''
 
             BoxLayout:
                 spacing: '25dp'
@@ -47,12 +55,17 @@ MainMenuWidget:
 
                 Button:
                     text: str(root.categories_list[4])
+                    background_color: tuple(float(item) for item in root.categories_list_color[4].split(','))
+                    background_normal: ''
 
                 Label:
                 Label:
 
                 Button:
                     text: str(root.categories_list[5])
+                    color: 0, 0, 0
+                    background_color: tuple(float(item) for item in root.categories_list_color[5].split(','))
+                    background_normal: ''
 
             BoxLayout:
                 spacing: '25dp'
@@ -60,12 +73,16 @@ MainMenuWidget:
 
                 Button:
                     text: str(root.categories_list[6])
+                    background_color: tuple(float(item) for item in root.categories_list_color[6].split(','))
+                    background_normal: ''
 
                 Label:
                 Label:
 
                 Button:
                     text: str(root.categories_list[7])
+                    background_color: tuple(float(item) for item in root.categories_list_color[7].split(','))
+                    background_normal: ''
 
             BoxLayout:
                 spacing: '25dp'
@@ -73,15 +90,23 @@ MainMenuWidget:
 
                 Button:
                     text: str(root.categories_list[8])
+                    background_color: tuple(float(item) for item in root.categories_list_color[8].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[9])
+                    background_color: tuple(float(item) for item in root.categories_list_color[9].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[10])
+                    background_color: tuple(float(item) for item in root.categories_list_color[10].split(','))
+                    background_normal: ''
 
                 Button:
                     text: str(root.categories_list[11])
+                    background_color: tuple(float(item) for item in root.categories_list_color[11].split(','))
+                    background_normal: ''
 
 <MainMenuWidget>:
     BoxLayout:
@@ -218,24 +243,32 @@ MainMenuWidget:
             height: "75dp"
 
             Button:
+                id: bottom_navigation_layout_accounts_button
+
                 text: "Accounts"
                 on_press: my_PageLayout.page = 0
                 on_press: root.change_the_middle_top_layout()
                 on_press: root.return_page_layout()
 
             Button:
+                id: bottom_navigation_layout_categories_button
+
                 text: "Categories"
                 on_press: my_PageLayout.page = 1
                 on_press: root.remove_the_changes_of_the_middle_top_layout()
                 on_press: root.return_page_layout()
 
             Button:
+                id: bottom_navigation_layout_transaction_button
+
                 text: "Transaction"
                 on_press: my_PageLayout.page = 2
                 on_press: root.remove_the_changes_of_the_middle_top_layout()
                 on_press: root.return_page_layout()
 
             Button:
+                id: bottom_navigation_layout_budget_button
+
                 text: "Budget"
                 on_press: my_PageLayout.page = 3
                 on_press: root.remove_the_changes_of_the_middle_top_layout()
