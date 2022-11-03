@@ -4,6 +4,8 @@ MainMenuWidget:
 
 
 <CategoriesMenu>:
+    id: CategoriesMenu
+
     canvas.before:
         Color:
             rgba: .2, .2, .2, 1
@@ -11,102 +13,102 @@ MainMenuWidget:
             size: self.size
             pos: self.pos
     AnchorLayout:
+        #id: categories_back_anchor
+
         Button:
             text: "stat"
             size_hint: None, None
             size: "350dp", "360dp"
 
         GridLayout:
+            #id: categories_grid
+
             row_default_height: "175dp"
             row_force_default: True
 
             padding: "25dp"
             spacing: '25dp'
 
-            cols:  1
+            cols:  4
             rows: 4
-            BoxLayout:
-                spacing: '25dp'
-                orientation: "horizontal"
 
-                Button:
-                    text: str(root.categories_list[0])
-                    background_color: tuple(float(item) for item in root.categories_list_color[0].split(','))
-                    background_normal: ''
+            Button:
+                id: CategoriesMenu_Button_0
 
-                Button:
-                    text: str(root.categories_list[1])
-                    background_color: tuple(float(item) for item in root.categories_list_color[1].split(','))
-                    background_normal: ''
+                text: '1'
+                background_normal: ''
 
-                Button:
-                    text: str(root.categories_list[2])
-                    background_color: tuple(float(item) for item in root.categories_list_color[2].split(','))
-                    background_normal: ''
+            Button:
+                id: CategoriesMenu_Button_1
 
-                Button:
-                    text: str(root.categories_list[3])
-                    background_color: tuple(float(item) for item in root.categories_list_color[3].split(','))
-                    background_normal: ''
+                text: '2'
+                background_normal: ''
 
-            BoxLayout:
-                spacing: '25dp'
-                orientation: "horizontal"
+            Button:
+                id: CategoriesMenu_Button_2
 
-                Button:
-                    text: str(root.categories_list[4])
-                    background_color: tuple(float(item) for item in root.categories_list_color[4].split(','))
-                    background_normal: ''
+                text: '3'
+                background_normal: ''
 
-                Label:
-                Label:
+            Button:
+                id: CategoriesMenu_Button_3
 
-                Button:
-                    text: str(root.categories_list[5])
-                    color: 0, 0, 0
-                    background_color: tuple(float(item) for item in root.categories_list_color[5].split(','))
-                    background_normal: ''
+                text: '4'
+                background_normal: ''
 
-            BoxLayout:
-                spacing: '25dp'
-                orientation: "horizontal"
+            Button:
+                id: CategoriesMenu_Button_4
 
-                Button:
-                    text: str(root.categories_list[6])
-                    background_color: tuple(float(item) for item in root.categories_list_color[6].split(','))
-                    background_normal: ''
+                text: '5'
+                background_normal: ''
 
-                Label:
-                Label:
+            Label:
+            Label:
 
-                Button:
-                    text: str(root.categories_list[7])
-                    background_color: tuple(float(item) for item in root.categories_list_color[7].split(','))
-                    background_normal: ''
+            Button:
+                id: CategoriesMenu_Button_5
 
-            BoxLayout:
-                spacing: '25dp'
-                orientation: "horizontal"
+                text: '6'
+                background_normal: ''
 
-                Button:
-                    text: str(root.categories_list[8])
-                    background_color: tuple(float(item) for item in root.categories_list_color[8].split(','))
-                    background_normal: ''
+            Button:
+                id: CategoriesMenu_Button_6
 
-                Button:
-                    text: str(root.categories_list[9])
-                    background_color: tuple(float(item) for item in root.categories_list_color[9].split(','))
-                    background_normal: ''
+                text: '7'
+                background_normal: ''
 
-                Button:
-                    text: str(root.categories_list[10])
-                    background_color: tuple(float(item) for item in root.categories_list_color[10].split(','))
-                    background_normal: ''
+            Label:
+            Label:
 
-                Button:
-                    text: str(root.categories_list[11])
-                    background_color: tuple(float(item) for item in root.categories_list_color[11].split(','))
-                    background_normal: ''
+            Button:
+                id: CategoriesMenu_Button_7
+
+                text: '8'
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_8
+
+                text: '9'
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_9
+
+                text: '10'
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_10
+
+                text: '11'
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_11
+
+                text: '12'
+                background_normal: ''
 
 <MainMenuWidget>:
     BoxLayout:

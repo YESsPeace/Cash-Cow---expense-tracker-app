@@ -1,6 +1,10 @@
+from time import sleep
+
 from kivy.app import App
 from kivy.metrics import dp
+from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
 from warnings import warn
 import os
@@ -8,35 +12,6 @@ import os
 os.system('Data\TXT-categories-data.py')
 os.system('Data\TXT-accounts.py')
 os.system('Data\CSV-transaction-history.py')
-
-
-def get_names_from_categories_data_txt(path):
-    return_list = []
-
-    list_of_categories_name = []
-    list_of_categories_color = []
-
-    try:
-        categories_data_file = open(path, 'r+', encoding="UTF8")
-
-        for line in categories_data_file:
-            list_of_categories_name.append(line.split('-')[1])
-            list_of_categories_color.append(line.split('-')[2][:-1])
-
-        categories_data_file.close()
-
-        return_list.append(list_of_categories_name)
-        return_list.append(list_of_categories_color)
-
-        print('# list of categories name:', list_of_categories_name)
-        print('# list of categories color:', list_of_categories_color)
-
-        return return_list
-
-    except FileNotFoundError:
-        warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here', DataFileIsNotFounded)
-        # warning message and return standard list
-        return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
 
 
 class DataFileIsNotFounded(UserWarning):  # Warning message, my type
@@ -47,11 +22,53 @@ class MonthsMenu(BoxLayout):
     pass
 
 
+def categories_menu_buttons_data(path):
+    categories_menu_button_data_dictionary = {}
+
+    for number_of_button in range(12):
+        categories_menu_button_data_dictionary['CategoriesMenu_Button_' + str(number_of_button)] = {}
+
+    try:
+        categories_data_file = open(path, 'r+', encoding="UTF8")
+
+        num_of_line_and_button = 0
+        for line in categories_data_file:
+            name_of_button = line.split('-')[1]
+            color_of_button = tuple([float(i) for i in line.split('-')[2][:-1].split(',')])
+
+            categories_menu_button_data_dictionary['CategoriesMenu_Button_' + str(num_of_line_and_button)] = {
+                'Name': name_of_button,
+                'Color': color_of_button}
+
+            num_of_line_and_button += 1
+
+        categories_data_file.close()
+
+        return categories_menu_button_data_dictionary
+
+    except FileNotFoundError:
+        warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here',
+             DataFileIsNotFounded)
+        # warning message and return standard list
+        return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
+
+
 class CategoriesMenu(BoxLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-        self.categories_list, self.categories_list_color = get_names_from_categories_data_txt(
+
+        self.categories_menu_button_data_dictionary = categories_menu_buttons_data(
             'Data/data_files/categories-data.txt')
+        print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
+
+        Clock.schedule_once(self.button_data_setter)
+
+    def button_data_setter(self, *args):
+        for button_id in self.ids:
+            getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id]['Name']
+            getattr(self.ids, button_id).background_color = self.categories_menu_button_data_dictionary[button_id][
+                'Color']
+
 
 class MainMenuWidget(BoxLayout):
     def __init__(self, **kwargs):
