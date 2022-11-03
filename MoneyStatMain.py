@@ -1,21 +1,16 @@
-from time import sleep
-
 from kivy.app import App
 from kivy.metrics import dp
 from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
 from warnings import warn
 import os
 
+from MyWarningMessages import DataFileIsNotFounded
+
 os.system('Data\TXT-categories-data.py')
 os.system('Data\TXT-accounts.py')
 os.system('Data\CSV-transaction-history.py')
-
-
-class DataFileIsNotFounded(UserWarning):  # Warning message, my type
-    pass
 
 
 class MonthsMenu(BoxLayout):
