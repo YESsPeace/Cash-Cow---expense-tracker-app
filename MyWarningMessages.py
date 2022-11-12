@@ -1,3 +1,6 @@
 # When file categories-data is not founded
-class DataFileIsNotFounded(UserWarning):
+class CategoriesDataFileIsNotFounded(UserWarning):
+    pass
+
+class AccountsDataFileIsNotFounded(UserWarning):
     pass

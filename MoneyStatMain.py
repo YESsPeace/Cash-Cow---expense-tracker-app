@@ -6,11 +6,11 @@ from kivy.uix.togglebutton import ToggleButton
 from warnings import warn
 import os
 
-from MyWarningMessages import DataFileIsNotFounded
+from MyWarningMessages import CategoriesDataFileIsNotFounded, AccountsDataFileIsNotFounded
 
-os.system('Data\TXT-categories-data.py')
-os.system('Data\TXT-accounts.py')
-os.system('Data\CSV-transaction-history.py')
+os.system('Data\TXT-categories-data.py')  # makes categories-data-txt file
+os.system('Data\TXT-accounts.py')  # makes accounts-txt file
+os.system('Data\CSV-transaction-history.py')  # makes empty transaction-history-csv file
 
 
 class MonthsMenu(BoxLayout):
@@ -18,6 +18,7 @@ class MonthsMenu(BoxLayout):
 
 
 def categories_menu_buttons_data(path):
+    # this func takes data from categories-data-txt
     categories_menu_button_data_dictionary = {}
 
     for number_of_button in range(12):
@@ -43,9 +44,82 @@ def categories_menu_buttons_data(path):
 
     except FileNotFoundError:
         warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here',
-             DataFileIsNotFounded)
+             CategoriesDataFileIsNotFounded)
         # warning message and return standard list
         return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
+
+
+def accounts_and_savings_data(path):
+    data_dict = {"Accounts": {}, "Savings": {}}
+
+    try:
+        accounts_and_savings_data_file = open(path, 'r+', encoding="UTF8")
+
+        is_accounts = False
+        is_savings = False
+
+        for line in accounts_and_savings_data_file:
+            if line.split()[0] == 'accounts':
+                is_accounts = True
+                is_savings = False
+
+            elif line.split()[0] == 'savings':
+                is_accounts = False
+                is_savings = True
+
+            elif is_accounts:
+                data_list = line.split('-')
+
+                try:
+                    data_dict['Accounts'][data_list[0]] = {"Name": data_list[1], "Color": data_list[2],
+                                                           'Balance': data_list[3], 'Currency': data_list[4][:-1]}
+                except IndexError:
+                    continue
+
+            elif is_savings:
+                data_list = line.split('-')
+
+                try:
+                    data_dict['Savings'][data_list[0]] = {"Name": data_list[1], "Color": data_list[2],
+                                                          'Balance': data_list[3], 'Currency': data_list[4][:-1]}
+                except IndexError:
+                    continue
+
+
+
+    except FileNotFoundError:
+        warn('accounts_data.txt is not founded. Check if the TXT-accounts.py is here',
+             AccountsDataFileIsNotFounded)
+
+    return data_dict
+
+
+class AccountsMenu(BoxLayout):
+    def __init__(self, *args, **kwargs):
+        super().__init__(**kwargs)
+
+        self.accounts_and_savings_data_dict = accounts_and_savings_data('Data/data_files/accounts-data.txt')
+
+        print("# accounts_and_savings_data_dictionary:", self.accounts_and_savings_data_dict)
+
+        self.accounts_balance_rub = 0
+        self.accounts_balance_usd = 0
+
+        for item in self.accounts_and_savings_data_dict['Accounts'].items():
+            if item[1]['Currency'] == "RUB":
+                self.accounts_balance_rub += int(item[1]['Balance'])
+
+            elif item[1]['Currency'] == "USD":
+                self.accounts_balance_usd += int(item[1]['Balance'])
+
+        Clock.schedule_once(self.accounts_and_savings_data_setter)
+
+    def accounts_and_savings_data_setter(self, *args):
+        pass
+
+
+class TransactionMenu(BoxLayout):
+    pass
 
 
 class CategoriesMenu(BoxLayout):
@@ -56,7 +130,7 @@ class CategoriesMenu(BoxLayout):
             'Data/data_files/categories-data.txt')
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
-        Clock.schedule_once(self.button_data_setter)
+        Clock.schedule_once(self.button_data_setter, -1)
 
     def button_data_setter(self, *args):
         for button_id in self.ids:
@@ -74,24 +148,35 @@ class MainMenuWidget(BoxLayout):
                                            allow_no_selection=False, background_normal='Icons/statistica.png',
                                            background_down='Icons/statistica_down.png')
 
-    def change_the_middle_top_layout(self):
-        # removing widgets which were before
-        self.ids.middle_top_layout.remove_widget(self.ids.left_btn)
-        self.ids.middle_top_layout.remove_widget(self.ids.middle_btn)
-        self.ids.middle_top_layout.remove_widget(self.ids.right_btn)
-        # adding the new toggle buttons
-        self.ids.middle_top_layout.add_widget(self.toggle_button1)
-        self.ids.middle_top_layout.add_widget(self.toggle_button2)
+    def page_layout_swipe_detected(self):
+        Clock.schedule_once(self.change_layout_of_page_layuot)
 
-    def remove_the_changes_of_the_middle_top_layout(self):
-        if self.toggle_button1 in list(self.ids.middle_top_layout.children):
-            # removing the toggle buttons
+    def change_layout_of_page_layuot(self, *args):
+        if self.ids.my_PageLayout.page == 0:
+            self.from_any_menus_to_accounts_menu()
+
+        if self.ids.my_PageLayout.page != 0:
+            self.return_any_page_layout_from_accounts_menu()
+
+    def return_any_page_layout_from_accounts_menu(self):
+        if self.toggle_button1 in self.ids.middle_top_layout.children:
+            # removing widgets which were before
             self.ids.middle_top_layout.remove_widget(self.toggle_button1)
             self.ids.middle_top_layout.remove_widget(self.toggle_button2)
-            # adding the old buttons
+            # adding the new toggle buttons
             self.ids.middle_top_layout.add_widget(self.ids.left_btn)
             self.ids.middle_top_layout.add_widget(self.ids.middle_btn)
             self.ids.middle_top_layout.add_widget(self.ids.right_btn)
+
+    def from_any_menus_to_accounts_menu(self):  # change the middle top layout
+        if self.ids.middle_btn in self.ids.middle_top_layout.children:
+            # removing widgets which were before
+            self.ids.middle_top_layout.remove_widget(self.ids.left_btn)
+            self.ids.middle_top_layout.remove_widget(self.ids.middle_btn)
+            self.ids.middle_top_layout.remove_widget(self.ids.right_btn)
+            # adding the new toggle buttons
+            self.ids.middle_top_layout.add_widget(self.toggle_button1)
+            self.ids.middle_top_layout.add_widget(self.toggle_button2)
 
     def click_on_month_in_main(self):
         self.ids.top_layout.remove_widget(self.ids.middle_top_layout)

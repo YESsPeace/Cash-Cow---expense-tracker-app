@@ -1,6 +1,39 @@
 MainMenuWidget:
 
-<MonthsMenu>
+<AccountsMenu>:
+    id: AccountsMenu
+
+
+    orientation: "vertical"
+    spacing: "1dp"
+
+    canvas.before:
+        Color:
+            rgba: .3, .3, .3, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        id: accounts_box
+
+        canvas.before:
+            Color:
+                rgba: .15, .15, .15, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    BoxLayout:
+        id: savings_box
+
+        canvas.before:
+            Color:
+                rgba: .15, .15, .15, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
 
 
 <CategoriesMenu>:
@@ -208,14 +241,9 @@ MainMenuWidget:
 
             page: 1
 
-            Label:
-                text: "Accounts"
-                canvas.before:
-                    Color:
-                        rgba: .15, .15, .15, 1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+            on_touch_move: root.page_layout_swipe_detected()
+
+            AccountsMenu:
 
             CategoriesMenu:
 
@@ -249,29 +277,25 @@ MainMenuWidget:
 
                 text: "Accounts"
                 on_press: my_PageLayout.page = 0
-                on_press: root.change_the_middle_top_layout()
-                on_press: root.return_page_layout()
+                on_press: root.from_any_menus_to_accounts_menu()
 
             Button:
                 id: bottom_navigation_layout_categories_button
 
                 text: "Categories"
                 on_press: my_PageLayout.page = 1
-                on_press: root.remove_the_changes_of_the_middle_top_layout()
-                on_press: root.return_page_layout()
+                on_press: root.return_any_page_layout_from_accounts_menu()
 
             Button:
                 id: bottom_navigation_layout_transaction_button
 
                 text: "Transaction"
                 on_press: my_PageLayout.page = 2
-                on_press: root.remove_the_changes_of_the_middle_top_layout()
-                on_press: root.return_page_layout()
+                on_press: root.return_any_page_layout_from_accounts_menu()
 
             Button:
                 id: bottom_navigation_layout_budget_button
 
                 text: "Budget"
                 on_press: my_PageLayout.page = 3
-                on_press: root.remove_the_changes_of_the_middle_top_layout()
-                on_press: root.return_page_layout()
+                on_press: root.return_any_page_layout_from_accounts_menu()
