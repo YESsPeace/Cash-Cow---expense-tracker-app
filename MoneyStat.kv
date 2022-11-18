@@ -1,9 +1,20 @@
 MainMenuWidget:
 
-<AccountsMenu>:
-    id: AccountsMenu
+<AccountsMenu_stat>:
+    orientation: "vertical"
+
+    Label:
+        id: AccountsMenu_stat_label
+
+        text: "Accounts stat will be here"
 
 
+    Button:
+        text: "click me to test"
+        on_press: root.click()
+
+
+<AccountsMenu_main>:
     orientation: "vertical"
     spacing: "1dp"
 
@@ -33,6 +44,11 @@ MainMenuWidget:
             Rectangle:
                 size: self.size
                 pos: self.pos
+
+<AccountsMenu>:
+    AccountsMenu_main:
+        id: AccountsMenu_main_id
+
 
 
 
@@ -244,6 +260,7 @@ MainMenuWidget:
             on_touch_move: root.page_layout_swipe_detected()
 
             AccountsMenu:
+                id: AccountsMenu_id
 
             CategoriesMenu:
 
@@ -278,6 +295,7 @@ MainMenuWidget:
                 text: "Accounts"
                 on_press: my_PageLayout.page = 0
                 on_press: root.from_any_menus_to_accounts_menu()
+                on_press: root.top_menu_toggle_button_setter()
 
             Button:
                 id: bottom_navigation_layout_categories_button

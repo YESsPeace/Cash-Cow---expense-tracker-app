@@ -3,7 +3,7 @@ import csv
 print('# Csv-transaction-history.py is open')
 
 try:
-    file = open('Data\data_files\\transaction-history.csv', 'r', encoding="UTF8")
+    file = open('Data\data_files\\transaction-history.csv', 'r', encoding="utf-8-sig")
 
     print('# data_file: transaction-history.csv is open')
 
@@ -15,7 +15,7 @@ except FileNotFoundError:
 
     file = open('Data\data_files\\transaction-history.csv', 'w', encoding="UTF8")
 
-    writer = csv.writer(file)
+    writer = csv.writer(file, delimiter=',', quotechar='"')
 
     writer.writerow(
         ['ДАТА'] + ['ТИП'] + ['СО СЧЁТА'] + ['НА СЧЁТ / НА КАТЕГОРИЮ'] + ['СУММА'] + ['ВАЛЮТА'] + ['СУММА 2'] +

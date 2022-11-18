@@ -2,9 +2,12 @@ from kivy.app import App
 from kivy.metrics import dp
 from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.anchorlayout import AnchorLayout
 from warnings import warn
 import os
+
+from kivy.uix.button import Button
+from kivy.uix.togglebutton import ToggleButton
 
 from MyWarningMessages import CategoriesDataFileIsNotFounded, AccountsDataFileIsNotFounded
 
@@ -94,7 +97,7 @@ def accounts_and_savings_data(path):
     return data_dict
 
 
-class AccountsMenu(BoxLayout):
+class AccountsMenu_main(BoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
@@ -112,17 +115,19 @@ class AccountsMenu(BoxLayout):
             elif item[1]['Currency'] == "USD":
                 self.accounts_balance_usd += int(item[1]['Balance'])
 
-        Clock.schedule_once(self.accounts_and_savings_data_setter)
+class AccountsMenu_stat(BoxLayout):
+    def click(self):
+        self.remove_widget(self.ids.AccountsMenu_stat_label)
 
-    def accounts_and_savings_data_setter(self, *args):
-        pass
-
+class AccountsMenu(BoxLayout):
+    pass
 
 class TransactionMenu(BoxLayout):
     pass
 
 
 class CategoriesMenu(BoxLayout):
+
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
@@ -131,7 +136,6 @@ class CategoriesMenu(BoxLayout):
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
         Clock.schedule_once(self.button_data_setter, -1)
-
     def button_data_setter(self, *args):
         for button_id in self.ids:
             getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id]['Name']
@@ -140,18 +144,27 @@ class CategoriesMenu(BoxLayout):
 
 
 class MainMenuWidget(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # buttons I want to set
-        self.toggle_button1 = ToggleButton(text='ACCOUNTS', group='sex', state='down', allow_no_selection=False)
+    def top_menu_toggle_button_setter(self, *args):
+
+        self.toggle_button1 = ToggleButton(text='ACCOUNTS', group='sex', state='down', allow_no_selection=False,
+                                           on_release=self.switch_accounts_menu_type_to_main)
+
         self.toggle_button2 = ToggleButton(text='', group='sex', size_hint=(None, 1), width=dp(50),
                                            allow_no_selection=False, background_normal='Icons/statistica.png',
-                                           background_down='Icons/statistica_down.png')
+                                           background_down='Icons/statistica_down.png',
+                                           on_press=self.switch_accounts_menu_type_to_stat)
+    def switch_accounts_menu_type_to_main(self, *args):
+        self.ids.AccountsMenu_id.clear_widgets()
+        self.ids.AccountsMenu_id.add_widget(self.ids.AccountsMenu_id.ids.AccountsMenu_main_id)
+    def switch_accounts_menu_type_to_stat(self, *args):
+        self.ids.AccountsMenu_id.clear_widgets()
+        self.ids.AccountsMenu_id.add_widget(AccountsMenu_stat())
 
     def page_layout_swipe_detected(self):
         Clock.schedule_once(self.change_layout_of_page_layuot)
 
     def change_layout_of_page_layuot(self, *args):
+        self.top_menu_toggle_button_setter()
         if self.ids.my_PageLayout.page == 0:
             self.from_any_menus_to_accounts_menu()
 
