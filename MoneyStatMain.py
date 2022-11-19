@@ -2,19 +2,21 @@ from kivy.app import App
 from kivy.metrics import dp
 from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from warnings import warn
-import os
-
-from kivy.uix.button import Button
 from kivy.uix.togglebutton import ToggleButton
 
+from warnings import warn
 from MyWarningMessages import CategoriesDataFileIsNotFounded, AccountsDataFileIsNotFounded
 
-os.system('Data\TXT-categories-data.py')  # makes categories-data-txt file
-os.system('Data\TXT-accounts.py')  # makes accounts-txt file
-os.system('Data\CSV-transaction-history.py')  # makes empty transaction-history-csv file
+import os
 
+from TxtCategoriesData import create_categories_data_file
+from TxtAccountsData import create_accounts_data_file
+from CsvTransactionHistory import create_transaction_history_file
+
+# makes empty data files
+create_categories_data_file('data_files/categories-data.txt')
+create_accounts_data_file('data_files/accounts-data.txt')
+create_transaction_history_file('data_files/transaction-history.csv')
 
 class MonthsMenu(BoxLayout):
     pass
@@ -46,7 +48,7 @@ def categories_menu_buttons_data(path):
         return categories_menu_button_data_dictionary
 
     except FileNotFoundError:
-        warn('categories_data.txt is not founded. Check if the TXT-categories-data.py is here',
+        warn('categories_data.txt is not founded. Check if the TxtCategoriesData.py is here',
              CategoriesDataFileIsNotFounded)
         # warning message and return standard list
         return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
@@ -91,7 +93,7 @@ def accounts_and_savings_data(path):
 
 
     except FileNotFoundError:
-        warn('accounts_data.txt is not founded. Check if the TXT-accounts.py is here',
+        warn('accounts_data.txt is not founded. Check if the TxtAccountsData.py is here',
              AccountsDataFileIsNotFounded)
 
     return data_dict
@@ -101,7 +103,7 @@ class AccountsMenu_main(BoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
-        self.accounts_and_savings_data_dict = accounts_and_savings_data('Data/data_files/accounts-data.txt')
+        self.accounts_and_savings_data_dict = accounts_and_savings_data('data_files/accounts-data.txt')
 
         print("# accounts_and_savings_data_dictionary:", self.accounts_and_savings_data_dict)
 
@@ -132,7 +134,7 @@ class CategoriesMenu(BoxLayout):
         super().__init__(**kwargs)
 
         self.categories_menu_button_data_dictionary = categories_menu_buttons_data(
-            'Data/data_files/categories-data.txt')
+            'data_files/categories-data.txt')
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
         Clock.schedule_once(self.button_data_setter, -1)
