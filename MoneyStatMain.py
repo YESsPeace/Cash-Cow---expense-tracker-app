@@ -3,11 +3,13 @@ from kivy.metrics import dp
 from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
+from kivy.core.window import Window
 
 from warnings import warn
 from MyWarningMessages import CategoriesDataFileIsNotFounded, AccountsDataFileIsNotFounded
 
-import os
+from GetDataFilesData import get_accounts_data_from_accounts_data_txt
+
 
 from TxtCategoriesData import create_categories_data_file
 from TxtAccountsData import create_accounts_data_file
@@ -17,6 +19,8 @@ from CsvTransactionHistory import create_transaction_history_file
 create_categories_data_file('data_files/categories-data.txt')
 create_accounts_data_file('data_files/accounts-data.txt')
 create_transaction_history_file('data_files/transaction-history.csv')
+
+Window.size = (0.4 * 1080, 0.4 * 2280)
 
 class MonthsMenu(BoxLayout):
     pass
@@ -53,57 +57,12 @@ def categories_menu_buttons_data(path):
         # warning message and return standard list
         return ['ERROR:'.rjust(16) + '\n' + 'File Is Not Founded'.rjust(16) for _ in range(12)]
 
-
-def accounts_and_savings_data(path):
-    data_dict = {"Accounts": {}, "Savings": {}}
-
-    try:
-        accounts_and_savings_data_file = open(path, 'r+', encoding="UTF8")
-
-        is_accounts = False
-        is_savings = False
-
-        for line in accounts_and_savings_data_file:
-            if line.split()[0] == 'accounts':
-                is_accounts = True
-                is_savings = False
-
-            elif line.split()[0] == 'savings':
-                is_accounts = False
-                is_savings = True
-
-            elif is_accounts:
-                data_list = line.split('-')
-
-                try:
-                    data_dict['Accounts'][data_list[0]] = {"Name": data_list[1], "Color": data_list[2],
-                                                           'Balance': data_list[3], 'Currency': data_list[4][:-1]}
-                except IndexError:
-                    continue
-
-            elif is_savings:
-                data_list = line.split('-')
-
-                try:
-                    data_dict['Savings'][data_list[0]] = {"Name": data_list[1], "Color": data_list[2],
-                                                          'Balance': data_list[3], 'Currency': data_list[4][:-1]}
-                except IndexError:
-                    continue
-
-
-
-    except FileNotFoundError:
-        warn('accounts_data.txt is not founded. Check if the TxtAccountsData.py is here',
-             AccountsDataFileIsNotFounded)
-
-    return data_dict
-
-
 class AccountsMenu_main(BoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
-        self.accounts_and_savings_data_dict = accounts_and_savings_data('data_files/accounts-data.txt')
+        self.accounts_and_savings_data_dict = get_accounts_data_from_accounts_data_txt(
+            accounts_data_file_path='data_files/accounts-data.txt')
 
         print("# accounts_and_savings_data_dictionary:", self.accounts_and_savings_data_dict)
 
@@ -140,9 +99,12 @@ class CategoriesMenu(BoxLayout):
         Clock.schedule_once(self.button_data_setter, -1)
     def button_data_setter(self, *args):
         for button_id in self.ids:
-            getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id]['Name']
-            getattr(self.ids, button_id).background_color = self.categories_menu_button_data_dictionary[button_id][
-                'Color']
+            try:
+                getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id]['Name']
+                getattr(self.ids, button_id).background_color = self.categories_menu_button_data_dictionary[button_id][
+                    'Color']
+            except KeyError:
+                continue
 
 
 class MainMenuWidget(BoxLayout):

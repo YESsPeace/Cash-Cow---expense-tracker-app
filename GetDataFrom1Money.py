@@ -1,3 +1,7 @@
+# this function return data dictionary  like
+# {'date': {'Type': 'Expenses', 'From': {'Name': 'Cash', 'Color':... and other}}
+# with it I can get data from 1Money's .csv file, who have all transaction
+
 def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_2022.csv',
                          categories_data_file_path='data_files/Test_files/test_categories-data.txt',
                          accounts_data_file_path='data_files/Test_files/test_accounts-data.txt'):
@@ -22,6 +26,7 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
                 color_of_account = tuple([float(i) for i in data_list[2][:-1].split(',')])
 
                 color_accounts_data_dict[name_of_account] = color_of_account
+
             except IndexError:
                 continue
 
@@ -30,9 +35,15 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
 
         transaction_dict = {}
 
+        dict_for_translation = {'Доход': 'Income', 'Расход': 'Expenses', 'Перевод': 'Transfer', 'Наличные': 'Cash',
+                                'Зарплата': 'Salary'}
+
         for row in reader:
             if "ДАТА" in row:
                 continue
+
+            elif row == ['', '']:
+                break
 
             clean_row = []
             for i in row:
@@ -40,19 +51,44 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
                     if '(' in i:
                         i = i.split('(')[0][:-1]
 
-                        clean_row.append(i)
-                    else:
-                        clean_row.append(i)
+                    if i in dict_for_translation:
+                        i = dict_for_translation[i]
 
-            if clean_row[3] in color_categories_data_dict:
-                clean_row[3] = {'Name': clean_row[3], 'Color': color_categories_data_dict[row[3]]}
+                    clean_row.append(i)
 
             if clean_row[2] in color_accounts_data_dict:
-                clean_row[2] = {'Name': clean_row[2], 'Color': color_accounts_data_dict[row[2]]}
+                clean_row[2] = {'Name': clean_row[2], 'Color': color_accounts_data_dict[clean_row[2]]}
 
-            transaction_dict[clean_row[0]] = clean_row[1:]
+            elif not clean_row[2] in color_accounts_data_dict:
+                clean_row[2] = {'Name': clean_row[2], 'Color': (0, 0.41, 0.24, 1)}
+
+            if clean_row[3] in color_categories_data_dict:
+                clean_row[3] = {'Name': clean_row[3], 'Color': color_categories_data_dict[clean_row[3]]}
+
+            elif not clean_row[3] in color_categories_data_dict:
+                clean_row[3] = {'Name': clean_row[3], 'Color': (0.38, 0.39, 0.61, 1)}
+
+            date = clean_row[0]
+
+            transaction_dict[date] = {}
+
+            transaction_dict[date]['Type'] = clean_row[1]
+            transaction_dict[date]['From'] = clean_row[2]
+            transaction_dict[date]['To'] = clean_row[3]
+            transaction_dict[date]['FromSUM'] = clean_row[4]
+            transaction_dict[date]['FromCurrency'] = clean_row[5]
+            transaction_dict[date]['ToSUM'] = clean_row[6]
+            transaction_dict[date]['ToCurrency'] = clean_row[7]
+
+            if len(clean_row) >= 9:
+                transaction_dict[date]['Сomment'] = clean_row[8]
+
 
         return transaction_dict
 
 if __name__ == '__main__':
-    print(*get_data_from_1money(money_file_path='data_files/Test_files/transaction-history.csv').items(), sep='\n')
+    from datetime import datetime
+
+    start_time = datetime.now()
+    print(*get_data_from_1money().items(), sep='\n')
+    print(f'This worked {datetime.now() - start_time}')

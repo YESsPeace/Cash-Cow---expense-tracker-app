@@ -12,4 +12,4 @@ ax.pie(vals, radius=1, colors=colors,
 
 fig.set_facecolor((0.2, 0.2, 0.2, 1))
 
-plt.savefig('pie_chart_pic/pie_chart.png')
+fig.savefig('pie_chart_pic/pie_chart.png')

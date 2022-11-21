@@ -15,7 +15,7 @@ def create_categories_data_file(path):
 
         categories_data_file = open(path, 'w+')
 
-        for i in range(1, 12 + 1):
-            categories_data_file.write('CategoriesMenu_Button_' + str(i) + '-' + str(i) + '-' + '.38, .39, .61, 1' + '\n')
+        for i in range(4*4):
+            categories_data_file.write('CategoriesMenu_Button_' + str(i) + '-' + '+' + '-' + '.38, .39, .61, 1' + '\n')
 
         print('# data_file: categories-data.txt is written')

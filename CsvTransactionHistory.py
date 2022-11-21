@@ -14,12 +14,12 @@ def create_transaction_history_file(path):
 
         print('# transaction-history.csv is done')
 
-        file = open(path, 'w', encoding="UTF8")
+        file = open(path, 'w', encoding="utf-8-sig")
 
         writer = csv.writer(file, delimiter=',', quotechar='"')
 
         writer.writerow(
-            ['ДАТА'] + ['ТИП'] + ['СО СЧЁТА'] + ['НА СЧЁТ / НА КАТЕГОРИЮ'] + ['СУММА'] + ['ВАЛЮТА'] + ['СУММА 2'] +
-            ['ВАЛЮТА 2'] + ['МЕТКИ'] + ['ЗАМЕТКИ'])
+            ['Date'] + ['Type'] + ['From'] + ['To'] + ['FromSUM'] + ['FromCurrency'] + ['ToSUM'] +
+            ['ToCurrency'] + ['Сomment'])
 
         print('# data_file: transaction-history.csv is open')

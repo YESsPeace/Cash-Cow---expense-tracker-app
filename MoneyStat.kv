@@ -61,54 +61,57 @@ MainMenuWidget:
         Rectangle:
             size: self.size
             pos: self.pos
-    AnchorLayout:
+    RelativeLayout:
         #id: categories_back_anchor
 
         Button:
             text: "stat"
-            size_hint: None, None
-            size: "350dp", "360dp"
+
+            pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+
+            size_hint: 0.5, None
+
+
+            height: self.width
+
+            background_normal: 'Diagrams/pie_chart_pic/pie_chart.png'
+
+
 
         GridLayout:
-            #id: categories_grid
 
-            row_default_height: "175dp"
+            row_default_height: CategoriesMenu.height * 0.17
             row_force_default: True
 
-            padding: "25dp"
-            spacing: '25dp'
+            padding: self.row_default_height * 0.143
+            spacing: self.row_default_height * 0.143
 
             cols:  4
-            rows: 4
+            rows: 5
 
             Button:
                 id: CategoriesMenu_Button_0
 
-                text: '1'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_1
 
-                text: '2'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_2
 
-                text: '3'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_3
 
-                text: '4'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_4
 
-                text: '5'
                 background_normal: ''
 
             Label:
@@ -117,13 +120,11 @@ MainMenuWidget:
             Button:
                 id: CategoriesMenu_Button_5
 
-                text: '6'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_6
 
-                text: '7'
                 background_normal: ''
 
             Label:
@@ -132,31 +133,46 @@ MainMenuWidget:
             Button:
                 id: CategoriesMenu_Button_7
 
-                text: '8'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_8
 
-                text: '9'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_9
 
-                text: '10'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_10
 
-                text: '11'
                 background_normal: ''
 
             Button:
                 id: CategoriesMenu_Button_11
 
-                text: '12'
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_12
+
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_13
+
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_14
+
+                background_normal: ''
+
+            Button:
+                id: CategoriesMenu_Button_15
+
                 background_normal: ''
 
 <MainMenuWidget>:
@@ -169,8 +185,8 @@ MainMenuWidget:
         AnchorLayout:
             id: top_layout_background
 
-            size_hint: 1, None
-            height: "125dp"
+            size_hint: 1, 0.15
+            # height: "125dp"
 
             canvas.before:
                 Color:
@@ -188,7 +204,7 @@ MainMenuWidget:
                     id: top_layout_menu_balance
 
                     size_hint: 1, None
-                    height: "75dp"
+                    height: top_layout_background.height * 0.6
 
                     Button:
                         id: top_menu_btn
@@ -197,7 +213,7 @@ MainMenuWidget:
                         background_down: "Icons/menu_down.png"
 
                         size_hint: None, 1
-                        width: "75dp"
+                        width: top_layout_background.height * 0.6
 
                     BoxLayout:
                         orientation: "vertical"
@@ -213,7 +229,7 @@ MainMenuWidget:
                         background_down: "Icons/pencil_down.png"
 
                         size_hint: None, 1
-                        width: "75dp"
+                        width: top_layout_background.height * 0.6
 
 
                 BoxLayout:
@@ -231,7 +247,7 @@ MainMenuWidget:
                         background_down: "Icons/next - Copy_down.png"
 
                         size_hint: None, 1
-                        width: "50dp"
+                        width: middle_top_layout.height
 
                     Button:
                         id: middle_btn
@@ -250,7 +266,7 @@ MainMenuWidget:
                         background_down: "Icons/next_down.png"
 
                         size_hint: None, 1
-                        width: "50dp"
+                        width: middle_top_layout.height
 
         PageLayout:
             id: my_PageLayout
