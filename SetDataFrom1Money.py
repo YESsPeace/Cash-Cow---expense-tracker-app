@@ -3,9 +3,9 @@ from GetDataFrom1Money import get_data_from_1money
 
 def set_accounts_data_from_1money(data_from_1money_dict, accounts_data_file_path='data_files/accounts-data.txt'):
     # getting old data
-    from GetDataFilesData import get_accounts_data_from_accounts_data_txt
+    from GetDataFilesData import get_accounts_data
 
-    old_data_dict = get_accounts_data_from_accounts_data_txt()
+    old_data_dict = get_accounts_data()
 
 
 def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='data_files/categories-data.txt'):

@@ -1,4 +1,0 @@
-accounts
-account_0-Cash-.27, .58, .29, 1-1250-RUB
-account_1-Card-.66, .89, .63, 1-14000-RUB
-savings

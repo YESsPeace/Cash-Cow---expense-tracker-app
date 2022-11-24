@@ -1,0 +1,30 @@
+<AccountsMenu_main>:
+    orientation: "vertical"
+    spacing: "1dp"
+
+    canvas.before:
+        Color:
+            rgba: .3, .3, .3, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        id: accounts_box
+
+        canvas.before:
+            Color:
+                rgba: .15, .15, .15, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+    BoxLayout:
+        id: savings_box
+
+        canvas.before:
+            Color:
+                rgba: .15, .15, .15, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
