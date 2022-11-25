@@ -9,7 +9,6 @@ from kivy.core.window import Window
 
 from GetDataFilesData import get_accounts_data, get_categories_data_from
 
-
 from TxtCategoriesData import create_categories_data_file
 from TxtAccountsData import create_accounts_data_file
 from CsvTransactionHistory import create_transaction_history_file
@@ -19,7 +18,7 @@ create_categories_data_file('data_files/categories-data.txt')
 create_accounts_data_file('data_files/accounts-data.txt')
 create_transaction_history_file('data_files/transaction-history.csv')
 
-# Loading Multiple .kv files
+# loading multiple .kv files
 Builder.load_file('accounts_menu_stat.kv')
 Builder.load_file('accounts_menu_main.kv')
 Builder.load_file('accounts_menu.kv')
@@ -30,36 +29,25 @@ Window.size = (0.4 * 1080, 0.4 * 2280)
 class MonthsMenu(BoxLayout):
     pass
 
+
 class AccountsMenu_main(BoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
-        self.accounts_and_savings_data_dict = get_accounts_data(
+        self.accounts_data_dict = get_accounts_data(
             accounts_data_file_path='data_files/accounts-data.txt')
 
-        print("# accounts_and_savings_data_dictionary:", self.accounts_and_savings_data_dict)
-
-        self.accounts_balance_rub = 0
-        self.accounts_balance_usd = 0
-
-        for item in self.accounts_and_savings_data_dict['Accounts'].items():
-            try:
-                if item[1]['Currency'] == "RUB":
-                    self.accounts_balance_rub += int(item[1]['Balance'])
-
-                elif item[1]['Currency'] == "USD":
-                    self.accounts_balance_usd += int(item[1]['Balance'])
-
-            except IndexError:
-                continue
+        print("# accounts_and_savings_data_dictionary:", self.accounts_data_dict)
 
 
 class AccountsMenu_stat(BoxLayout):
     def click(self):
         self.remove_widget(self.ids.AccountsMenu_stat_label)
 
+
 class AccountsMenu(BoxLayout):
     pass
+
 
 class TransactionMenu(BoxLayout):
     pass
@@ -76,11 +64,13 @@ class CategoriesMenu(BoxLayout):
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
         Clock.schedule_once(self.button_data_setter, -1)
+
     def button_data_setter(self, *args):
         for button_id in self.ids:
             try:
                 getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
-                getattr(self.ids, button_id).background_color = self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
+                getattr(self.ids, button_id).background_color = \
+                self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
             except KeyError:
                 continue
 
@@ -95,9 +85,11 @@ class MainMenuWidget(BoxLayout):
                                            allow_no_selection=False, background_normal='Icons/statistica.png',
                                            background_down='Icons/statistica_down.png',
                                            on_press=self.switch_accounts_menu_type_to_stat)
+
     def switch_accounts_menu_type_to_main(self, *args):
         self.ids.AccountsMenu_id.clear_widgets()
         self.ids.AccountsMenu_id.add_widget(self.ids.AccountsMenu_id.ids.AccountsMenu_main_id)
+
     def switch_accounts_menu_type_to_stat(self, *args):
         self.ids.AccountsMenu_id.clear_widgets()
         self.ids.AccountsMenu_id.add_widget(AccountsMenu_stat())

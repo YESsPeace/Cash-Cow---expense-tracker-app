@@ -21,6 +21,7 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
 
         for line in accounts_and_savings_data_file:
             data_list = line.split('-')
+
             try:
                 name_of_account = data_list[1]
                 color_of_account = tuple([float(i) for i in data_list[2][:-1].split(',')])
@@ -28,6 +29,9 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
                 color_accounts_data_dict[name_of_account] = color_of_account
 
             except IndexError:
+                continue
+
+            except ValueError:
                 continue
 
     with open(money_file_path, encoding="utf-8-sig") as csvfile:
@@ -73,8 +77,15 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
             transaction_dict[date] = {}
 
             transaction_dict[date]['Type'] = clean_row[1]
-            transaction_dict[date]['From'] = clean_row[2]
-            transaction_dict[date]['To'] = clean_row[3]
+
+            if transaction_dict[date]['Type'] == 'Income':
+                transaction_dict[date]['From'] = clean_row[3]
+                transaction_dict[date]['To'] = clean_row[2]
+
+            else:
+                transaction_dict[date]['From'] = clean_row[2]
+                transaction_dict[date]['To'] = clean_row[3]
+
             transaction_dict[date]['FromSUM'] = clean_row[4]
             transaction_dict[date]['FromCurrency'] = clean_row[5]
             transaction_dict[date]['ToSUM'] = clean_row[6]
