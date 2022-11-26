@@ -14,7 +14,7 @@ def get_accounts_and_savings_names(data_from_1money_dict):
             if not new_account_1 in accounts_name_type_income_or_expenses:
                 accounts_name_type_income_or_expenses.append(new_account_1)
 
-        if transaction['Type'] == 'Expenses':
+        elif transaction['Type'] == 'Expenses':
             new_account_1 = transaction['From']['Name']
 
             if not new_account_1 in accounts_name_type_income_or_expenses:
@@ -31,10 +31,15 @@ def get_accounts_and_savings_names(data_from_1money_dict):
                 accounts_name_type_transfer.append(new_account_2)
 
     # cycle which distribute a name of an account
-    for account in accounts_name_type_transfer:
+    for i in range(len(accounts_name_type_transfer)):
         # if account in expenses, then it's not a savings
-        if account in accounts_name_type_income_or_expenses:
-            accounts_name_type_transfer.remove(account)
+        if accounts_name_type_transfer[i] in accounts_name_type_income_or_expenses:
+            # I used this way, cause else the cycle will be losing elements, when it's deleting they
+            # because he check the list step by step
+            accounts_name_type_transfer[i] = None
+
+    # deleting all None
+    accounts_name_type_transfer = [i for i in accounts_name_type_transfer if i is not None]
 
     return accounts_name_type_income_or_expenses, accounts_name_type_transfer
 
@@ -42,10 +47,6 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
 def set_accounts_data_from_1money(may_new_accounts_names_list, accounts_data_file_path='data_files/Test_files/test_accounts-data.txt'):
     # getting old data
-    from GetDataFilesData import get_accounts_data
-
-    old_data_dict = get_accounts_data()
-
     accounts_data_file = open(accounts_data_file_path, mode='r+', encoding='utf-8-sig')
 
     old_lines = accounts_data_file.readlines()
@@ -53,12 +54,14 @@ def set_accounts_data_from_1money(may_new_accounts_names_list, accounts_data_fil
     last_num_of_account = int(old_lines[-1].split('-')[0].split('_')[1])
 
     old_accounts_names = []
+    # getting old data
     for line in accounts_data_file:
         account_name = line.split('-')[1]
         old_accounts_names.append(account_name)
 
     accounts_data_file.close()
 
+    # set new accounts
     with open(accounts_data_file_path, mode='w+', encoding='utf-8-sig') as accounts_data_file:
         for old_line in old_lines:
             accounts_data_file.write(old_line)
@@ -90,4 +93,4 @@ if __name__ == '__main__':
 
     print()
 
-    set_accounts_data_from_1money(accounts_names_list)
+    #set_accounts_data_from_1money(accounts_names_list)
