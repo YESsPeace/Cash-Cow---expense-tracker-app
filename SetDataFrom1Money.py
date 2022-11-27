@@ -44,8 +44,8 @@ def get_accounts_and_savings_names(data_from_1money_dict):
     return accounts_name_type_income_or_expenses, accounts_name_type_transfer
 
 
-
-def set_accounts_data_from_1money(may_new_accounts_names_list, accounts_data_file_path='data_files/Test_files/test_accounts-data.txt'):
+def set_accounts_data_from_1money(may_new_accounts_names_list,
+                                  accounts_data_file_path='data_files/accounts-data.txt'):
     # getting old data
     accounts_data_file = open(accounts_data_file_path, mode='r+', encoding='utf-8-sig')
 
@@ -72,25 +72,71 @@ def set_accounts_data_from_1money(may_new_accounts_names_list, accounts_data_fil
                 accounts_data_file.write('account_' + str(last_num_of_account) + '-' + name +
                                          '-' + '0, .41, .24, 1' + '\n')
 
-def set_gategories_data_from_1money(savings_names_list, savings_data_file_path='data_files/savings-data.txt'):
+
+def set_savings_data_from_1money(savings_names_list, savings_data_file_path='data_files/savings-data.txt'):
     pass
 
 
 def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='data_files/categories-data.txt'):
+    # getting old data
+    categories_dict = {}
+    old_categories_list = []
+    last_category_num = 0
+    with open(categories_data_file_path, mode='r+', encoding='utf-8-sig') as categories_data_file:
+        for line in categories_data_file:
+            categories_id, name, color = line[:-1].split('-')
+            if name != '+':
+                old_categories_list.append(name)
+                categories_dict[categories_id] = {'Name': name, 'Color': color}
+                last_category_num += 1
+
+    # getting categories from 1Money
+    new_categories_list = []
+    for transaction in data_from_1money_dict:
+        if data_from_1money_dict[transaction]['Type'] == 'Expenses':
+            name = data_from_1money_dict[transaction]['To']['Name']
+            if not name in new_categories_list:
+                if not name in old_categories_list:
+                    new_categories_list.append(name)
+
+    # adding new categories to dictionary with color
+    for name in new_categories_list:
+        categories_dict['Categories_' + str(last_category_num)] = {'Name': name, 'Color': '.38, .39, .61, 1'}
+        last_category_num += 1
+
+    # setting all categories to file
+    with open(categories_data_file_path, mode='w+', encoding='utf-8-sig') as categories_data_file:
+        for category_id in categories_dict:
+            name = categories_dict[category_id]['Name']
+            color = categories_dict[category_id]['Color']
+            categories_data_file.write(
+                category_id + '-' + name + '-' + color + '\n'
+            )
+        # adding missing categories
+        if last_category_num < 15:
+            for num in range(last_category_num, 16):
+                category_id = 'Categories_' + str(num)
+                name = '+'
+                color = '.38, .39, .61, 1'
+                categories_data_file.write(
+                    category_id + '-' + name + '-' + color + '\n'
+                )
+
+def set_incomes_data_from_1money():
     pass
 
 
 if __name__ == '__main__':
     from GetDataFrom1Money import get_data_from_1money
-
     data_dict_from_1money = get_data_from_1money()
 
-    accounts_and_savings_names = get_accounts_and_savings_names(data_from_1money_dict=data_dict_from_1money)
-    accounts_names_list, savings_names_list = accounts_and_savings_names[0], accounts_and_savings_names[1]
 
-    print(f"accounts' names: {accounts_names_list}")
-    print(f"savings' names: {savings_names_list}")
+    # accounts_and_savings_names = get_accounts_and_savings_names(data_from_1money_dict=data_dict_from_1money)
+    # accounts_names_list, savings_names_list = accounts_and_savings_names[0], accounts_and_savings_names[1]
+    #
+    # print(f"accounts' names: {accounts_names_list}")
+    # print(f"savings' names: {savings_names_list}")
+    # print()
+    # set_accounts_data_from_1money(accounts_names_list)
 
-    print()
-
-    #set_accounts_data_from_1money(accounts_names_list)
+    set_categories_data_from_1money(data_dict_from_1money)
