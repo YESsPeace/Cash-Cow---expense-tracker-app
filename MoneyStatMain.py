@@ -1,19 +1,20 @@
-from kivy.lang import Builder
-
 from kivy.app import App
 from kivy.metrics import dp
+from kivy.lang import Builder
 from kivy.properties import Clock
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
-from kivy.core.window import Window
 
 from GetDataFilesData import get_accounts_data, get_categories_data_from
 
+from CsvTransactionHistory import create_transaction_history_file
 from TxtCategoriesData import create_categories_data_file
 from TxtAccountsData import create_accounts_data_file
-from CsvTransactionHistory import create_transaction_history_file
+from TxtSavingsData import create_savings_data_file
 
 # makes empty data files
+create_savings_data_file('data_files/savings-data.txt')
 create_categories_data_file('data_files/categories-data.txt')
 create_accounts_data_file('data_files/accounts-data.txt')
 create_transaction_history_file('data_files/transaction-history.csv')
@@ -25,6 +26,7 @@ Builder.load_file('accounts_menu.kv')
 Builder.load_file('categories_menu.kv')
 
 Window.size = (0.4 * 1080, 0.4 * 2280)
+
 
 class MonthsMenu(BoxLayout):
     pass
@@ -70,7 +72,7 @@ class CategoriesMenu(BoxLayout):
             try:
                 getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
                 getattr(self.ids, button_id).background_color = \
-                self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
+                    self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
             except KeyError:
                 continue
 

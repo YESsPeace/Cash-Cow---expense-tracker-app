@@ -158,38 +158,72 @@ def get_accounts_and_savings_names(data_from_1money_dict):
     return accounts_name_type_income_or_expenses, accounts_name_type_transfer
 
 
-def set_accounts_data_from_1money(may_new_accounts_names_list,
+def set_accounts_data_from_1money(may_new_accounts_list,
                                   accounts_data_file_path='data_files/accounts-data.txt'):
     # getting old data
     accounts_data_file = open(accounts_data_file_path, mode='r+', encoding='utf-8-sig')
 
     old_lines = accounts_data_file.readlines()
 
-    last_num_of_account = int(old_lines[-1].split('-')[0].split('_')[1])
+    try:
+        last_num_of_account = int(old_lines[-1].split('-')[0].split('_')[1])
 
-    old_accounts_names = []
-    # getting old data
-    for line in accounts_data_file:
-        account_name = line.split('-')[1]
-        old_accounts_names.append(account_name)
+    except IndexError:
+        last_num_of_account = 0
 
     accounts_data_file.close()
+
+    # getting old names
+    old_accounts_names = []
+    for line in old_lines:
+        account_name = line.split('-')[1]
+        old_accounts_names.append(account_name)
 
     # set new accounts
     with open(accounts_data_file_path, mode='w+', encoding='utf-8-sig') as accounts_data_file:
         for old_line in old_lines:
             accounts_data_file.write(old_line)
 
-        for account in may_new_accounts_names_list:
-            if not account in old_accounts_names:
+        for account in may_new_accounts_list:
+            if not account['Name'] in old_accounts_names:
                 last_num_of_account += 1
                 accounts_data_file.write('account_' + str(last_num_of_account) + '-' + account['Name'] +
-                                         '-' + '0, .41, .24, 1' + '-' + account['Balance'] + '-' + account['Currency'] +'\n')
+                                         '-' + '0, .41, .24, 1' + '-' + str(account['Balance']) + '-' +
+                                         account['Currency'] +'\n')
 
 
-def set_savings_data_from_1money(savings_names_list, savings_data_file_path='data_files/savings-data.txt'):
-    pass
+def set_savings_data_from_1money(may_new_savings_names_list,
+                                 savings_data_file_path='data_files/savings-data.txt'):
+    # getting old data
+    savings_data_file = open(savings_data_file_path, mode='r+', encoding='utf-8-sig')
 
+    old_lines = savings_data_file.readlines()
+
+    try:
+        last_num_of_savings = int(old_lines[-1].split('-')[0].split('_')[1])
+
+    except IndexError:
+        last_num_of_savings = -1
+
+    savings_data_file.close()
+
+    # getting old names
+    old_savings_names = []
+    for line in old_lines:
+        savings_name = line.split('-')[1]
+        old_savings_names.append(savings_name)
+
+    # set new savings
+    with open(savings_data_file_path, mode='w+', encoding='utf-8-sig') as savings_data_file:
+        for old_line in old_lines:
+            savings_data_file.write(old_line)
+
+        for savings in may_new_savings_names_list:
+            if not savings['Name'] in old_savings_names:
+                last_num_of_savings += 1
+                savings_data_file.write('savings_' + str(last_num_of_savings) + '-' + savings['Name'] +
+                                        '-' + '.27, .58, .29, 1' + '-' + str(savings['Balance']) + '-' +
+                                        savings['Currency'] +'\n')
 
 def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='data_files/categories-data.txt'):
     # getting old data
@@ -266,7 +300,10 @@ if __name__ == '__main__':
         set_accounts_data_from_1money(accounts_names_list)
 
     elif n == 3:
-        pass
+        accounts_and_savings_names = get_accounts_and_savings_names(data_from_1money_dict=data_dict_from_1money)
+        accounts_names_list, savings_names_list = accounts_and_savings_names[0], accounts_and_savings_names[1]
+
+        set_savings_data_from_1money(savings_names_list)
 
     elif n == 4:
         set_categories_data_from_1money(data_dict_from_1money)
