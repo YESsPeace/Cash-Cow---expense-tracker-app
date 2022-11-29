@@ -42,6 +42,7 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
         dict_for_translation = {'Доход': 'Income', 'Расход': 'Expenses', 'Перевод': 'Transfer', 'Наличные': 'Cash',
                                 'Зарплата': 'Salary'}
 
+        num_of_row = 0
         for row in reader:
             if "ДАТА" in row:
                 continue
@@ -72,27 +73,29 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
             elif not clean_row[3] in color_categories_data_dict:
                 clean_row[3] = {'Name': clean_row[3], 'Color': (0.38, 0.39, 0.61, 1)}
 
-            date = clean_row[0]
+            transaction_dict[num_of_row] = {}
 
-            transaction_dict[date] = {}
+            transaction_dict[num_of_row]['Date'] = clean_row[0]
 
-            transaction_dict[date]['Type'] = clean_row[1]
+            transaction_dict[num_of_row]['Type'] = clean_row[1]
 
-            if transaction_dict[date]['Type'] == 'Income':
-                transaction_dict[date]['From'] = clean_row[3]
-                transaction_dict[date]['To'] = clean_row[2]
+            if transaction_dict[num_of_row]['Type'] == 'Income':
+                transaction_dict[num_of_row]['From'] = clean_row[3]
+                transaction_dict[num_of_row]['To'] = clean_row[2]
 
             else:
-                transaction_dict[date]['From'] = clean_row[2]
-                transaction_dict[date]['To'] = clean_row[3]
+                transaction_dict[num_of_row]['From'] = clean_row[2]
+                transaction_dict[num_of_row]['To'] = clean_row[3]
 
-            transaction_dict[date]['FromSUM'] = clean_row[4]
-            transaction_dict[date]['FromCurrency'] = clean_row[5]
-            transaction_dict[date]['ToSUM'] = clean_row[6]
-            transaction_dict[date]['ToCurrency'] = clean_row[7]
+            transaction_dict[num_of_row]['FromSUM'] = clean_row[4]
+            transaction_dict[num_of_row]['FromCurrency'] = clean_row[5]
+            transaction_dict[num_of_row]['ToSUM'] = clean_row[6]
+            transaction_dict[num_of_row]['ToCurrency'] = clean_row[7]
 
             if len(clean_row) >= 9:
-                transaction_dict[date]['Сomment'] = clean_row[8]
+                transaction_dict[num_of_row]['Сomment'] = clean_row[8]
+
+            num_of_row += 1
 
 
         return transaction_dict
