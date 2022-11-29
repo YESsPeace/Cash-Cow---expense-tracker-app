@@ -1,10 +1,11 @@
-from kivy.app import App
+from kivymd.app import MDApp
 from kivy.metrics import dp
 from kivy.lang import Builder
 from kivy.properties import Clock
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
+from kivymd.uix.swiper import MDSwiperItem
 
 from GetDataFilesData import get_accounts_data, get_categories_data_from
 
@@ -147,8 +148,7 @@ class MainMenuWidget(BoxLayout):
 
             self.ids.top_layout_background.height = dp(125)
 
-
-class MoneyStatApp(App):
+class MoneyStatApp(MDApp):
     pass
 
 
