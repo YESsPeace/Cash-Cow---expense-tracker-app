@@ -5,7 +5,10 @@ from kivy.properties import Clock
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
-from kivymd.uix.swiper import MDSwiperItem
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.swiper import MDSwiperItem, MDSwiper
+from kivymd.uix.tab import MDTabsBase
 
 from GetDataFilesData import get_accounts_data, get_categories_data_from
 
@@ -29,10 +32,6 @@ Builder.load_file('categories_menu.kv')
 Window.size = (0.4 * 1080, 0.4 * 2280)
 
 
-class MonthsMenu(BoxLayout):
-    pass
-
-
 class AccountsMenu_main(BoxLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
@@ -52,11 +51,7 @@ class AccountsMenu(BoxLayout):
     pass
 
 
-class TransactionMenu(BoxLayout):
-    pass
-
-
-class CategoriesMenu(BoxLayout):
+class CategoriesMenu(MDScreen):
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
@@ -77,80 +72,22 @@ class CategoriesMenu(BoxLayout):
             except KeyError:
                 continue
 
+    def next_swiper_item(self):
+        if self.ids.my_swiper.get_current_index() < len(self.ids.my_swiper.get_items()) - 1:
+            print('1')
+            self.ids.my_swiper.set_current(self.ids.my_swiper.get_current_index() + 1)
 
-class MainMenuWidget(BoxLayout):
-    def top_menu_toggle_button_setter(self, *args):
-
-        self.toggle_button1 = ToggleButton(text='ACCOUNTS', group='sex', state='down', allow_no_selection=False,
-                                           on_release=self.switch_accounts_menu_type_to_main)
-
-        self.toggle_button2 = ToggleButton(text='', group='sex', size_hint=(None, 1), width=dp(50),
-                                           allow_no_selection=False, background_normal='Icons/statistica.png',
-                                           background_down='Icons/statistica_down.png',
-                                           on_press=self.switch_accounts_menu_type_to_stat)
-
-    def switch_accounts_menu_type_to_main(self, *args):
-        self.ids.AccountsMenu_id.clear_widgets()
-        self.ids.AccountsMenu_id.add_widget(self.ids.AccountsMenu_id.ids.AccountsMenu_main_id)
-
-    def switch_accounts_menu_type_to_stat(self, *args):
-        self.ids.AccountsMenu_id.clear_widgets()
-        self.ids.AccountsMenu_id.add_widget(AccountsMenu_stat())
-
-    def page_layout_swipe_detected(self):
-        Clock.schedule_once(self.change_layout_of_page_layuot)
-
-    def change_layout_of_page_layuot(self, *args):
-        self.top_menu_toggle_button_setter()
-        if self.ids.my_PageLayout.page == 0:
-            self.from_any_menus_to_accounts_menu()
-
-        if self.ids.my_PageLayout.page != 0:
-            self.return_any_page_layout_from_accounts_menu()
-
-    def return_any_page_layout_from_accounts_menu(self):
-        if self.toggle_button1 in self.ids.middle_top_layout.children:
-            # removing widgets which were before
-            self.ids.middle_top_layout.remove_widget(self.toggle_button1)
-            self.ids.middle_top_layout.remove_widget(self.toggle_button2)
-            # adding the new toggle buttons
-            self.ids.middle_top_layout.add_widget(self.ids.left_btn)
-            self.ids.middle_top_layout.add_widget(self.ids.middle_btn)
-            self.ids.middle_top_layout.add_widget(self.ids.right_btn)
-
-    def from_any_menus_to_accounts_menu(self):  # change the middle top layout
-        if self.ids.middle_btn in self.ids.middle_top_layout.children:
-            # removing widgets which were before
-            self.ids.middle_top_layout.remove_widget(self.ids.left_btn)
-            self.ids.middle_top_layout.remove_widget(self.ids.middle_btn)
-            self.ids.middle_top_layout.remove_widget(self.ids.right_btn)
-            # adding the new toggle buttons
-            self.ids.middle_top_layout.add_widget(self.toggle_button1)
-            self.ids.middle_top_layout.add_widget(self.toggle_button2)
-
-    def click_on_month_in_main(self):
-        self.ids.top_layout.remove_widget(self.ids.middle_top_layout)
-        self.ids.MainMenuWidget.remove_widget(self.ids.my_PageLayout)
-        self.ids.MainMenuWidget.remove_widget(self.ids.bottom_navigation_layout)
-
-        self.ids.top_layout_background.height = dp(125 * 0.6)
-        self.ids.MainMenuWidget.add_widget(MonthsMenu())
-        self.ids.MainMenuWidget.add_widget(self.ids.bottom_navigation_layout)
-
-    def return_page_layout(self):
-        if not self.ids.my_PageLayout in self.ids.MainMenuWidget.children:
-            self.ids.MainMenuWidget.clear_widgets()
-
-            self.ids.MainMenuWidget.add_widget(self.ids.top_layout_background)
-            self.ids.top_layout.add_widget(self.ids.middle_top_layout)
-            self.ids.MainMenuWidget.add_widget(self.ids.my_PageLayout)
-            self.ids.MainMenuWidget.add_widget(self.ids.bottom_navigation_layout)
-
-            self.ids.top_layout_background.height = dp(125)
-
-class MoneyStatApp(MDApp):
+        else:
+            print('2')
+            # self.ids.my_swiper.add_widget(MDScreen())
+class Tab(MDFloatLayout, MDTabsBase):
     pass
 
+class MoneyStatApp(MDApp):
+    def build(self):
+        self.theme_cls.material_style = "M3"
+        self.theme_cls.theme_style = "Dark"
+        return Builder.load_file('MainScreen.kv')
 
 if __name__ == '__main__':
     MoneyStatApp().run()
