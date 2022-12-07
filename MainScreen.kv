@@ -1,66 +1,63 @@
-Main:
+<MainSrceen>:
 
-<Main@MDFloatLayout>:
+    MDBottomNavigation:
+        selected_color_background: "grey"
+        text_color_active: "lightgrey"
 
-    MDScreen:
-        MDBottomNavigation:
-            selected_color_background: "grey"
-            text_color_active: "lightgrey"
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Accounts'
+            icon: 'Icons/Accounts-icon-white.png'
 
-            MDBottomNavigationItem:
-                name: 'screen 1'
-                text: 'Accounts'
-                icon: 'Icons/Accounts-icon-white.png'
+            AccountsMenu:
+                id: AccountsMenu_id
 
-                AccountsMenu:
-                    id: AccountsMenu_id
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Categories'
+            icon: 'Icons/Categories-icon-white.png'
 
-            MDBottomNavigationItem:
-                name: 'screen 2'
-                text: 'Categories'
-                icon: 'Icons/Categories-icon-white.png'
+            CategoriesMenu:
+                id: CategoriesMenu
 
-                CategoriesMenu:
-                    id: CategoriesMenu
+        MDBottomNavigationItem:
+            name: 'screen 3'
+            text: "Transaction"
+            icon: 'Icons/Transaction-icon-white.png'
 
-            MDBottomNavigationItem:
-                name: 'screen 3'
+            Label:
                 text: "Transaction"
-                icon: 'Icons/Transaction-icon-white.png'
+                canvas.before:
+                    Color:
+                        rgba: .2, .2, .2, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
 
-                Label:
-                    text: "Transaction"
-                    canvas.before:
-                        Color:
-                            rgba: .2, .2, .2, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
+        MDBottomNavigationItem:
+            name: 'screen 4'
+            text: "Budget"
+            icon: 'Icons/Budget-icon-white.png'
 
-            MDBottomNavigationItem:
-                name: 'screen 4'
+            Label:
                 text: "Budget"
-                icon: 'Icons/Budget-icon-white.png'
+                canvas.before:
+                    Color:
+                        rgba: .2, .2, .2, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
 
-                Label:
-                    text: "Budget"
-                    canvas.before:
-                        Color:
-                            rgba: .2, .2, .2, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
+        MDBottomNavigationItem:
+            name: 'screen 5'
+            text: 'Overview'
+            icon: 'Icons/Overview-icon-white.png '
 
-            MDBottomNavigationItem:
-                name: 'screen 5'
-                text: 'Overview'
-                icon: 'Icons/Overview-icon-white.png '
-
-                Label:
-                    text: "Overview"
-                    canvas.before:
-                        Color:
-                            rgba: .2, .2, .2, 1
-                        Rectangle:
-                            size: self.size
-                            pos: self.pos
+            Label:
+                text: "Overview"
+                canvas.before:
+                    Color:
+                        rgba: .2, .2, .2, 1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos

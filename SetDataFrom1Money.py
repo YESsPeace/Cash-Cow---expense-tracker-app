@@ -32,11 +32,11 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
             else:  # if it's an old account
                 name = accounts_already_in['Name']
-                balance = round(float(accounts_already_in['Balance']) + float(transaction['ToSUM']), 2)  # old balance + new transaction Sum
+                balance = round(float(accounts_already_in['Balance']) + float(transaction['ToSUM']),
+                                2)  # old balance + new transaction Sum
                 currency = accounts_already_in['Currency']
 
                 new_account_1 = {'Name': name, 'Balance': balance, 'Currency': currency}
-
 
             accounts_name_type_income_or_expenses.append(new_account_1)
 
@@ -64,7 +64,8 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
             else:  # if it's an old account
                 name = accounts_already_in['Name']
-                balance = round(float(accounts_already_in['Balance']) - float(transaction['FromSUM']), 2)  # old balance + new transaction Sum
+                balance = round(float(accounts_already_in['Balance']) - float(transaction['FromSUM']),
+                                2)  # old balance + new transaction Sum
                 currency = accounts_already_in['Currency']
 
                 new_account_1 = {'Name': name, 'Balance': balance, 'Currency': currency}
@@ -91,7 +92,6 @@ def get_accounts_and_savings_names(data_from_1money_dict):
                 except (KeyError, TypeError):
                     continue
 
-
             for k in range(len(accounts_name_type_transfer)):
                 try:
                     if accounts_name_type_transfer[k]['Name'] == transaction['To']['Name']:
@@ -103,7 +103,7 @@ def get_accounts_and_savings_names(data_from_1money_dict):
                 except (KeyError, TypeError):
                     continue
 
-            if flag_1 == True:  # if it's a new account
+            if flag_1:  # if it's a new account
                 name = transaction['From']['Name']
                 balance = round(-float(transaction['FromSUM']), 2)
                 currency = transaction['FromCurrency']
@@ -117,14 +117,14 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
                 new_account_1 = {'Name': name, 'Balance': balance, 'Currency': currency}
 
-            if flag_2 == True:
+            if flag_2:  # if it's a new account
                 name = transaction['To']['Name']
                 balance = round(float(transaction['ToSUM']), 2)
                 currency = transaction['ToCurrency']
 
                 new_account_2 = {'Name': name, 'Balance': balance, 'Currency': currency}
 
-            else:   # if it's an old account
+            else:  # if it's an old account
                 name = account_already_in_2['Name']
                 balance = round(float(account_already_in_2['Balance']) + float(transaction['ToSUM']), 2)
                 currency = account_already_in_2['Currency']
@@ -149,7 +149,6 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
             except TypeError:
                 continue
-
 
     # deleting all None
     accounts_name_type_income_or_expenses = [i for i in accounts_name_type_income_or_expenses if i is not None]
@@ -189,7 +188,7 @@ def set_accounts_data_from_1money(may_new_accounts_list,
                 last_num_of_account += 1
                 accounts_data_file.write('account_' + str(last_num_of_account) + '-' + account['Name'] +
                                          '-' + '0, .41, .24, 1' + '-' + str(account['Balance']) + '-' +
-                                         account['Currency'] +'\n')
+                                         account['Currency'] + '\n')
 
 
 def set_savings_data_from_1money(may_new_savings_names_list,
@@ -223,7 +222,8 @@ def set_savings_data_from_1money(may_new_savings_names_list,
                 last_num_of_savings += 1
                 savings_data_file.write('savings_' + str(last_num_of_savings) + '-' + savings['Name'] +
                                         '-' + '.27, .58, .29, 1' + '-' + str(savings['Balance']) + '-' +
-                                        savings['Currency'] +'\n')
+                                        savings['Currency'] + '\n')
+
 
 def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='data_files/categories-data.txt'):
     # getting old data
@@ -270,6 +270,7 @@ def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_
                     category_id + '-' + name + '-' + color + '\n'
                 )
 
+
 def set_incomes_data_from_1money():
     pass
 
@@ -282,6 +283,7 @@ if __name__ == '__main__':
     print('4. set_categories_data_from_1money')
 
     from GetDataFrom1Money import get_data_from_1money
+
     data_dict_from_1money = get_data_from_1money()
 
     n = int(input('Ответ (цифра): '))

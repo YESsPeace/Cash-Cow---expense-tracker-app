@@ -1,0 +1,21 @@
+<DrawerClickableItem@MDNavigationDrawerItem>:
+    focus_color: "#e7e4c0"
+    unfocus_color: "#fffcf4"
+
+
+<MyNavigationDrawer>:
+    id: nav_drawer
+    radius: (0, 16, 16, 0)
+    elevation: 4
+    width: "240dp"
+
+
+    MDNavigationDrawerMenu:
+
+        DrawerClickableItem:
+            text: 'top'
+            on_release: root.open_main()
+
+        DrawerClickableItem:
+            text: 'other'
+            on_release: root.open_other()
