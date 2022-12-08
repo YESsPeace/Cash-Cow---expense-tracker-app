@@ -60,12 +60,6 @@ class CategoriesMenu(MDScreen):
                     self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
             except KeyError:
                 continue
-
-
-class Tab(MDFloatLayout, MDTabsBase):
-    pass
-
-
 class MainSrceen(MDScreen):
     pass
 
@@ -74,7 +68,10 @@ class MoneyStatApp(MDApp):
     def build(self):
         self.theme_cls.material_style = "M3"
         self.theme_cls.theme_style = "Dark"
-        return Builder.load_file('MoneyStatApp.kv')
+        return Manager()
+
+class Manager(ScreenManager):
+    pass
 
 class MyNavigationDrawer(MDNavigationDrawer):
     def open_main(self):
@@ -82,7 +79,6 @@ class MyNavigationDrawer(MDNavigationDrawer):
 
     def open_other(self):
         print(2)
-
 
 class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
@@ -103,6 +99,7 @@ if __name__ == '__main__':
     Builder.load_file('categories_menu.kv')
     Builder.load_file('MainScreen.kv')
     Builder.load_file('MyNavigationDrawer.kv')
+    Builder.load_file('manager.kv')
 
     # smartphone screen checking
     Window.size = (0.4 * 1080, 0.4 * 2280)
