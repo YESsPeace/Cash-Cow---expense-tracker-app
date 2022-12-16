@@ -1,17 +1,16 @@
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.uix.widget import Widget
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.properties import Clock, ObjectProperty
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
-from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.tab import MDTabsBase
 
-from datetime import date
+import datetime
+from calendar import monthrange, month_name
 
 from GetDataFilesData import get_accounts_data, get_categories_data_from
 
@@ -39,12 +38,56 @@ class AccountsMenu_stat(BoxLayout):
 class AccountsMenu(Screen):
     pass
 
-
 class CategoriesMenu(MDScreen):
-
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
+        self.days_in_month_icon_dict = {
+            28: 'Icons/Month_days_icons/twenty-eight.png',
+            29: 'Icons/Month_days_icons/twenty-nine.png',
+            30: 'Icons/Month_days_icons/thirty.png',
+            31: 'Icons/Month_days_icons/thirty-one.png'
+        }
+
+        # current menu date
+        self.current_menu_date = date_today
+
+        self.current_menu_year = current_year
+        self.current_menu_month = current_month
+
+        self.days_in_current_menu_month = monthrange(self.current_menu_year, self.current_menu_month)[1]
+        self.current_menu_month_name = month_name[self.current_menu_month]
+
+    def load_previous_month(self):
+        last_month_date = self.current_menu_date - datetime.timedelta(days=self.days_in_current_menu_month)
+        print('Year:', last_month_date.strftime("%Y") + ',', 'Month:', last_month_date.strftime("%m"))
+
+        self.current_menu_date = last_month_date
+
+    def load_next_month(self):
+        # getting next month
+        next_month_date = self.current_menu_date + datetime.timedelta(days=self.days_in_current_menu_month)
+        print('Year:', next_month_date.strftime("%Y") + ',', 'Month:', next_month_date.strftime("%m"))
+        print(next_month_date)
+
+        # update data in python
+        self.current_menu_date = next_month_date
+
+        self.days_in_current_menu_month = monthrange(self.current_menu_date.year, self.current_menu_date.month)[1]
+        self.current_menu_month_name = month_name[self.current_menu_date.month]
+
+        # update data in menu
+        self.ids.month_label.text = self.current_menu_month_name
+        self.ids.month_label.icon = self.days_in_month_icon_dict[self.days_in_current_menu_month]
+
+        self.ids.my_swiper.add_widget(Categories_buttons_menu())
+        self.ids.my_swiper.load_next()
+
+class Categories_buttons_menu(MDScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(**kwargs)
+
+        # getting data for categories
         self.categories_menu_button_data_dictionary = get_categories_data_from(
             categories_data_file_path='data_files/categories-data.txt'
         )
@@ -54,12 +97,15 @@ class CategoriesMenu(MDScreen):
 
     def button_data_setter(self, *args):
         for button_id in self.ids:
+            print(button_id)
             try:
-                getattr(self.ids, button_id).text = self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
+                getattr(self.ids, button_id).text = \
+                self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
                 getattr(self.ids, button_id).background_color = \
                     self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
             except KeyError:
                 continue
+
 class MainSrceen(MDScreen):
     pass
 
@@ -70,8 +116,10 @@ class MoneyStatApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         return Manager()
 
+
 class Manager(ScreenManager):
     pass
+
 
 class MyNavigationDrawer(MDNavigationDrawer):
     def open_main(self):
@@ -79,6 +127,7 @@ class MyNavigationDrawer(MDNavigationDrawer):
 
     def open_other(self):
         print(2)
+
 
 class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
@@ -96,17 +145,21 @@ if __name__ == '__main__':
     Builder.load_file('accounts_menu_stat.kv')
     Builder.load_file('accounts_menu_main.kv')
     Builder.load_file('accounts_menu.kv')
-    Builder.load_file('categories_menu.kv')
+    Builder.load_file('Categories_menu/categories_menu.kv')
     Builder.load_file('MainScreen.kv')
     Builder.load_file('MyNavigationDrawer.kv')
     Builder.load_file('manager.kv')
+    Builder.load_file('Categories_menu/categories_buttons_menu.kv')
 
     # smartphone screen checking
     Window.size = (0.4 * 1080, 0.4 * 2280)
 
     # date
-    date_today = date.today()
-    days_per_month = {1: 31, 2: 28, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
+    date_today = datetime.date.today()
+
+    current_year = date_today.year
+    current_month = date_today.month
+    current_day = date_today.day
 
     # start the app
     MoneyStatApp().run()

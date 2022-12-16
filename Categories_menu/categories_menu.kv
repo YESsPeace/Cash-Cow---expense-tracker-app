@@ -1,0 +1,67 @@
+<CategoriesMenu>:
+    background_color: .2, .2, .2, 1
+
+    MDTopAppBar:
+        id: top_bar
+
+        elevation: 4
+        pos_hint: {"top": 1}
+
+        MDIconButton:
+            icon: 'menu'
+            on_release: nav_drawer.set_state("open")
+
+    MDBoxLayout:
+        id: mont_menu
+
+        size_hint_y: None
+        height: top_bar.height * 0.75
+        pos: (top_bar.pos[0], top_bar.pos[1] - top_bar.height * 0.75)
+
+        md_bg_color: 0, 1, 1, 1
+
+        MDIconButton:
+            icon: 'Icons/next - Copy.png'
+            icon_size: "24sp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release:
+                my_swiper.load_previous()
+                root.load_previous_month()
+
+        MDLabel:
+
+        MDRectangleFlatIconButton:
+            id: month_label
+
+            text: root.current_menu_month_name
+            line_color: self.parent.md_bg_color
+            line_color: 0, 0, 0, 0
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+
+
+        MDLabel:
+
+        MDIconButton:
+            icon: 'Icons/next.png'
+            icon_size: "24sp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release:
+                root.load_next_month()
+
+
+    Carousel:
+        id: my_swiper
+        index: 1
+
+        size_hint_y: None
+        height: root.height - top_bar.height - mont_menu.height - dp(40)
+        y: root.height - self.height - top_bar.height - mont_menu.height - dp(20)
+
+        Categories_buttons_menu:
+            id: CategoriesMenu
+
+    MyNavigationDrawer:
+        id: nav_drawer
+
