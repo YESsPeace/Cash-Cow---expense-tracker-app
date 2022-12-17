@@ -41,47 +41,62 @@ class AccountsMenu(Screen):
 class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-
-        self.days_in_month_icon_dict = {
-            28: 'Icons/Month_days_icons/twenty-eight.png',
-            29: 'Icons/Month_days_icons/twenty-nine.png',
-            30: 'Icons/Month_days_icons/thirty.png',
-            31: 'Icons/Month_days_icons/thirty-one.png'
-        }
-
-        # current menu date
-        self.current_menu_date = date_today
-
-        self.current_menu_year = current_year
-        self.current_menu_month = current_month
-
-        self.days_in_current_menu_month = monthrange(self.current_menu_year, self.current_menu_month)[1]
-        self.current_menu_month_name = month_name[self.current_menu_month]
+        # just for first creating widgets
+        self.current_menu_month_name = current_menu_month_name
+        self.days_in_month_icon_dict = days_in_month_icon_dict
+        self.days_in_current_menu_month = days_in_current_menu_month
 
     def load_previous_month(self):
-        last_month_date = self.current_menu_date - datetime.timedelta(days=self.days_in_current_menu_month)
-        print('Year:', last_month_date.strftime("%Y") + ',', 'Month:', last_month_date.strftime("%m"))
+        global current_menu_date, days_in_current_menu_month, current_menu_month_name
 
-        self.current_menu_date = last_month_date
-
-    def load_next_month(self):
-        # getting next month
-        next_month_date = self.current_menu_date + datetime.timedelta(days=self.days_in_current_menu_month)
-        print('Year:', next_month_date.strftime("%Y") + ',', 'Month:', next_month_date.strftime("%m"))
-        print(next_month_date)
+        last_month_date = current_menu_date - datetime.timedelta(days=days_in_current_menu_month)
+        # print('Year:', last_month_date.strftime("%Y") + ',', 'Month:', last_month_date.strftime("%m"))
 
         # update data in python
-        self.current_menu_date = next_month_date
+        current_menu_date = last_month_date
 
-        self.days_in_current_menu_month = monthrange(self.current_menu_date.year, self.current_menu_date.month)[1]
-        self.current_menu_month_name = month_name[self.current_menu_date.month]
+        days_in_current_menu_month = monthrange(current_menu_date.year, current_menu_date.month)[1]
+        current_menu_month_name = month_name[current_menu_date.month]
 
         # update data in menu
-        self.ids.month_label.text = self.current_menu_month_name
-        self.ids.month_label.icon = self.days_in_month_icon_dict[self.days_in_current_menu_month]
+        self.ids.month_label.text = current_menu_month_name
+        self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        self.ids.my_swiper.add_widget(Categories_buttons_menu())
-        self.ids.my_swiper.load_next()
+        if self.ids.my_swiper.index == 0:
+            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=current_menu_month_name), index=-1)
+            self.ids.my_swiper.index = 1
+            print('After-previous', self.ids.my_swiper.slides)
+
+        self.ids.my_swiper.index = self.ids.my_swiper.index - 1
+
+        #self.ids.my_swiper.load_previous()
+
+
+
+    def load_next_month(self):
+        global current_menu_date, days_in_current_menu_month, current_menu_month_name
+
+        # getting next month
+        next_month_date = current_menu_date + datetime.timedelta(days=days_in_current_menu_month)
+        # print('Year:', next_month_date.strftime("%Y") + ',', 'Month:', next_month_date.strftime("%m"))
+
+        # update data in python
+        current_menu_date = next_month_date
+
+        days_in_current_menu_month = monthrange(current_menu_date.year, current_menu_date.month)[1]
+        current_menu_month_name = month_name[current_menu_date.month]
+
+        # update data in menu
+        self.ids.month_label.text = current_menu_month_name
+        self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
+
+        if self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1:
+            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=current_menu_month_name))
+            print('After-next', self.ids.my_swiper.slides)
+
+        self.ids.my_swiper.index = self.ids.my_swiper.index + 1
+
+        #self.ids.my_swiper.load_next()
 
 class Categories_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -97,7 +112,6 @@ class Categories_buttons_menu(MDScreen):
 
     def button_data_setter(self, *args):
         for button_id in self.ids:
-            print(button_id)
             try:
                 getattr(self.ids, button_id).text = \
                 self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
@@ -160,6 +174,22 @@ if __name__ == '__main__':
     current_year = date_today.year
     current_month = date_today.month
     current_day = date_today.day
+
+    # current menu date
+    days_in_month_icon_dict = {
+        28: 'Icons/Month_days_icons/twenty-eight.png',
+        29: 'Icons/Month_days_icons/twenty-nine.png',
+        30: 'Icons/Month_days_icons/thirty.png',
+        31: 'Icons/Month_days_icons/thirty-one.png'
+    }
+
+    current_menu_date = date_today
+
+    current_menu_year = current_year
+    current_menu_month = current_month
+
+    days_in_current_menu_month = monthrange(current_menu_year, current_menu_month)[1]
+    current_menu_month_name = month_name[current_menu_month]
 
     # start the app
     MoneyStatApp().run()

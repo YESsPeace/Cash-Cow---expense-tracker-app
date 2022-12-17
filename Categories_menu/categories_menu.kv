@@ -25,7 +25,6 @@
             icon_size: "24sp"
             pos_hint: {"center_x": .5, "center_y": .5}
             on_release:
-                my_swiper.load_previous()
                 root.load_previous_month()
 
         MDLabel:
@@ -50,17 +49,16 @@
             on_release:
                 root.load_next_month()
 
-
     Carousel:
         id: my_swiper
-        index: 1
+
 
         size_hint_y: None
         height: root.height - top_bar.height - mont_menu.height - dp(40)
         y: root.height - self.height - top_bar.height - mont_menu.height - dp(20)
 
         Categories_buttons_menu:
-            id: CategoriesMenu
+            name: 'CategoriesMenu'
 
     MyNavigationDrawer:
         id: nav_drawer
