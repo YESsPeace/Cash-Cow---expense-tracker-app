@@ -282,7 +282,7 @@ if __name__ == '__main__':
     print('3. set_savings_data_from_1money')
     print('4. set_categories_data_from_1money')
 
-    from GetDataFrom1Money import get_data_from_1money
+    from AppData.data_scripts.GetData.GetDataFrom1Money import get_data_from_1money
 
     data_dict_from_1money = get_data_from_1money()
 

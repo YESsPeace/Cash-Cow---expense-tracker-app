@@ -1,5 +1,4 @@
 from kivy.uix.screenmanager import Screen, ScreenManager
-from kivy.uix.widget import Widget
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.properties import Clock, ObjectProperty
@@ -12,12 +11,12 @@ from kivymd.uix.scrollview import MDScrollView
 import datetime
 from calendar import monthrange, month_name
 
-from GetDataFilesData import get_accounts_data, get_categories_data_from
+from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from
 
-from CsvTransactionHistory import create_transaction_history_file
-from TxtCategoriesData import create_categories_data_file
-from TxtAccountsData import create_accounts_data_file
-from TxtSavingsData import create_savings_data_file
+from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
+from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file
+from AppData.data_scripts.Creating_data_files.TxtAccountsData import create_accounts_data_file
+from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savings_data_file
 
 
 class AccountsMenu_main(BoxLayout):
@@ -25,7 +24,7 @@ class AccountsMenu_main(BoxLayout):
         super().__init__(**kwargs)
 
         self.accounts_data_dict = get_accounts_data(
-            accounts_data_file_path='data_files/accounts-data.txt')
+            accounts_data_file_path='AppData/data_files/accounts-data.txt')
 
         print("# accounts_and_savings_data_dictionary:", self.accounts_data_dict)
 
@@ -37,6 +36,7 @@ class AccountsMenu_stat(BoxLayout):
 
 class AccountsMenu(Screen):
     pass
+
 
 class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -63,15 +63,15 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
         if self.ids.my_swiper.index == 0:
-            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=current_menu_month_name), index=-1)
+            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=last_month_date.strftime("%Y") + '.' +
+                                                                       last_month_date.strftime("%m")), index=-1)
+                                                                       # current_menu_month_name
             self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index - 1
 
-        #self.ids.my_swiper.load_previous()
-
-
+        # self.ids.my_swiper.load_previous()
 
     def load_next_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
@@ -91,12 +91,15 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
         if self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1:
-            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=current_menu_month_name))
+            self.ids.my_swiper.add_widget(Categories_buttons_menu(name=next_month_date.strftime("%Y") + '.' +
+                                                                       next_month_date.strftime("%m")))
+                                                                       # current_menu_month_name
             print('After-next', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index + 1
 
-        #self.ids.my_swiper.load_next()
+        # self.ids.my_swiper.load_next()
+
 
 class Categories_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -104,7 +107,7 @@ class Categories_buttons_menu(MDScreen):
 
         # getting data for categories
         self.categories_menu_button_data_dictionary = get_categories_data_from(
-            categories_data_file_path='data_files/categories-data.txt'
+            categories_data_file_path='AppData/data_files/categories-data.txt'
         )
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
@@ -114,11 +117,12 @@ class Categories_buttons_menu(MDScreen):
         for button_id in self.ids:
             try:
                 getattr(self.ids, button_id).text = \
-                self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
+                    self.categories_menu_button_data_dictionary[button_id[:-12]]['Name']
                 getattr(self.ids, button_id).background_color = \
                     self.categories_menu_button_data_dictionary[button_id[:-12]]['Color']
             except KeyError:
                 continue
+
 
 class MainSrceen(MDScreen):
     pass
@@ -150,20 +154,20 @@ class ContentNavigationDrawer(MDScrollView):
 
 if __name__ == '__main__':
     # makes empty data files
-    create_savings_data_file('data_files/savings-data.txt')
-    create_categories_data_file('data_files/categories-data.txt')
-    create_accounts_data_file('data_files/accounts-data.txt')
-    create_transaction_history_file('data_files/transaction-history.csv')
+    create_savings_data_file('AppData/data_files/savings-data.txt')
+    create_categories_data_file('AppData/data_files/categories-data.txt')
+    create_accounts_data_file('AppData/data_files/accounts-data.txt')
+    create_transaction_history_file('AppData/data_files/transaction-history.csv')
 
     # loading multiple .kv files
-    Builder.load_file('accounts_menu_stat.kv')
-    Builder.load_file('accounts_menu_main.kv')
-    Builder.load_file('accounts_menu.kv')
-    Builder.load_file('Categories_menu/categories_menu.kv')
+    Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
+    Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
+    Builder.load_file('AppMenus/Accounts_menu/accounts_menu.kv')
+    Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
     Builder.load_file('MainScreen.kv')
     Builder.load_file('MyNavigationDrawer.kv')
     Builder.load_file('manager.kv')
-    Builder.load_file('Categories_menu/categories_buttons_menu.kv')
+    Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
 
     # smartphone screen checking
     Window.size = (0.4 * 1080, 0.4 * 2280)
