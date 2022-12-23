@@ -2,9 +2,9 @@
 # {'date': {'Type': 'Expenses', 'From': {'Name': 'Cash', 'Color':... and other}}
 # with it I can get data from 1Money's .csv file, who have all transaction
 
-def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_2022.csv',
-                         categories_data_file_path='data_files/Test_files/test_categories-data.txt',
-                         accounts_data_file_path='data_files/Test_files/test_accounts-data.txt'):
+def get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
+                         categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
+                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'):
     import csv
 
     with open(categories_data_file_path, mode='r+', encoding="utf-8-sig") as categories_data_file:
@@ -47,10 +47,12 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
             if "ДАТА" in row:
                 continue
 
-            elif row == ['', '']:
+            elif row == ['', '']:  # After that in the file will be Accounts amounts
                 break
 
             clean_row = []
+
+            num_of_i = 0
             for i in row:
                 if i != "":
                     if '(' in i:
@@ -60,6 +62,7 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
                         i = dict_for_translation[i]
 
                     clean_row.append(i)
+                    num_of_i += 1
 
             if clean_row[2] in color_accounts_data_dict:
                 clean_row[2] = {'Name': clean_row[2], 'Color': color_accounts_data_dict[clean_row[2]]}
@@ -97,8 +100,8 @@ def get_data_from_1money(money_file_path='data_files/Test_files/1Money_30_04_202
 
             num_of_row += 1
 
-
         return transaction_dict
+
 
 if __name__ == '__main__':
     from datetime import datetime

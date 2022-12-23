@@ -1,9 +1,10 @@
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.properties import Clock, ObjectProperty
 from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
@@ -11,7 +12,7 @@ from kivymd.uix.scrollview import MDScrollView
 import datetime
 from calendar import monthrange, month_name
 
-from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from
+from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from, get_savings_data
 
 from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
 from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file
@@ -19,23 +20,39 @@ from AppData.data_scripts.Creating_data_files.TxtAccountsData import create_acco
 from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savings_data_file
 
 
-class AccountsMenu_main(BoxLayout):
+class AccountsMenu(Screen):
+    pass
+
+
+class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
 
         self.accounts_data_dict = get_accounts_data(
-            accounts_data_file_path='AppData/data_files/accounts-data.txt')
+            accounts_data_file_path='AppData/data_files/accounts-data.txt'
+        )
+        self.savings_data_dict = get_savings_data(
+            savings_data_file_path='AppData/data_files/savings-data.txt'
+        )
 
-        print("# accounts_and_savings_data_dictionary:", self.accounts_data_dict)
+        print("# accounts_data_dictionary:", self.accounts_data_dict)
+        print('# savings_data_dictionary:', self.savings_data_dict)
+
+        Clock.schedule_once(self.adding_accountsANDsavings_main_menu, -1)
+
+    def adding_accountsANDsavings_main_menu(self, *args):
+        for account_id in self.accounts_data_dict:
+            my_widget = Button(background_color=(.1, .8, .9, 1), background_normal='')
+
+            self.ids.accounts_Boxlines.add_widget(my_widget)
+
+class AccountsMenu_debts(MDScreen):
+    pass
 
 
-class AccountsMenu_stat(BoxLayout):
+class AccountsMenu_stat(MDScreen):
     def click(self):
         self.remove_widget(self.ids.AccountsMenu_stat_label)
-
-
-class AccountsMenu(Screen):
-    pass
 
 
 class CategoriesMenu(MDScreen):
@@ -65,7 +82,7 @@ class CategoriesMenu(MDScreen):
         if self.ids.my_swiper.index == 0:
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=last_month_date.strftime("%Y") + '.' +
                                                                        last_month_date.strftime("%m")), index=-1)
-                                                                       # current_menu_month_name
+            # current_menu_month_name
             self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
@@ -93,7 +110,7 @@ class CategoriesMenu(MDScreen):
         if self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1:
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=next_month_date.strftime("%Y") + '.' +
                                                                        next_month_date.strftime("%m")))
-                                                                       # current_menu_month_name
+            # current_menu_month_name
             print('After-next', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index + 1
@@ -124,15 +141,11 @@ class Categories_buttons_menu(MDScreen):
                 continue
 
 
-class MainSrceen(MDScreen):
+class Transaction_menu(MDScreen):
     pass
 
-
-class MoneyStatApp(MDApp):
-    def build(self):
-        self.theme_cls.material_style = "M3"
-        self.theme_cls.theme_style = "Dark"
-        return Manager()
+class MainSrceen(MDScreen):
+    pass
 
 
 class Manager(ScreenManager):
@@ -152,22 +165,32 @@ class ContentNavigationDrawer(MDScrollView):
     nav_drawer = ObjectProperty()
 
 
+class MoneyStatApp(MDApp):
+    def build(self):
+        self.theme_cls.material_style = "M3"
+        self.theme_cls.theme_style = "Dark"
+
+        # loading multiple .kv files
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu.kv')
+        Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
+        Builder.load_file('MainScreen.kv')
+        Builder.load_file('MyNavigationDrawer.kv')
+        Builder.load_file('manager.kv')
+        Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
+        Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
+
+        return Manager()
+
+
 if __name__ == '__main__':
     # makes empty data files
     create_savings_data_file('AppData/data_files/savings-data.txt')
     create_categories_data_file('AppData/data_files/categories-data.txt')
     create_accounts_data_file('AppData/data_files/accounts-data.txt')
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
-
-    # loading multiple .kv files
-    Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
-    Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
-    Builder.load_file('AppMenus/Accounts_menu/accounts_menu.kv')
-    Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
-    Builder.load_file('MainScreen.kv')
-    Builder.load_file('MyNavigationDrawer.kv')
-    Builder.load_file('manager.kv')
-    Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
 
     # smartphone screen checking
     Window.size = (0.4 * 1080, 0.4 * 2280)

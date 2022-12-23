@@ -1,19 +1,69 @@
+<Tab>
+
+    MDIconButton:
+        id: icon
+        icon: root.icon
+        icon_size: "48sp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+
 <AccountsMenu>:
     BoxLayout:
         orientation: 'vertical'
 
-#        MDTopAppBar:
-#            id: top_bar
-#
-#            elevation: 4
-#            pos_hint: {"top": 1}
-#
-#            MDIconButton:
-#                icon: 'menu'
-#                on_release: nav_drawer.set_state("open")
+        MDTopAppBar:
+            id: top_bar
 
-        AccountsMenu_main:
-            id: AccountsMenu_main_id
+            elevation: 4
+            pos_hint: {"top": 1}
 
-#    MyNavigationDrawer:
-#        id: nav_drawer
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                size: self.parent.size
+                md_bg_color: .9, .7, .3, 1
+
+                MDIconButton:
+                    icon: 'menu'
+                    on_release:
+                        nav_drawer.set_state("open")
+
+                MDLabel:
+                    text: '12904₽'
+                    font_size: 26
+                    halign: "center"
+                    valign: "middle"
+                    md_bg_color: .5, .7, .3, 1
+
+                MDIconButton:
+                    icon: 'plus'
+
+        TabbedPanel:
+            id: tab_manager
+            do_default_tab: False
+            tab_pos: 'top_mid'
+            tab_width: self.width/3 - 7
+
+            canvas.before:
+                Color:
+                    rgba: 1, 0, .5, 1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            TabbedPanelItem:
+                text: 'main'
+                AccountsMenu_main:
+                    id: AccountsMenu_main_id
+
+            TabbedPanelItem:
+                text: 'debts'
+                AccountsMenu_stat:
+                    id: AccountsMenu_stat_id
+
+            TabbedPanelItem:
+                text: 'stat'
+                AccountsMenu_debts:
+                    id: AccountsMenu_debts_id
+
+    MyNavigationDrawer:
+        id: nav_drawer

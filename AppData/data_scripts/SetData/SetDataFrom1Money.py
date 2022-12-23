@@ -158,7 +158,7 @@ def get_accounts_and_savings_names(data_from_1money_dict):
 
 
 def set_accounts_data_from_1money(may_new_accounts_list,
-                                  accounts_data_file_path='data_files/accounts-data.txt'):
+                                  accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'):
     # getting old data
     accounts_data_file = open(accounts_data_file_path, mode='r+', encoding='utf-8-sig')
 
@@ -192,7 +192,7 @@ def set_accounts_data_from_1money(may_new_accounts_list,
 
 
 def set_savings_data_from_1money(may_new_savings_names_list,
-                                 savings_data_file_path='data_files/savings-data.txt'):
+                                 savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt'):
     # getting old data
     savings_data_file = open(savings_data_file_path, mode='r+', encoding='utf-8-sig')
 
@@ -225,7 +225,7 @@ def set_savings_data_from_1money(may_new_savings_names_list,
                                         savings['Currency'] + '\n')
 
 
-def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='data_files/categories-data.txt'):
+def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt'):
     # getting old data
     categories_dict = {}
     old_categories_list = []

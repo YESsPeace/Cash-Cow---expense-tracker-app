@@ -8,7 +8,7 @@
         MDBottomNavigationItem:
             name: 'screen 1'
             text: 'Accounts'
-            icon: 'Icons/Accounts-icon-white.png'
+            icon: 'Icons/Btn_icon/Accounts-icon-white.png'
 
             AccountsMenu:
                 id: AccountsMenu_id
@@ -16,7 +16,7 @@
         MDBottomNavigationItem:
             name: 'screen 2'
             text: 'Categories'
-            icon: 'Icons/Categories-icon-white.png'
+            icon: 'Icons/Btn_icon/Categories-icon-white.png'
 
             CategoriesMenu:
                 id: CategoriesMenu
@@ -24,21 +24,14 @@
         MDBottomNavigationItem:
             name: 'screen 3'
             text: "Transaction"
-            icon: 'Icons/Transaction-icon-white.png'
+            icon: 'Icons/Btn_icon/Transaction-icon-white.png'
 
-            Label:
-                text: "Transaction"
-                canvas.before:
-                    Color:
-                        rgba: .2, .2, .2, 1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
+            Transaction_menu:
 
         MDBottomNavigationItem:
             name: 'screen 4'
             text: "Budget"
-            icon: 'Icons/Budget-icon-white.png'
+            icon: 'Icons/Btn_icon/Budget-icon-white.png'
 
             Label:
                 text: "Budget"
@@ -52,7 +45,7 @@
         MDBottomNavigationItem:
             name: 'screen 5'
             text: 'Overview'
-            icon: 'Icons/Overview-icon-white.png '
+            icon: 'Icons/Btn_icon/Overview-icon-white.png '
 
             Label:
                 text: "Overview"

@@ -3,13 +3,31 @@
 
     MDTopAppBar:
         id: top_bar
+        use_overflow: True
 
         elevation: 4
         pos_hint: {"top": 1}
 
-        MDIconButton:
-            icon: 'menu'
-            on_release: nav_drawer.set_state("open")
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            size: self.parent.size
+            md_bg_color: .9, .7, .3, 1
+
+            MDIconButton:
+                icon: 'menu'
+                on_release:
+                    nav_drawer.set_state("open")
+
+            MDLabel:
+                text: '12904₽'
+                font_size: 26
+                halign: "center"
+                valign: "middle"
+                md_bg_color: .5, .7, .3, 1
+
+            MDIconButton:
+                icon: 'Icons/Btn_icon/pencil.png'
 
     MDBoxLayout:
         id: mont_menu
@@ -21,7 +39,7 @@
         md_bg_color: 0, 1, 1, 1
 
         MDIconButton:
-            icon: 'Icons/next - Copy.png'
+            icon: 'Icons/Btn_icon/next - Copy.png'
             icon_size: "24sp"
             pos_hint: {"center_x": .5, "center_y": .5}
             on_release:
@@ -43,7 +61,7 @@
         MDLabel:
 
         MDIconButton:
-            icon: 'Icons/next.png'
+            icon: 'Icons/Btn_icon/next.png'
             icon_size: "24sp"
             pos_hint: {"center_x": .5, "center_y": .5}
             on_release:

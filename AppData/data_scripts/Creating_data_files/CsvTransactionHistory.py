@@ -23,3 +23,6 @@ def create_transaction_history_file(path):
             ['ToCurrency'] + ['Сomment'])
 
         print('# data_file: transaction-history.csv is open')
+
+if __name__ == '__main__':
+    create_transaction_history_file('C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/transaction-history.csv')
