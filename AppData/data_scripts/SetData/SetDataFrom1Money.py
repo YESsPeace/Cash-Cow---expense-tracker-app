@@ -222,7 +222,7 @@ def set_savings_data_from_1money(may_new_savings_names_list,
                 last_num_of_savings += 1
                 savings_data_file.write('savings_' + str(last_num_of_savings) + '-' + savings['Name'] +
                                         '-' + '.27, .58, .29, 1' + '-' + str(savings['Balance']) + '-' +
-                                        savings['Currency'] + '\n')
+                                        '0' + '-' + savings['Currency'] + '\n')
 
 
 def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt'):

@@ -1,10 +1,14 @@
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.properties import Clock, ObjectProperty
 from kivy.core.window import Window
+from kivymd.material_resources import dp
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDIconButton, MDRectangleFlatIconButton
+from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
@@ -22,8 +26,6 @@ from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savin
 
 class AccountsMenu(Screen):
     pass
-
-
 class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
@@ -41,10 +43,51 @@ class AccountsMenu_main(MDScreen):
         Clock.schedule_once(self.adding_accountsANDsavings_main_menu, -1)
 
     def adding_accountsANDsavings_main_menu(self, *args):
+        accounts_amount, savings_amount = 0, 0
+
         for account_id in self.accounts_data_dict:
-            my_widget = Button(background_color=(.1, .8, .9, 1), background_normal='')
+            my_widget = MDRectangleFlatIconButton(
+                id=account_id, icon='Icons/Btn_icon/Accounts-icon-white.png', md_bg_color=self.accounts_data_dict[account_id]['Color'],
+                size_hint=(1, 1), halign='left'
+            )
+
+            my_widget.add_widget(
+                Label(
+                    text=f"{self.accounts_data_dict[account_id]['Name']}\n"
+                         f"{self.accounts_data_dict[account_id]['Balance']}",
+                    text_size=(dp(355), None),
+                    halign='left'
+                )
+            )
 
             self.ids.accounts_Boxlines.add_widget(my_widget)
+            if self.accounts_data_dict[account_id]['Currency'] == 'RUB':
+                accounts_amount += float(self.accounts_data_dict[account_id]['Balance'])
+
+        self.ids.accounts_amount.text = str(accounts_amount)
+
+        for savings_id in self.savings_data_dict:
+            my_widget = MDRectangleFlatIconButton(
+                id=savings_id, icon='Icons/Btn_icon/Accounts-icon-white.png', md_bg_color=self.savings_data_dict[savings_id]['Color'],
+                size_hint=(1, 1), halign='left'
+            )
+
+            my_widget.add_widget(
+                Label(
+                    text=f"{self.savings_data_dict[savings_id]['Name']}\n"
+                         f"{self.savings_data_dict[savings_id]['Balance']}",
+                    text_size=(dp(355), None),
+                    halign='left'
+                )
+            )
+
+            self.ids.savings_Boxlines.add_widget(my_widget)
+
+            if self.savings_data_dict[savings_id]['Currency'] == 'RUB':
+                savings_amount += float(self.savings_data_dict[savings_id]['Balance'])
+
+        self.ids.savings_amount.text = str(savings_amount)
+
 
 class AccountsMenu_debts(MDScreen):
     pass
@@ -143,6 +186,7 @@ class Categories_buttons_menu(MDScreen):
 
 class Transaction_menu(MDScreen):
     pass
+
 
 class MainSrceen(MDScreen):
     pass
