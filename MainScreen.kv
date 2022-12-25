@@ -6,7 +6,7 @@
         text_color_active: "lightgrey"
 
         MDBottomNavigationItem:
-            name: 'screen 1'
+            name: 'screen1'
             text: 'Accounts'
             icon: 'Icons/Btn_icon/Accounts-icon-white.png'
 
@@ -14,22 +14,26 @@
                 id: AccountsMenu_id
 
         MDBottomNavigationItem:
-            name: 'screen 2'
+            name: 'screen2'
             text: 'Categories'
             icon: 'Icons/Btn_icon/Categories-icon-white.png'
+            on_tab_press:
+                screen3.clear_widgets()
 
             CategoriesMenu:
                 id: CategoriesMenu
 
         MDBottomNavigationItem:
-            name: 'screen 3'
+            id: screen3
+            name: 'screen3'
             text: "Transaction"
             icon: 'Icons/Btn_icon/Transaction-icon-white.png'
 
-            Transaction_menu:
+            on_tab_press:
+                self.add_widget(root.menu())
 
         MDBottomNavigationItem:
-            name: 'screen 4'
+            name: 'screen4'
             text: "Budget"
             icon: 'Icons/Btn_icon/Budget-icon-white.png'
 
@@ -43,7 +47,7 @@
                         pos: self.pos
 
         MDBottomNavigationItem:
-            name: 'screen 5'
+            name: 'screen5'
             text: 'Overview'
             icon: 'Icons/Btn_icon/Overview-icon-white.png '
 

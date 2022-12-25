@@ -1,9 +1,80 @@
 <Transaction_menu>:
-    Label:
-        text: "Transaction"
-        canvas.before:
-            Color:
-                rgba: .2, .2, .2, 1
-            Rectangle:
-                size: self.size
-                pos: self.pos
+    MDTopAppBar:
+        id: top_bar
+        use_overflow: True
+
+        elevation: 4
+        pos_hint: {"top": 1}
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint: 1, None
+            size: self.parent.size
+            md_bg_color: .9, .7, .3, 1
+
+            MDIconButton:
+                icon: 'menu'
+                on_release:
+                    nav_drawer.set_state("open")
+
+            MDLabel:
+                text: '12904₽'
+                font_size: 26
+                halign: "center"
+                valign: "middle"
+                md_bg_color: .5, .7, .3, 1
+
+            MDIconButton:
+                icon: 'magnify'
+
+    MDBoxLayout:
+        id: mont_menu
+
+        size_hint_y: None
+        height: top_bar.height * 0.75
+        pos: (top_bar.pos[0], top_bar.pos[1] - top_bar.height * 0.75)
+
+        md_bg_color: 0, 1, 1, 1
+
+        MDIconButton:
+            icon: 'Icons/Btn_icon/next - Copy.png'
+            icon_size: "24sp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release:
+                root.load_previous_month()
+
+        MDLabel:
+
+        MDRectangleFlatIconButton:
+            id: month_label
+
+            text: root.current_menu_month_name
+            line_color: self.parent.md_bg_color
+            line_color: 0, 0, 0, 0
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+
+
+        MDLabel:
+
+        MDIconButton:
+            icon: 'Icons/Btn_icon/next.png'
+            icon_size: "24sp"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release:
+                root.load_next_month()
+
+    Carousel:
+        id: my_swiper
+        size_hint_y: None
+        height: root.height - top_bar.height - mont_menu.height - dp(40)
+        y: root.height - self.height - top_bar.height - mont_menu.height - dp(20)
+
+        Screen:
+            Label:
+                text: 'first'
+
+
+    MyNavigationDrawer:
+        id: nav_drawer
