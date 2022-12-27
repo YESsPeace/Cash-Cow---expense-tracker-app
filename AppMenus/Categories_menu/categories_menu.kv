@@ -30,7 +30,7 @@
                 icon: 'Icons/Btn_icon/pencil.png'
 
     MDBoxLayout:
-        id: mont_menu
+        id: month_menu
 
         size_hint_y: None
         height: top_bar.height * 0.75
@@ -70,11 +70,11 @@
     Carousel:
         id: my_swiper
         size_hint_y: None
-        height: root.height - top_bar.height - mont_menu.height - dp(40)
-        y: root.height - self.height - top_bar.height - mont_menu.height - dp(20)
+        height: root.height - top_bar.height - month_menu.height - dp(40)
+        y: root.height - self.height - top_bar.height - month_menu.height - dp(20)
 
         Categories_buttons_menu:
-            name: 'CategoriesMenu'
+            name: root.current_menu_date
 
     MyNavigationDrawer:
         id: nav_drawer

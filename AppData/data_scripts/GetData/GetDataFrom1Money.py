@@ -5,7 +5,6 @@
 def get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
                          categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
                          accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'):
-    import csv
 
     with open(categories_data_file_path, mode='r+', encoding="utf-8-sig") as categories_data_file:
         color_categories_data_dict = {}
@@ -35,6 +34,7 @@ def get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-s
                 continue
 
     with open(money_file_path, encoding="utf-8-sig") as csvfile:
+        import csv
         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
 
         transaction_dict = {}

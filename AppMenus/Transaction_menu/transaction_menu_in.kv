@@ -1,0 +1,31 @@
+<Transaction_menu_in>:
+    md_bg_color: 1, 1, 1, 1
+    ScrollView:
+        size_hint: 1, None
+        size: self.parent.size
+
+        MDGridLayout:
+            id: GridLayout_in_ScrollView
+            size_hint_y: None
+            cols: 1
+            md_bg_color: .5, .6, 1, 1
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint: 1, None
+                height: dp(40)
+                pos_hint: {'top': 1}
+                padding: dp(12)
+                md_bg_color: .3, .1, .5, 1
+
+                MDLabel:
+                    text: 'Before Balance'
+                    font_size: dp(16)
+                    halign: 'left'
+                    md_bg_color: .3, .6, .5, 1
+
+                MDLabel
+                    text: 'After Balance'
+                    font_size: dp(16)
+                    halign: 'right'
+                    md_bg_color: .3, .6, .8, 1

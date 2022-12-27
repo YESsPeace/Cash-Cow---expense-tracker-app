@@ -108,6 +108,7 @@ class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         # just for first creating widgets
+        self.current_menu_date = str(current_menu_date)[:-3]
         self.current_menu_month_name = current_menu_month_name
         self.days_in_month_icon_dict = days_in_month_icon_dict
         self.days_in_current_menu_month = days_in_current_menu_month
@@ -128,11 +129,12 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if self.ids.my_swiper.index == 0:
+        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != last_month_date.strftime("%Y") + \
+                '-' + last_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=last_month_date.strftime("%Y") + '-' +
                                                                        last_month_date.strftime("%m")), index=-1)
             # current_menu_month_name
-            self.ids.my_swiper.index = 1
+            # self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index - 1
@@ -156,7 +158,9 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1:
+        if (self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1) or \
+                self.ids.my_swiper.next_slide.name != next_month_date.strftime("%Y") + \
+                '-' + next_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=next_month_date.strftime("%Y") + '-' +
                                                                        next_month_date.strftime("%m")))
             # current_menu_month_name
@@ -192,6 +196,7 @@ class Categories_buttons_menu(MDScreen):
 
 class Transaction_menu(MDScreen):
     def __init__(self, *args, **kwargs):
+        self.current_menu_date = str(current_menu_date)[:-3]
         self.current_menu_month_name = current_menu_month_name
         self.days_in_month_icon_dict = days_in_month_icon_dict
         self.days_in_current_menu_month = days_in_current_menu_month
@@ -213,11 +218,12 @@ class Transaction_menu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if self.ids.my_swiper.index == 0:
+        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != \
+                last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Screen(name=last_month_date.strftime("%Y") + '-' +
                                                       last_month_date.strftime("%m")), index=-1)
             # current_menu_month_name
-            self.ids.my_swiper.index = 1
+            # self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index - 1
@@ -239,7 +245,9 @@ class Transaction_menu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1:
+        if (self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1) or \
+                self.ids.my_swiper.next_slide.name != next_month_date.strftime("%Y") + \
+                '-' + next_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Screen(name=next_month_date.strftime("%Y") + '-' +
                                                       next_month_date.strftime("%m")))
             # current_menu_month_name
@@ -249,11 +257,31 @@ class Transaction_menu(MDScreen):
 
         # self.ids.my_swiper.load_next()
 
+class Transaction_menu_in(MDScreen):
 
-class MainSrceen(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.menu = Transaction_menu
+        Clock.schedule_once(self.history_setter, 0)
+
+    def history_setter(self, *args):
+        print('fdsfsd')
+
+
+
+class MainSrceen(MDScreen):
+    def current_menu_month_name(self):
+        return current_menu_month_name
+
+    def set_transaction_menu_in(self):
+        self.ids.Transaction_menu.ids.my_swiper.add_widget(Transaction_menu_in(name=str(current_menu_date)[:-3]))
+
+    def set_categories_menu_buttons(self):
+        self.ids.CategoriesMenu.ids.my_swiper.add_widget(Categories_buttons_menu(name=str(current_menu_date)[:-3]))
+
+    def del_widgets_with_month(self):
+        self.ids.CategoriesMenu.ids.my_swiper.clear_widgets()
+        self.ids.Transaction_menu.ids.my_swiper.clear_widgets()
+
 
 class Manager(ScreenManager):
     pass
@@ -288,6 +316,7 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
+        Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
 
         return Manager()
 
