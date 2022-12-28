@@ -1,0 +1,35 @@
+<date_label_for_transaction_history_menu>:
+    orientation: 'horizontal'
+    size_hint: 1, None
+    height: dp(40)
+    canvas.before:
+        Color:
+            rgba: .1, .2, .7, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    MDLabel:
+        text: root.date
+        font_size: dp(16)
+        padding: dp(12), 0
+        halign: 'left'
+        canvas.before:
+            Color:
+                rgba: .7, .2, .1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+    MDLabel:
+        text: 'Second'
+        font_size: dp(16)
+        halign: 'right'
+        padding: dp(12), 0
+        canvas.before:
+            Color:
+                rgba: .5, .15, .2, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size

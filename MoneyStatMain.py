@@ -3,9 +3,12 @@ from calendar import monthrange, month_name
 
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.metrics import dp
 from kivy.properties import Clock, ObjectProperty
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
@@ -114,7 +117,6 @@ class CategoriesMenu(MDScreen):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
 
         last_month_date = current_menu_date - datetime.timedelta(days=days_in_current_menu_month)
-        # print('Year:', last_month_date.strftime("%Y") + ',', 'Month:', last_month_date.strftime("%m"))
 
         # update data in python
         current_menu_date = last_month_date
@@ -126,24 +128,19 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != last_month_date.strftime("%Y") + \
-                '-' + last_month_date.strftime("%m"):
+        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != \
+                last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=last_month_date.strftime("%Y") + '-' +
                                                                        last_month_date.strftime("%m")), index=-1)
-            # current_menu_month_name
-            # self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index - 1
-
-        # self.ids.my_swiper.load_previous()
 
     def load_next_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
 
         # getting next month
         next_month_date = current_menu_date + datetime.timedelta(days=days_in_current_menu_month)
-        # print('Year:', next_month_date.strftime("%Y") + ',', 'Month:', next_month_date.strftime("%m"))
 
         # update data in python
         current_menu_date = next_month_date
@@ -164,8 +161,6 @@ class CategoriesMenu(MDScreen):
             print('After-next', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index + 1
-
-        # self.ids.my_swiper.load_next()
 
 
 class Categories_buttons_menu(MDScreen):
@@ -212,7 +207,6 @@ class Transaction_menu(MDScreen):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
 
         last_month_date = current_menu_date - datetime.timedelta(days=days_in_current_menu_month)
-        # print('Year:', last_month_date.strftime("%Y") + ',', 'Month:', last_month_date.strftime("%m"))
 
         # update data in python
         current_menu_date = last_month_date
@@ -228,8 +222,6 @@ class Transaction_menu(MDScreen):
                 last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
             self.ids.my_swiper.add_widget(Transaction_menu_in(name=last_month_date.strftime("%Y") + '-' +
                                                                    last_month_date.strftime("%m")), index=-1)
-            # current_menu_month_name
-            # self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
 
         self.ids.my_swiper.index = self.ids.my_swiper.index - 1
@@ -239,7 +231,6 @@ class Transaction_menu(MDScreen):
 
         # getting next month
         next_month_date = current_menu_date + datetime.timedelta(days=days_in_current_menu_month)
-        # print('Year:', next_month_date.strftime("%Y") + ',', 'Month:', next_month_date.strftime("%m"))
 
         # update data in python
         current_menu_date = next_month_date
@@ -261,8 +252,6 @@ class Transaction_menu(MDScreen):
 
         self.ids.my_swiper.index = self.ids.my_swiper.index + 1
 
-        # self.ids.my_swiper.load_next()
-
 
 class Transaction_menu_in(MDScreen):
 
@@ -276,18 +265,47 @@ class Transaction_menu_in(MDScreen):
         print(str(current_menu_date.replace(day=1)))
         print(str(current_menu_date))
 
-        Clock.schedule_once(self.history_setter, 0)
+        Clock.schedule_once(self.history_setter_default, 0)
 
-    def history_setter(self, *args):
+    def history_setter_default(self, *args):
         global current_menu_date, current_menu_month_name
 
         # the period is current menu month
         # it's from first day of the month to now
-        print(*get_transaction_for_the_period(
+        history_dict_for_the_period = get_transaction_for_the_period(
             from_date=str(current_menu_date.replace(day=1)),
             to_date=str(current_menu_date),
             history_dict=self.history_dict
-        ).items(), sep='\n')
+        )
+        print(*history_dict_for_the_period.items(), sep='\n')
+
+        if len(history_dict_for_the_period) != 0:
+            Transaction_menu_in.last_date = history_dict_for_the_period[0]['Date']
+
+        self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
+
+        for transaction in history_dict_for_the_period.values():
+            if transaction['Date'] == Transaction_menu_in.last_date:
+                self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
+                    text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
+                    md_bg_color=transaction['To']['Color'], halign='left',
+                    size_hint=(1, None), font_size="18sp"
+                ))
+
+            else:
+                Transaction_menu_in.last_date = transaction['Date']
+                self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
+                self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
+                    text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
+                    md_bg_color=transaction['To']['Color'], halign='left',
+                    size_hint=(1, None), font_size="18sp"
+                ))
+
+class date_label_for_transaction_history_menu(MDBoxLayout):
+
+    def __init__(self, *args, **kwargs):
+        self.date = Transaction_menu_in.last_date
+        super().__init__(*args, **kwargs)
 
 class MainSrceen(MDScreen):
     def current_menu_month_name(self):
@@ -327,17 +345,26 @@ class MoneyStatApp(MDApp):
         self.theme_cls.theme_style = "Dark"
 
         # loading multiple .kv files
-        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
-        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
+
+        # Accounts menu
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
+        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
+
+        # Categories menu
         Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
+        Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
+
+        # Transaction menu
+        Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
+        Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
+        Builder.load_file('AppMenus/Transaction_menu/date_label_for_transaction_history_menu.kv')
+
+        # main
         Builder.load_file('MainScreen.kv')
         Builder.load_file('MyNavigationDrawer.kv')
         Builder.load_file('manager.kv')
-        Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
-        Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
-        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
-        Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
 
         return Manager()
 
