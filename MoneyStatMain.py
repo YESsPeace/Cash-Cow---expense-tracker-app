@@ -1,27 +1,24 @@
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivymd.app import MDApp
+import datetime
+from calendar import monthrange, month_name
+
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import Clock, ObjectProperty
-from kivy.core.window import Window
-from kivymd.material_resources import dp
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton, MDRectangleFlatIconButton
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.app import MDApp
+from kivymd.uix.button import MDRectangleFlatIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
-import datetime
-from calendar import monthrange, month_name
-
-from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from, get_savings_data
-
 from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
-from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file
 from AppData.data_scripts.Creating_data_files.TxtAccountsData import create_accounts_data_file
+from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file
 from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savings_data_file
+from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from, get_savings_data
+from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history, \
+    get_transaction_for_the_period
 
 
 class AccountsMenu(Screen):
@@ -196,11 +193,20 @@ class Categories_buttons_menu(MDScreen):
 
 class Transaction_menu(MDScreen):
     def __init__(self, *args, **kwargs):
+        super(Transaction_menu, self).__init__(**kwargs)
+
+        # getting actually data for menu settings and meny title
         self.current_menu_date = str(current_menu_date)[:-3]
         self.current_menu_month_name = current_menu_month_name
         self.days_in_month_icon_dict = days_in_month_icon_dict
         self.days_in_current_menu_month = days_in_current_menu_month
-        super(Transaction_menu, self).__init__(**kwargs)
+
+        # getting history data
+        Transaction_menu.history_dict = get_transaction_history(
+            history_file_path='AppData/data_files/transaction-history.csv',
+            categories_data_file_path='AppData/data_files/categories-data.txt',
+            accounts_data_file_path='AppData/data_files/accounts-data.txt'
+        )
 
     def load_previous_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
@@ -220,8 +226,8 @@ class Transaction_menu(MDScreen):
 
         if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != \
                 last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
-            self.ids.my_swiper.add_widget(Screen(name=last_month_date.strftime("%Y") + '-' +
-                                                      last_month_date.strftime("%m")), index=-1)
+            self.ids.my_swiper.add_widget(Transaction_menu_in(name=last_month_date.strftime("%Y") + '-' +
+                                                                   last_month_date.strftime("%m")), index=-1)
             # current_menu_month_name
             # self.ids.my_swiper.index = 1
             print('After-previous', self.ids.my_swiper.slides)
@@ -248,8 +254,8 @@ class Transaction_menu(MDScreen):
         if (self.ids.my_swiper.index == len(self.ids.my_swiper.slides) - 1) or \
                 self.ids.my_swiper.next_slide.name != next_month_date.strftime("%Y") + \
                 '-' + next_month_date.strftime("%m"):
-            self.ids.my_swiper.add_widget(Screen(name=next_month_date.strftime("%Y") + '-' +
-                                                      next_month_date.strftime("%m")))
+            self.ids.my_swiper.add_widget(Transaction_menu_in(name=next_month_date.strftime("%Y") + '-' +
+                                                                   next_month_date.strftime("%m")))
             # current_menu_month_name
             print('After-next', self.ids.my_swiper.slides)
 
@@ -257,16 +263,31 @@ class Transaction_menu(MDScreen):
 
         # self.ids.my_swiper.load_next()
 
+
 class Transaction_menu_in(MDScreen):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # setting local variable for history dictionary from main Transaction menu
+        self.history_dict = Transaction_menu.history_dict
+        print(*self.history_dict.items(), sep='\n')
+
+        print(str(current_menu_date.replace(day=1)))
+        print(str(current_menu_date))
+
         Clock.schedule_once(self.history_setter, 0)
 
     def history_setter(self, *args):
-        print('fdsfsd')
+        global current_menu_date, current_menu_month_name
 
-
+        # the period is current menu month
+        # it's from first day of the month to now
+        print(*get_transaction_for_the_period(
+            from_date=str(current_menu_date.replace(day=1)),
+            to_date=str(current_menu_date),
+            history_dict=self.history_dict
+        ).items(), sep='\n')
 
 class MainSrceen(MDScreen):
     def current_menu_month_name(self):

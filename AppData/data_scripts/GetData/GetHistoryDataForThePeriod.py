@@ -79,22 +79,19 @@ def get_transaction_history(history_file_path, categories_data_file_path,
         return transaction_dict
 
 
-def get_transaction_for_the_period(from_date, to_date, history_file_path,
-                                   categories_data_file_path, accounts_data_file_path):
+def get_transaction_for_the_period(from_date, to_date, history_dict):
     import datetime
 
-    history_dict = get_transaction_history(
-        history_file_path, categories_data_file_path, accounts_data_file_path
-    )
+    from_date = from_date.replace('-', '.')
+    to_date = to_date.replace('-', '.')
 
-    from_date = from_date.split('.')[::-1]
+    from_date = from_date.split('.')
     from_date = [int(i) for i in from_date]
     from_date = datetime.datetime(from_date[0], from_date[1], from_date[2])
 
-    to_date = to_date.split('.')[::-1]
+    to_date = to_date.split('.')
     to_date = [int(i) for i in to_date]
     to_date = datetime.datetime(to_date[0], to_date[1], to_date[2])
-
 
     history_for_the_period_dict = {}
 
@@ -112,28 +109,38 @@ def get_transaction_for_the_period(from_date, to_date, history_file_path,
 
 
 if __name__ == '__main__':
-    import datetime
-
     # date_today = datetime.date.today()
     # first_day = str(date_today.replace(day=1)).replace('-', '.')
     # date_today = str(date_today).replace('-', '.')
 
-    start_time = datetime.datetime.now()
+    print('Что чекнуть?')
+    print('1. get_transaction_history')
+    print('2. get_transaction_for_the_period')
+    n = int(input())
 
-    print(*get_transaction_history(
-        history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
-        categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
-        accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
-    ).items(), sep='\n')
-    print(f'This worked_1 {datetime.datetime.now() - start_time}')
+    if n == 1:
+        import datetime
 
-    start_time = datetime.datetime.now()
+        start_time = datetime.datetime.now()
 
-    print(*get_transaction_for_the_period(
-        from_date='21.01.2022',
-        to_date='21.01.2022',
-        history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
-        categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
-        accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
-    ).items(), sep='\n')
-    print(f'This worked_2 {datetime.datetime.now() - start_time}')
+        print(*get_transaction_history(
+            history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
+            categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
+            accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+        ).items(), sep='\n')
+        print(f'This worked {datetime.datetime.now() - start_time}')
+    if n == 2:
+        import datetime
+
+        start_time = datetime.datetime.now()
+
+        print(*get_transaction_for_the_period(
+            from_date='2022-12-28',
+            to_date='2022-12-28',
+            history_dict=get_transaction_history(
+                history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
+                categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
+                accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+            )
+        ).items(), sep='\n')
+        print(f'This worked {datetime.datetime.now() - start_time}')

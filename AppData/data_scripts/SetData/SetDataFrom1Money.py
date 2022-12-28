@@ -270,6 +270,34 @@ def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_
                     category_id + '-' + name + '-' + color + '\n'
                 )
 
+def set_history_data_from_1money(
+        history_dict_from_1money,
+        history_file_path
+):
+    import csv
+
+    with open(history_file_path, encoding='utf-8', mode='a', newline='') as history_file:
+
+        writer = csv.writer(history_file, delimiter=',')
+
+        for transaction in history_dict_from_1money.values():
+            Date = transaction['Date']
+            Type = transaction['Type']
+            From = transaction['From']['Name']
+            To = transaction['To']['Name']
+            FromSUM = transaction['FromSUM']
+            FromCurrency = transaction['FromCurrency']
+            ToSUM = transaction['ToSUM']
+            ToCurrency = transaction['ToCurrency']
+
+            if 'Сomment' in transaction:
+                Сomment = transaction['Сomment']
+            else:
+                Сomment = None
+
+            writer.writerow(
+                [Date] + [Type] + [From] + [To] + [FromSUM] + [FromCurrency] + [ToSUM] +
+                [ToCurrency] + [Сomment])
 
 def set_incomes_data_from_1money():
     pass
@@ -281,6 +309,7 @@ if __name__ == '__main__':
     print('2. set_accounts_data_from_1money')
     print('3. set_savings_data_from_1money')
     print('4. set_categories_data_from_1money')
+    print('5. set_history_data_from_1money')
 
     from AppData.data_scripts.GetData.GetDataFrom1Money import get_data_from_1money
 
@@ -309,3 +338,9 @@ if __name__ == '__main__':
 
     elif n == 4:
         set_categories_data_from_1money(data_dict_from_1money)
+
+    elif n == 5:
+        set_history_data_from_1money(
+            history_dict_from_1money=data_dict_from_1money,
+            history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv'
+        )
