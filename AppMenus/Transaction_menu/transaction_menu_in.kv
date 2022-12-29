@@ -7,7 +7,7 @@
 
         MDGridLayout:
             id: GridLayout_in_ScrollView
-            size_hint_y: None
+            size_hint: 1, None
             adaptive_height: True
             cols: 1
 
@@ -16,19 +16,24 @@
                 orientation: 'horizontal'
                 size_hint: 1, None
                 height: dp(40)
-                #pos_hint: {'top': 1}
+                padding: dp(12), 0
                 md_bg_color: .3, .1, .5, 1
 
                 MDLabel:
                     text: 'Before Balance'
-                    font_size: dp(20)
-                    padding: dp(12), 0
+                    font_size: dp(16)
                     halign: 'left'
                     md_bg_color: .3, .6, .5, 1
 
-                MDLabel
+                Label
                     text: 'After Balance'
-                    font_size: dp(20)
-                    padding: dp(12), 0
+                    font_size: dp(16)
                     halign: 'right'
-                    md_bg_color: .3, .6, .8, 1
+                    size_hint_x: None
+                    size: self.texture_size
+                    canvas.before:
+                        Color:
+                            rgba: .3, .6, .8, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size

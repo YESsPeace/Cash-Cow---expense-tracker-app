@@ -2,6 +2,7 @@
     orientation: 'horizontal'
     size_hint: 1, None
     height: dp(40)
+    padding: dp(12), 0
     canvas.before:
         Color:
             rgba: .1, .2, .7, 1
@@ -12,7 +13,6 @@
     MDLabel:
         text: root.date
         font_size: dp(16)
-        padding: dp(12), 0
         halign: 'left'
         canvas.before:
             Color:
@@ -21,15 +21,16 @@
                 pos: self.pos
                 size: self.size
 
-
-    MDLabel:
+    Label:
         text: 'Second'
         font_size: dp(16)
         halign: 'right'
-        padding: dp(12), 0
+        size_hint_x: None
+        size: self.texture_size
         canvas.before:
             Color:
                 rgba: .5, .15, .2, 1
             Rectangle:
                 pos: self.pos
                 size: self.size
+

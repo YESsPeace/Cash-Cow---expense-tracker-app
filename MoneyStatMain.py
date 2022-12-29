@@ -5,6 +5,7 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import Clock, ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
@@ -289,7 +290,7 @@ class Transaction_menu_in(MDScreen):
                 self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
                     text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
                     md_bg_color=transaction['To']['Color'], halign='left',
-                    size_hint=(1, None), font_size="18sp"
+                    size_hint=(1, None)
                 ))
 
             else:
@@ -298,7 +299,7 @@ class Transaction_menu_in(MDScreen):
                 self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
                     text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
                     md_bg_color=transaction['To']['Color'], halign='left',
-                    size_hint=(1, None), font_size="18sp"
+                    size_hint=(1, None)
                 ))
 
 class date_label_for_transaction_history_menu(MDBoxLayout):
@@ -377,7 +378,7 @@ if __name__ == '__main__':
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
 
     # smartphone screen checking
-    Window.size = (0.4 * 1080, 0.4 * 2280)
+    Window.size = (0.5 * 640, 0.5 * 1136)
 
     # date
     date_today = datetime.date.today()

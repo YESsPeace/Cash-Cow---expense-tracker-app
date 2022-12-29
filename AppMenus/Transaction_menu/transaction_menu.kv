@@ -67,11 +67,13 @@
 
     Carousel:
         id: my_swiper
-        size_hint_y: None
+        size_hint: None, None
         height: root.height - top_bar.height - month_menu.height
         y: root.height - self.height - top_bar.height - month_menu.height
+        width: root.width
 
         Transaction_menu_in:
+            id: Transaction_menu_in
             name: root.current_menu_date
 
 
