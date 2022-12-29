@@ -284,22 +284,29 @@ class Transaction_menu_in(MDScreen):
             Transaction_menu_in.last_date = history_dict_for_the_period[0]['Date']
 
         self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
+        box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
+
 
         for transaction in history_dict_for_the_period.values():
             if transaction['Date'] == Transaction_menu_in.last_date:
-                self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
+                box.add_widget(MDRectangleFlatIconButton(
                     text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
                     md_bg_color=transaction['To']['Color'], halign='left',
-                    size_hint=(1, None)
+                    size_hint=(1, 1)
                 ))
 
             else:
+                box.height = dp(50)*len(box.children)
+                self.ids.GridLayout_in_ScrollView.add_widget(box)
+
+                box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
                 Transaction_menu_in.last_date = transaction['Date']
+
                 self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
-                self.ids.GridLayout_in_ScrollView.add_widget(MDRectangleFlatIconButton(
+                box.add_widget(MDRectangleFlatIconButton(
                     text=f"{transaction['Type']}: {transaction['From']['Name']} -> {transaction['To']['Name']}",
                     md_bg_color=transaction['To']['Color'], halign='left',
-                    size_hint=(1, None)
+                    size_hint=(1, 1)
                 ))
 
 class date_label_for_transaction_history_menu(MDBoxLayout):
