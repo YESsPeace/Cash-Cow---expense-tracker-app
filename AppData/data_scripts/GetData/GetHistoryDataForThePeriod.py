@@ -39,42 +39,46 @@ def get_transaction_history(history_file_path, categories_data_file_path,
         num_of_row = 0
 
         for row in reader:
+            try:
 
-            if row[2] in color_accounts_data_dict:
-                row[2] = {'Name': row[2], 'Color': color_accounts_data_dict[row[2]]}
+                if row[2] in color_accounts_data_dict:
+                    row[2] = {'Name': row[2], 'Color': color_accounts_data_dict[row[2]]}
 
-            elif not row[2] in color_accounts_data_dict:
-                row[2] = {'Name': row[2], 'Color': (0, 0.41, 0.24, 1)}
+                elif not row[2] in color_accounts_data_dict:
+                    row[2] = {'Name': row[2], 'Color': (0, 0.41, 0.24, 1)}
 
-            if row[3] in color_categories_data_dict:
-                row[3] = {'Name': row[3], 'Color': color_categories_data_dict[row[3]]}
+                if row[3] in color_categories_data_dict:
+                    row[3] = {'Name': row[3], 'Color': color_categories_data_dict[row[3]]}
 
-            elif not row[3] in color_categories_data_dict:
-                row[3] = {'Name': row[3], 'Color': (0.38, 0.39, 0.61, 1)}
+                elif not row[3] in color_categories_data_dict:
+                    row[3] = {'Name': row[3], 'Color': (0.38, 0.39, 0.61, 1)}
 
-            transaction_dict[num_of_row] = {}
+                transaction_dict[num_of_row] = {}
 
-            transaction_dict[num_of_row]['Date'] = row[0]
+                transaction_dict[num_of_row]['Date'] = row[0]
 
-            transaction_dict[num_of_row]['Type'] = row[1]
+                transaction_dict[num_of_row]['Type'] = row[1]
 
-            if transaction_dict[num_of_row]['Type'] == 'Income':
-                transaction_dict[num_of_row]['From'] = row[3]
-                transaction_dict[num_of_row]['To'] = row[2]
+                if transaction_dict[num_of_row]['Type'] == 'Income':
+                    transaction_dict[num_of_row]['From'] = row[3]
+                    transaction_dict[num_of_row]['To'] = row[2]
 
-            else:
-                transaction_dict[num_of_row]['From'] = row[2]
-                transaction_dict[num_of_row]['To'] = row[3]
+                else:
+                    transaction_dict[num_of_row]['From'] = row[2]
+                    transaction_dict[num_of_row]['To'] = row[3]
 
-            transaction_dict[num_of_row]['FromSUM'] = row[4]
-            transaction_dict[num_of_row]['FromCurrency'] = row[5]
-            transaction_dict[num_of_row]['ToSUM'] = row[6]
-            transaction_dict[num_of_row]['ToCurrency'] = row[7]
+                transaction_dict[num_of_row]['FromSUM'] = row[4]
+                transaction_dict[num_of_row]['FromCurrency'] = row[5]
+                transaction_dict[num_of_row]['ToSUM'] = row[6]
+                transaction_dict[num_of_row]['ToCurrency'] = row[7]
 
-            if len(row) == 9:
-                transaction_dict[num_of_row]['Сomment'] = row[8]
+                if len(row) == 9:
+                    transaction_dict[num_of_row]['Сomment'] = row[8]
 
-            num_of_row += 1
+                num_of_row += 1
+
+            except IndexError:
+                num_of_row += 1
 
         return transaction_dict
 
