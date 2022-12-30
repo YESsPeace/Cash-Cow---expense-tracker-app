@@ -1,12 +1,10 @@
 import datetime
 from calendar import monthrange, month_name
 
-from kivy.core.window import Window
+# from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import Clock, ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -370,8 +368,8 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Transaction_menu/date_label_for_transaction_history_menu.kv')
 
         # main
-        Builder.load_file('MainScreen.kv')
-        Builder.load_file('MyNavigationDrawer.kv')
+        Builder.load_file('main_screen.kv')
+        Builder.load_file('my_navigation_drawer.kv')
         Builder.load_file('manager.kv')
 
         return Manager()
@@ -385,7 +383,7 @@ if __name__ == '__main__':
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
 
     # smartphone screen checking
-    Window.size = (0.5 * 640, 0.5 * 1136)
+    # Window.size = (0.5 * 640, 0.5 * 1136)
 
     # date
     date_today = datetime.date.today()
