@@ -10,33 +10,26 @@
     BoxLayout:
         orientation: 'vertical'
 
-        MDTopAppBar:
-            id: top_bar
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(60)
+            md_bg_color: .9, .7, .3, 1
 
-            elevation: 4
-            pos_hint: {"top": 1}
+            MDIconButton:
+                icon: 'menu'
+                on_release:
+                    nav_drawer.set_state("open")
 
-            MDBoxLayout:
-                orientation: 'horizontal'
-                size_hint: 1, None
-                size: self.parent.size
-                md_bg_color: .9, .7, .3, 1
+            MDLabel:
+                text: '12904₽'
+                font_size: 26
+                halign: "center"
+                valign: "middle"
+                md_bg_color: .5, .7, .3, 1
 
-                MDIconButton:
-                    icon: 'menu'
-                    on_release:
-                        nav_drawer.set_state("open")
-
-                MDLabel:
-                    id: focus_account_amount
-                    text: '12904₽'
-                    font_size: 26
-                    halign: "center"
-                    valign: "middle"
-                    md_bg_color: .5, .7, .3, 1
-
-                MDIconButton:
-                    icon: 'plus'
+            MDIconButton:
+                icon: 'Icons/Btn_icon/pencil.png'
 
         TabbedPanel:
             id: tab_manager

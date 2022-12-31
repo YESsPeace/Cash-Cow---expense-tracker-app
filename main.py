@@ -202,6 +202,7 @@ class Transaction_menu(MDScreen):
             categories_data_file_path='AppData/data_files/categories-data.txt',
             accounts_data_file_path='AppData/data_files/accounts-data.txt'
         )
+        print(*Transaction_menu.history_dict.items(), sep='\n')
 
     def load_previous_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name

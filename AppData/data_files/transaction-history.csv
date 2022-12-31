@@ -1,21 +1,21 @@
 Date,Type,From,To,FromSUM,FromCurrency,ToSUM,ToCurrency,Сomment
-28.04.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
-28.04.2022,Transfer,Сбер ₽,На столовую ,100,RUB,100,RUB,
-27.04.2022,Transfer,Cash,Копилка,20,RUB,20,RUB,
-26.04.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
-25.04.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
-24.04.2022,Expenses,Cash,not stonks,30,RUB,30,RUB,Передайте за проезд
-24.04.2022,Income,Мама,На столовую ,200,RUB,200,RUB,
-23.04.2022,Transfer,Cash,Копилка,25,RUB,25,RUB,
-23.04.2022,Income,Родственники,Cash,25,RUB,25,RUB,
-21.04.2022,Transfer,Cash,Копилка,10,RUB,10,RUB,
-21.04.2022,Transfer,На столовую ,Cash,10,RUB,10,RUB,
-21.04.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Сосиска в тесте
-18.04.2022,Transfer,Cash,Копилка,20,RUB,20,RUB,
-18.04.2022,Transfer,На столовую ,Cash,20,RUB,20,RUB,
-18.04.2022,Income,Мама,На столовую ,150,RUB,150,RUB,
-18.04.2022,Expenses,На столовую ,Столовая,30,RUB,30,RUB,
-14.04.2022,Transfer,Cash,Копилка,55,RUB,55,RUB,
+28.12.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
+28.12.2022,Transfer,Сбер ₽,На столовую ,100,RUB,100,RUB,
+27.12.2022,Transfer,Cash,Копилка,20,RUB,20,RUB,
+26.12.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
+25.12.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Курник
+24.12.2022,Expenses,Cash,not stonks,30,RUB,30,RUB,Передайте за проезд
+24.12.2022,Income,Мама,На столовую ,200,RUB,200,RUB,
+23.12.2022,Transfer,Cash,Копилка,25,RUB,25,RUB,
+23.12.2022,Income,Родственники,Cash,25,RUB,25,RUB,
+21.12.2022,Transfer,Cash,Копилка,10,RUB,10,RUB,
+21.12.2022,Transfer,На столовую ,Cash,10,RUB,10,RUB,
+21.12.2022,Expenses,На столовую ,Столовая,40,RUB,40,RUB,Сосиска в тесте
+18.12.2022,Transfer,Cash,Копилка,20,RUB,20,RUB,
+18.12.2022,Transfer,На столовую ,Cash,20,RUB,20,RUB,
+18.12.2022,Income,Мама,На столовую ,150,RUB,150,RUB,
+18.12.2022,Expenses,На столовую ,Столовая,30,RUB,30,RUB,
+14.12.2022,Transfer,Cash,Копилка,55,RUB,55,RUB,
 14.04.2022,Transfer,На столовую ,Cash,55,RUB,55,RUB,
 14.04.2022,Expenses,На столовую ,Столовая,45,RUB,45,RUB,С джемом + сок
 13.04.2022,Expenses,На столовую ,Столовая,50,RUB,50,RUB,Пицца. Оптовая
