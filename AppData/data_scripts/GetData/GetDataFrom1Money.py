@@ -2,9 +2,7 @@
 # {'date': {'Type': 'Expenses', 'From': {'Name': 'Cash', 'Color':... and other}}
 # with it I can get data from 1Money's .csv file, who have all transaction
 
-def get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
-                         categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
-                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'):
+def get_data_from_1money(money_file_path, categories_data_file_path, accounts_data_file_path):
 
     with open(categories_data_file_path, mode='r+', encoding="utf-8-sig") as categories_data_file:
         color_categories_data_dict = {}
@@ -107,5 +105,8 @@ if __name__ == '__main__':
     from datetime import datetime
 
     start_time = datetime.now()
-    print(*get_data_from_1money().items(), sep='\n')
+    print(*get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
+                         categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
+                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+                                ).items(), sep='\n')
     print(f'This worked {datetime.now() - start_time}')

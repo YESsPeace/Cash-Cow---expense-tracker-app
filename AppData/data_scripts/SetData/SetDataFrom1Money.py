@@ -191,8 +191,7 @@ def set_accounts_data_from_1money(may_new_accounts_list,
                                          account['Currency'] + '\n')
 
 
-def set_savings_data_from_1money(may_new_savings_names_list,
-                                 savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt'):
+def set_savings_data_from_1money(may_new_savings_names_list, savings_data_file_path):
     # getting old data
     savings_data_file = open(savings_data_file_path, mode='r+', encoding='utf-8-sig')
 
@@ -225,7 +224,7 @@ def set_savings_data_from_1money(may_new_savings_names_list,
                                         '0' + '-' + savings['Currency'] + '\n')
 
 
-def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt'):
+def set_categories_data_from_1money(data_from_1money_dict, categories_data_file_path):
     # getting old data
     categories_dict = {}
     old_categories_list = []
@@ -328,16 +327,19 @@ if __name__ == '__main__':
         accounts_and_savings_names = get_accounts_and_savings_names(data_from_1money_dict=data_dict_from_1money)
         accounts_names_list, savings_names_list = accounts_and_savings_names[0], accounts_and_savings_names[1]
 
-        set_accounts_data_from_1money(accounts_names_list)
+        set_accounts_data_from_1money(accounts_names_list,
+                                      accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt')
 
     elif n == 3:
         accounts_and_savings_names = get_accounts_and_savings_names(data_from_1money_dict=data_dict_from_1money)
         accounts_names_list, savings_names_list = accounts_and_savings_names[0], accounts_and_savings_names[1]
 
-        set_savings_data_from_1money(savings_names_list)
+        set_savings_data_from_1money(savings_names_list,
+                                     savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt')
 
     elif n == 4:
-        set_categories_data_from_1money(data_dict_from_1money)
+        set_categories_data_from_1money(data_dict_from_1money,
+                                        categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt')
 
     elif n == 5:
         set_history_data_from_1money(

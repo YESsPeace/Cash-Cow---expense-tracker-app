@@ -1,4 +1,4 @@
-def get_accounts_data(accounts_data_file_path='data_files/Test_files/test_accounts-data.txt'):
+def get_accounts_data(accounts_data_file_path):
     accounts_data_dict = {}
 
     try:
@@ -28,7 +28,7 @@ def get_accounts_data(accounts_data_file_path='data_files/Test_files/test_accoun
     return accounts_data_dict
 
 
-def get_savings_data(savings_data_file_path='data_files/Test_files/test_savings-data.txt'):
+def get_savings_data(savings_data_file_path):
     savings_data_dict = {}
 
     try:
@@ -59,7 +59,7 @@ def get_savings_data(savings_data_file_path='data_files/Test_files/test_savings-
     return savings_data_dict
 
 
-def get_categories_data_from(categories_data_file_path='data_files/Test_files/test_categories-data.txt'):
+def get_categories_data_from(categories_data_file_path):
     categories_data_dictionary = {}
 
     try:
@@ -87,8 +87,14 @@ def get_categories_data_from(categories_data_file_path='data_files/Test_files/te
 
 
 if __name__ == '__main__':
-    print(get_accounts_data())
+    print(get_accounts_data(
+        accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+    ))
     print()
-    print(get_savings_data())
+    print(get_savings_data(
+        savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt'
+    ))
     print()
-    print(get_categories_data_from())
+    print(get_categories_data_from(
+        categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt'
+    ))
