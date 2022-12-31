@@ -4,7 +4,8 @@ from calendar import monthrange, month_name
 # from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
-from kivy.properties import Clock, ObjectProperty
+from kivy.properties import ObjectProperty
+from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -284,7 +285,6 @@ class Transaction_menu_in(MDScreen):
             self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
             box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
 
-
             for transaction in history_dict_for_the_period.values():
                 if transaction['Date'] == Transaction_menu_in.last_date:
                     box.add_widget(MDRectangleFlatIconButton(
@@ -294,7 +294,7 @@ class Transaction_menu_in(MDScreen):
                     ))
 
                 else:
-                    box.height = dp(50)*len(box.children)
+                    box.height = dp(50) * len(box.children)
                     self.ids.GridLayout_in_ScrollView.add_widget(box)
 
                     box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
@@ -307,11 +307,13 @@ class Transaction_menu_in(MDScreen):
                         size_hint=(1, 1)
                     ))
 
+
 class date_label_for_transaction_history_menu(MDBoxLayout):
 
     def __init__(self, *args, **kwargs):
         self.date = Transaction_menu_in.last_date
         super().__init__(*args, **kwargs)
+
 
 class MainSrceen(MDScreen):
     def current_menu_month_name(self):

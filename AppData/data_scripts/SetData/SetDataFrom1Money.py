@@ -157,8 +157,7 @@ def get_accounts_and_savings_names(data_from_1money_dict):
     return accounts_name_type_income_or_expenses, accounts_name_type_transfer
 
 
-def set_accounts_data_from_1money(may_new_accounts_list,
-                                  accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'):
+def set_accounts_data_from_1money(may_new_accounts_list, accounts_data_file_path):
     # getting old data
     accounts_data_file = open(accounts_data_file_path, mode='r+', encoding='utf-8-sig')
 
