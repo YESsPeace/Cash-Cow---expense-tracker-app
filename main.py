@@ -23,14 +23,13 @@ from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history, \
     get_transaction_for_the_period
 
-
 class AccountsMenu(Screen):
     pass
 
 
 class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
         self.accounts_data_dict = get_accounts_data(
             accounts_data_file_path='AppData/data_files/accounts-data.txt'
@@ -106,7 +105,7 @@ class AccountsMenu_stat(MDScreen):
 
 class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
         # just for first creating widgets
         self.current_menu_date = str(current_menu_date)[:-3]
         self.current_menu_month_name = current_menu_month_name
@@ -165,7 +164,7 @@ class CategoriesMenu(MDScreen):
 
 class Categories_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
         # getting data for categories
         self.categories_menu_button_data_dictionary = get_categories_data_from(
@@ -188,7 +187,7 @@ class Categories_buttons_menu(MDScreen):
 
 class Transaction_menu(MDScreen):
     def __init__(self, *args, **kwargs):
-        super(Transaction_menu, self).__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
         # getting actually data for menu settings and meny title
         self.current_menu_date = str(current_menu_date)[:-3]
@@ -284,7 +283,8 @@ class Transaction_menu_in(MDScreen):
             Transaction_menu_in.last_date = history_dict_for_the_period[0]['Date']
 
             self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
-            box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
+            box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5),
+                              size_hint=(1, None))
 
             for transaction in history_dict_for_the_period.values():
                 if transaction['Date'] == Transaction_menu_in.last_date:
@@ -298,7 +298,8 @@ class Transaction_menu_in(MDScreen):
                     box.height = dp(50) * len(box.children)
                     self.ids.GridLayout_in_ScrollView.add_widget(box)
 
-                    box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5), size_hint=(1, None))
+                    box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5),
+                                      size_hint=(1, None))
                     Transaction_menu_in.last_date = transaction['Date']
 
                     self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
@@ -307,6 +308,9 @@ class Transaction_menu_in(MDScreen):
                         md_bg_color=transaction['To']['Color'], halign='left',
                         size_hint=(1, 1)
                     ))
+
+            box.height = dp(50) * len(box.children)
+            self.ids.GridLayout_in_ScrollView.add_widget(box)
 
 
 class date_label_for_transaction_history_menu(MDBoxLayout):

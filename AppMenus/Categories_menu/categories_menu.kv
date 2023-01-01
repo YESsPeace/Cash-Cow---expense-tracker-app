@@ -6,9 +6,10 @@
         pos_hint: {"top": 1}
         orientation: 'vertical'
         size_hint_y: None
-        height: dp(40)*2.75
+        height: top_btn_bar.height + month_menu.height
 
         MDBoxLayout:
+            id: top_btn_bar
             orientation: 'horizontal'
             size_hint_y: None
             height: dp(60)
@@ -31,6 +32,8 @@
 
         MDBoxLayout:
             id: month_menu
+            size_hint_y: None
+            height: dp(40)
 
             md_bg_color: 0, 1, 1, 1
 
