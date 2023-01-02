@@ -1,4 +1,5 @@
 <Transaction_menu>:
+    id: Transaction_menu
     MDBoxLayout:
         id: top_bar
         pos_hint: {"top": 1}
@@ -77,6 +78,15 @@
         Transaction_menu_in:
             id: Transaction_menu_in
             name: root.current_menu_date
+
+    MDIconButton:
+        id: new_transaction_button
+        pos_hint: {'right': .97, 'top': .15}
+        icon: 'android'
+        md_bg_color: .6, .2, 0, 1
+        on_release:
+            app.root.ids.main.add_menu_for_transaction_adding()
+
 
 
     MyNavigationDrawer:

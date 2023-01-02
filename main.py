@@ -4,12 +4,15 @@ from calendar import monthrange, month_name
 # from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
+from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatIconButton
+from kivymd.uix.card import MDCard
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
@@ -22,6 +25,7 @@ from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savin
 from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from, get_savings_data
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history, \
     get_transaction_for_the_period
+
 
 class AccountsMenu(Screen):
     pass
@@ -127,13 +131,13 @@ class CategoriesMenu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != \
-                last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
+        if self.ids.my_swiper.index == 0:
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=last_month_date.strftime("%Y") + '-' +
                                                                        last_month_date.strftime("%m")), index=-1)
             print('After-previous', self.ids.my_swiper.slides)
 
-        self.ids.my_swiper.index = self.ids.my_swiper.index - 1
+        else:
+            self.ids.my_swiper.index -= 1
 
     def load_next_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
@@ -218,13 +222,13 @@ class Transaction_menu(MDScreen):
         self.ids.month_label.text = current_menu_month_name
         self.ids.month_label.icon = days_in_month_icon_dict[days_in_current_menu_month]
 
-        if (self.ids.my_swiper.index == 0) or self.ids.my_swiper.previous_slide.name != \
-                last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m"):
+        if self.ids.my_swiper.index == 0:
             self.ids.my_swiper.add_widget(Transaction_menu_in(name=last_month_date.strftime("%Y") + '-' +
                                                                    last_month_date.strftime("%m")), index=-1)
             print('After-previous', self.ids.my_swiper.slides)
 
-        self.ids.my_swiper.index = self.ids.my_swiper.index - 1
+        else:
+            self.ids.my_swiper.index -= 1
 
     def load_next_month(self):
         global current_menu_date, days_in_current_menu_month, current_menu_month_name
@@ -265,16 +269,16 @@ class Transaction_menu_in(MDScreen):
         print(str(current_menu_date.replace(day=1)))
         print(str(current_menu_date))
 
-        Clock.schedule_once(self.history_setter_default, 0)
+        Clock.schedule_once(self.history_setter_month, 0)
 
-    def history_setter_default(self, *args):
-        global current_menu_date, current_menu_month_name
+    def history_setter_month(self, *args):
+        global current_menu_date, current_menu_month_name, days_in_current_menu_month
 
         # the period is current menu month
         # it's from first day of the month to now
         history_dict_for_the_period = get_transaction_for_the_period(
             from_date=str(current_menu_date.replace(day=1)),
-            to_date=str(current_menu_date),
+            to_date=str(current_menu_date.replace(day=days_in_current_menu_month)),
             history_dict=self.history_dict
         )
         print(*history_dict_for_the_period.items(), sep='\n')
@@ -321,6 +325,11 @@ class date_label_for_transaction_history_menu(MDBoxLayout):
 
 
 class MainSrceen(MDScreen):
+    def add_menu_for_transaction_adding(self):
+        self.add_widget(MenuForTransactionAdding(
+            id='menu_for_transaction_adding'
+        ))
+
     def current_menu_month_name(self):
         return current_menu_month_name
 
@@ -335,11 +344,61 @@ class MainSrceen(MDScreen):
         self.ids.Transaction_menu.ids.my_swiper.clear_widgets()
 
 
+class MenuForTransactionAdding(MDNavigationDrawer):
+    state = OptionProperty("open", options=("close", "open"))
+    status = OptionProperty(
+        "opened",
+        options=(
+            "closed",
+            "opening_with_swipe",
+            "opening_with_animation",
+            "opened",
+            "closing_with_swipe",
+            "closing_with_animation",
+        ),
+    )
+    enable_swiping = BooleanProperty(False)
+
+    def update_status(self, *_) -> None:
+        status = self.status
+        if status == "closed":
+            self.state = "close"
+        elif status == "opened":
+            self.state = "open"
+        elif self.open_progress == 1 and status == "opening_with_animation":
+            self.status = "opened"
+            self.state = "open"
+        elif self.open_progress == 0 and status == "closing_with_animation":
+            self.status = "closed"
+            self.state = "close"
+
+            # will kill the widget, when it's finally closed
+            self.del_myself()
+
+        elif status in (
+                "opening_with_swipe",
+                "opening_with_animation",
+                "closing_with_swipe",
+                "closing_with_animation",
+        ):
+            pass
+        if self.status == "closed":
+            self.opacity = 0
+        else:
+            self.opacity = 1
+
+    def del_myself(self):
+        # it'll kill me
+        self.parent.remove_widget(self)
+        # yep, he's dead
+
+
 class Manager(ScreenManager):
     pass
 
 
 class MyNavigationDrawer(MDNavigationDrawer):
+
     def open_main(self):
         print(1)
 
@@ -373,6 +432,7 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
         Builder.load_file('AppMenus/Transaction_menu/date_label_for_transaction_history_menu.kv')
+        Builder.load_file('AppMenus/Transaction_menu/menu_for_transaction_adding.kv')
 
         # main
         Builder.load_file('main_screen.kv')
