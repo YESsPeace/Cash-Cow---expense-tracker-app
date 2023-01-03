@@ -1,18 +1,18 @@
 import datetime
 from calendar import monthrange, month_name
 
-# from kivy.core.window import Window
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
-from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivymd.app import MDApp
+from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRectangleFlatIconButton
-from kivymd.uix.card import MDCard
-from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.button import MDRectangleFlatIconButton, MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
@@ -359,6 +359,90 @@ class MenuForTransactionAdding(MDNavigationDrawer):
     )
     enable_swiping = BooleanProperty(False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # getting data for expense
+        self.expense_dict = get_categories_data_from(
+            categories_data_file_path='AppData/data_files/categories-data.txt'
+        )
+        print("# expense_dict", *self.expense_dict.items(), sep='\n')
+
+        # getting data for transfer
+        self.transfer = get_accounts_data(
+            accounts_data_file_path='AppData/data_files/accounts-data.txt'
+        ) | get_savings_data(
+            savings_data_file_path='AppData/data_files/savings-data.txt'
+        )
+        print('# transfer_dict', *self.transfer.items(), sep='\n')
+
+        # switching to default tab, it's expense tab
+        Clock.schedule_once(lambda *args: self.ids.tab_manager.switch_to(self.ids.expense_tab))
+        # adding button to expense tab
+        Clock.schedule_once(self.adding_buttons_to_expense_tab, 0)
+        Clock.schedule_once(self.get_new_func_to_transfer_buttons, 0)
+
+    def adding_buttons_to_expense_tab(self, *args):
+        for button in self.expense_dict.values():
+            box = MDScreen(
+                md_bg_color=(.8, .3, .4, 1)
+            )
+
+            anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
+            anchor_btn.add_widget(
+                MDIconButton(
+                    md_bg_color=button['Color'],
+                    icon_size="32sp"
+                )
+            )
+            box.add_widget(anchor_btn)
+
+            box.add_widget(
+                MDLabel(
+                    text=button['Name'],
+                    pos_hint={'center_x': .5, 'top': 1},
+                    size_hint=(1, .25),
+                    halign='center',
+                )
+            )
+
+            self.ids.expense_layout.add_widget(box)
+
+    def adding_buttons_to_transfer_tab(self, *args):
+        for account in self.transfer.values():
+            box = MDScreen(
+                md_bg_color=(.8, .3, .4, 1)
+            )
+
+            anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
+            anchor_btn.add_widget(
+                MDIconButton(
+                    md_bg_color=account['Color'],
+                    icon_size="32sp"
+                )
+            )
+            box.add_widget(anchor_btn)
+
+            box.add_widget(
+                MDLabel(
+                    text=account['Name'],
+                    pos_hint={'center_x': .5, 'top': 1},
+                    size_hint=(1, .25),
+                    halign='center',
+                )
+            )
+
+            self.ids.transfer_layout.add_widget(box)
+
+    def get_new_func_to_transfer_buttons(self, *args):
+        for button in self.ids.AccountsMenu_main.ids.accounts_Boxlines.children:
+            button.bind(on_press=self.put)
+
+        for button in self.ids.AccountsMenu_main.ids.savings_Boxlines.children:
+            button.bind(on_press=self.put)
+    def put(self, widget, **kwargs):
+        widget.text = "It's work"
+        print(widget.id)
+
     def update_status(self, *_) -> None:
         status = self.status
         if status == "closed":
@@ -450,7 +534,7 @@ if __name__ == '__main__':
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
 
     # smartphone screen checking
-    # Window.size = (0.5 * 640, 0.5 * 1136)
+    Window.size = (0.6 * 640, 0.6 * 1136)
 
     # date
     date_today = datetime.date.today()
