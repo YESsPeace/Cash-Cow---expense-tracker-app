@@ -445,6 +445,16 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         widget.text = "It's started"
         self.status = 'closed'
 
+        try:
+            import shutil
+
+            shutil.copy('AppData/data_files/accounts-data.txt', 'storage/emulated/0/Android/data/accounts-data_copy.txt')
+
+            widget.text = "It's done"
+
+        except:
+            widget.text = "it doesn't work"
+
     def update_status(self, *_) -> None:
         status = self.status
         if status == "closed":
