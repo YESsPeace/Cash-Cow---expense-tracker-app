@@ -1,4 +1,6 @@
 import datetime
+import os, sys
+import webbrowser
 from calendar import monthrange, month_name
 
 from kivy.core.window import Window
@@ -325,10 +327,9 @@ class date_label_for_transaction_history_menu(MDBoxLayout):
 
 
 class MainSrceen(MDScreen):
-    def add_menu_for_transaction_adding(self):
-        self.add_widget(MenuForTransactionAdding(
-            id='menu_for_transaction_adding'
-        ))
+    def open_menu_for_transaction_adding(self):
+        self.ids.menu_for_transaction_adding.pos_hint = {'center_x': .5}
+        self.ids.menu_for_transaction_adding.status = 'opened'
 
     def current_menu_month_name(self):
         return current_menu_month_name
@@ -347,7 +348,7 @@ class MainSrceen(MDScreen):
 class MenuForTransactionAdding(MDNavigationDrawer):
     state = OptionProperty("open", options=("close", "open"))
     status = OptionProperty(
-        "opened",
+        "closed",
         options=(
             "closed",
             "opening_with_swipe",
@@ -375,11 +376,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         )
         print('# transfer_dict', *self.transfer.items(), sep='\n')
 
-        # switching to default tab, it's expense tab
-        Clock.schedule_once(lambda *args: self.ids.tab_manager.switch_to(self.ids.expense_tab))
         # adding button to expense tab
-        Clock.schedule_once(self.adding_buttons_to_expense_tab, 0)
-        Clock.schedule_once(self.get_new_func_to_transfer_buttons, 0)
+        Clock.schedule_once(self.adding_buttons_to_expense_tab, 1)
+        Clock.schedule_once(self.get_new_func_to_transfer_buttons, 1)
+
 
     def adding_buttons_to_expense_tab(self, *args):
         for button in self.expense_dict.values():
@@ -406,6 +406,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             )
 
             self.ids.expense_layout.add_widget(box)
+
 
     def adding_buttons_to_transfer_tab(self, *args):
         for account in self.transfer.values():
@@ -439,9 +440,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
         for button in self.ids.AccountsMenu_main.ids.savings_Boxlines.children:
             button.bind(on_press=self.put)
+
     def put(self, widget, **kwargs):
-        widget.text = "It's work"
-        print(widget.id)
+        widget.text = "It's started"
+        self.status = 'closed'
 
     def update_status(self, *_) -> None:
         status = self.status
@@ -456,9 +458,6 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             self.status = "closed"
             self.state = "close"
 
-            # will kill the widget, when it's finally closed
-            self.del_myself()
-
         elif status in (
                 "opening_with_swipe",
                 "opening_with_animation",
@@ -470,12 +469,6 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             self.opacity = 0
         else:
             self.opacity = 1
-
-    def del_myself(self):
-        # it'll kill me
-        self.parent.remove_widget(self)
-        # yep, he's dead
-
 
 class Manager(ScreenManager):
     pass

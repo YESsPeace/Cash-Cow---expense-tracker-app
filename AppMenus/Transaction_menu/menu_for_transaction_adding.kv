@@ -1,10 +1,8 @@
 <MenuForTransactionAdding>:
     size_hint: 1, .75
-    pos_hint: {'center_x': .5}
     #elevation: 4
     TabbedPanel:
         id: tab_manager
-        pos_hint: {'center_x': .5}
         do_default_tab: False
         tab_pos: 'top_mid'
         tab_width: self.width/3 - 7
@@ -15,9 +13,6 @@
             Rectangle:
                 size: self.size
                 pos: self.pos
-
-        TabbedPanelItem:
-            text: 'Income'
 
         TabbedPanelItem:
             id: expense_tab
@@ -36,8 +31,6 @@
             AccountsMenu_main:
                 id: AccountsMenu_main
 
-#            MDGridLayout:
-#                id: transfer_layout
-#                md_bg_color: .9, .9, .9, 1
-#                spacing: dp(7)
-#                cols: 4
+        TabbedPanelItem:
+            text: 'Income'
+
