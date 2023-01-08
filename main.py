@@ -56,6 +56,10 @@ class MainSrceen(MDScreen):
 
 
 class MenuForTransactionAdding(MDNavigationDrawer):
+    # the menu opening only in Transaction menu
+    # it's needs for choosing what exactly will be in transaction
+    # Account, Category of expense and other
+
     state = OptionProperty("open", options=("close", "open"))
     status = OptionProperty(
         "closed",
@@ -112,10 +116,12 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         print('# transfer_dict', *self.transfer.items(), sep='\n')
 
         # adding button to expense tab
-        Clock.schedule_once(self.adding_buttons_to_expense_tab, 1)
-        Clock.schedule_once(self.get_new_func_to_transfer_buttons, 1)
+        Clock.schedule_once(self.adding_buttons_to_expense_tab)
+
 
     def adding_buttons_to_expense_tab(self, *args):
+        Clock.schedule_once(self.get_new_func_to_transfer_buttons)
+
         for button in self.expense_dict.values():
             box = MDScreen(
                 md_bg_color=(.8, .3, .4, 1)
@@ -140,6 +146,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             )
 
             self.ids.expense_layout.add_widget(box)
+
+
 
     def adding_buttons_to_transfer_tab(self, *args):
         for account in self.transfer.values():
@@ -178,10 +186,13 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         widget.text = 'func is working'
         self.status = 'closed'
 
-        self.parent.add_menu_for_a_new_transaction()
+        self.parent.add_widget(menu_for_a_new_transaction())
+        print(self.parent.children)
 
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
+    # the menu opening, when we know what exactly will be in transaction
+    # Account, Category of expense and other
     state = OptionProperty("open", options=("close", "open"))
     status = OptionProperty(
         "opened",
