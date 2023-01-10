@@ -1,3 +1,77 @@
 <menu_for_a_new_transaction>:
     pos_hint: {'center_x': .5}
     size_hint: 1, .75
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(85)
+
+            MDLabel:
+                md_bg_color: .2, .2, .6, 1
+
+            MDLabel:
+                md_bg_color: .1, .1, .6, 1
+
+        MDLabel:
+            md_bg_color: .6, .1, .2, 1
+            size_hint_y: None
+            height: dp(115)
+
+        MDGridLayout:
+            md_bg_color: .5, 0, .2, 1
+            cols: 5
+            rows: 4
+
+            Button:
+                text: '÷'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: '7'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '8'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '9'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: 'del'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: 'x'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: '4'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '5'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '6'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: 'Calender'
+                background_normal: ''
+                background_color: .25, 0, .1, 1

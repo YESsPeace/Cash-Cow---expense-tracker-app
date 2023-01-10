@@ -1,4 +1,3 @@
-# date
 import datetime
 from calendar import monthrange, month_name
 
