@@ -15,11 +15,23 @@
 
             MDLabel:
                 md_bg_color: .1, .1, .6, 1
-
-        MDLabel:
-            md_bg_color: .6, .1, .2, 1
+        MDBoxLayout:
+            orientation: 'vertical'
+            md_bg_color: .3, .05, .1, 1
             size_hint_y: None
             height: dp(115)
+
+            MDLabel:
+                text: '0'
+                halign: 'center'
+                size_hint_y: .65
+                md_bg_color: .6, .1, .2, 1
+
+            MDLabel:
+                text: 'notes'
+                halign: 'center'
+                size_hint_y: .35
+                md_bg_color: .58, .08, .18, 1
 
         MDGridLayout:
             md_bg_color: .5, 0, .2, 1
@@ -47,7 +59,7 @@
                 background_color: 1, 1, 1, .25
 
             Button:
-                text: 'del'
+                text: 'AC'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
 
@@ -72,6 +84,56 @@
                 background_color: 1, 1, 1, .25
 
             Button:
+                text: 'del'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: '-'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: '1'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '2'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '3'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
                 text: 'Calender'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: '+'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+
+            Button:
+                text: 'currency'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '0'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '.'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: 'done'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
