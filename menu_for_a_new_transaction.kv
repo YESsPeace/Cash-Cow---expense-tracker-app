@@ -22,91 +22,142 @@
             height: dp(115)
 
             MDLabel:
+                id: sum_label
                 text: '0'
                 halign: 'center'
                 size_hint_y: .65
                 md_bg_color: .6, .1, .2, 1
 
-            MDLabel:
+            TextInput:
                 text: 'notes'
                 halign: 'center'
+                multiline: False
                 size_hint_y: .35
-                md_bg_color: .58, .08, .18, 1
+                cursor_color: 1, 1, 1, 1
+                foreground_color: 1, 1, 1, 1
+                background_color: .59, .09, .19, 1
 
         MDGridLayout:
             md_bg_color: .5, 0, .2, 1
+            spacing: dp(1)
             cols: 5
             rows: 4
 
             Button:
                 text: '÷'
+                font_size: '19sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
+                    done_btn.text = '='
+
 
             Button:
                 text: '7'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '8'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '9'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: 'AC'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    sum_label.text = '0'
 
             Button:
                 text: 'x'
+                font_size: '18sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
+                    done_btn.text = '='
+
 
             Button:
                 text: '4'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '5'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '6'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: 'del'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    sum_label.text = sum_label.text[:-1]
 
             Button:
                 text: '-'
+                font_size: '28sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
+                    done_btn.text = '='
+
 
             Button:
                 text: '1'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '2'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '3'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: 'Calender'
@@ -115,8 +166,12 @@
 
             Button:
                 text: '+'
+                font_size: '18sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
+                    done_btn.text = '='
 
             Button:
                 text: 'currency'
@@ -127,13 +182,28 @@
                 text: '0'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == '0': sum_label.text = self.text
+                    else: sum_label.text = sum_label.text + self.text
 
             Button:
                 text: '.'
                 background_normal: ''
                 background_color: 1, 1, 1, .25
+                on_release:
+                    sign = set(sum_label.text).intersection(['+', '-', '÷', 'x'])
+                    if len(sign): num_1, num_2 = sum_label.text.split(list(sign)[0])
+                    else: num_2 = sum_label.text
+                    if not '.' in num_2: sum_label.text = sum_label.text + self.text
 
             Button:
+                id: done_btn
                 text: 'done'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
+                on_release:
+                    is_calculate = False
+                    if self.text == '=': is_calculate = True
+                    if is_calculate: self.text = 'done'
+                    if is_calculate: sum_label.text = root.calculate_it(sum_label.text)
+                    if not is_calculate: root.write_transaction(sum_label.text)

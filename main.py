@@ -241,6 +241,45 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
     def del_myself(self):
         self.parent.remove_widget(self)
 
+    def calculate_it(self, expression):
+        if '+' in expression:
+            num_1, num_2 = expression.split('+')
+            answer = float(num_1) + float(num_2)
+            if answer % 1 == 0:
+                answer = int(answer)
+
+            return str(answer)
+
+        elif '-' in expression:
+            num_1, num_2 = expression.split('-')
+            answer = float(num_1) - float(num_2)
+            if answer % 1 == 0:
+                answer = int(answer)
+
+            return str(answer)
+
+        elif '÷' in expression:
+            num_1, num_2 = expression.split('÷')
+            answer = float(num_1) / float(num_2)
+            if answer % 1 == 0:
+                answer = int(answer)
+
+            return str(answer)
+
+        elif 'x' in expression:
+            num_1, num_2 = expression.split('x')
+            answer = float(num_1) * float(num_2)
+            if answer % 1 == 0:
+                answer = int(answer)
+
+            return str(answer)
+
+        else:
+            return False
+
+    def write_transaction(self, sum):
+        print('# doing transaction with:', sum)
+
 
 class Manager(ScreenManager):
     pass
