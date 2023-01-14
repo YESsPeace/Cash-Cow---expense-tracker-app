@@ -48,9 +48,7 @@
                 font_size: '19sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
-                on_release:
-                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
-                    done_btn.text = '='
+                on_release: root.sign_btn_pressed(self)
 
 
             Button:
@@ -89,9 +87,7 @@
                 font_size: '18sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
-                on_release:
-                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
-                    done_btn.text = '='
+                on_release: root.sign_btn_pressed(self)
 
 
             Button:
@@ -130,9 +126,7 @@
                 font_size: '28sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
-                on_release:
-                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
-                    done_btn.text = '='
+                on_release: root.sign_btn_pressed(self)
 
 
             Button:
@@ -169,9 +163,7 @@
                 font_size: '18sp'
                 background_normal: ''
                 background_color: .25, 0, .1, 1
-                on_release:
-                    if not sum_label.text[-1] in ['+', '-', '÷', 'x']: sum_label.text = sum_label.text + self.text
-                    done_btn.text = '='
+                on_release: root.sign_btn_pressed(self)
 
             Button:
                 text: 'currency'
@@ -202,8 +194,6 @@
                 background_normal: ''
                 background_color: .25, 0, .1, 1
                 on_release:
-                    is_calculate = False
-                    if self.text == '=': is_calculate = True
-                    if is_calculate: self.text = 'done'
-                    if is_calculate: sum_label.text = root.calculate_it(sum_label.text)
-                    if not is_calculate: root.write_transaction(sum_label.text)
+                    if self.text == '=': root.calculate_btn_pressed()
+                    elif self.text == 'done': root.write_transaction(sum_label.text)
+                    self.text = 'done'

@@ -241,10 +241,27 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
     def del_myself(self):
         self.parent.remove_widget(self)
 
+    def sign_btn_pressed(self, btn):
+        if len(set(self.ids.sum_label.text).intersection({'+', '-', '÷', 'x'})):
+            self.calculate_btn_pressed()
+            self.ids.sum_label.text = self.ids.sum_label.text + btn.text
+
+        elif self.ids.sum_label.text[-1] in ['+', '-', '÷', 'x']:
+            self.ids.sum_label.text = self.ids.sum_label.text[:-1] + btn.text
+
+        else:
+            self.ids.sum_label.text = self.ids.sum_label.text + btn.text
+
+        self.ids.done_btn.text = '='
+
+    def calculate_btn_pressed(self):
+        self.ids.sum_label.text = self.calculate_it(self.ids.sum_label.text)
+
     def calculate_it(self, expression):
         if '+' in expression:
             num_1, num_2 = expression.split('+')
             answer = float(num_1) + float(num_2)
+            answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
 
@@ -253,6 +270,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         elif '-' in expression:
             num_1, num_2 = expression.split('-')
             answer = float(num_1) - float(num_2)
+            answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
 
@@ -261,6 +279,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         elif '÷' in expression:
             num_1, num_2 = expression.split('÷')
             answer = float(num_1) / float(num_2)
+            answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
 
@@ -269,6 +288,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         elif 'x' in expression:
             num_1, num_2 = expression.split('x')
             answer = float(num_1) * float(num_2)
+            answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
 
@@ -278,7 +298,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             return False
 
     def write_transaction(self, sum):
-        print('# doing transaction with:', sum)
+        print('# writing transaction:', sum)
 
 
 class Manager(ScreenManager):
@@ -328,7 +348,8 @@ class MoneyStatApp(MDApp):
         Builder.load_file('manager.kv')
         Builder.load_file('menu_for_a_new_transaction.kv')
 
-        return Manager()
+        # return Manager()
+        return menu_for_a_new_transaction()
 
 
 if __name__ == '__main__':
