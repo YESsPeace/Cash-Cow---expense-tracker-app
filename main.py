@@ -33,6 +33,10 @@ from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get
 
 
 class MainSrceen(MDScreen):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def open_menu_for_transaction_adding(self):
         self.ids.menu_for_transaction_adding.pos_hint = {'center_x': .5}
         self.ids.menu_for_transaction_adding.status = 'opened'
@@ -130,8 +134,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
             anchor_btn.add_widget(
                 MDIconButton(
+                    text=button['Name'],
                     md_bg_color=button['Color'],
-                    icon_size="32sp"
+                    icon_size="32sp",
+                    on_release=self.put
                 )
             )
             box.add_widget(anchor_btn)
@@ -183,11 +189,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             button.bind(on_press=self.put)
 
     def put(self, widget, **kwargs):
-        widget.text = 'func is working'
         self.status = 'closed'
-
+        config.second_transaction_item = {'Name': widget.text, 'Color': widget.md_bg_color}
+        print(config.second_transaction_item)
         self.parent.add_widget(menu_for_a_new_transaction())
-        print(self.parent.children)
 
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -236,7 +241,10 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        pass
+        # self.ids.ifrst_item_label.text = config.first_transaction_item['Name']
+        # self.ids.ifrst_item_label.md_bg_color = config.first_transaction_item['Color']
+        self.ids.second_item_label.text = config.second_transaction_item['Name']
+        self.ids.second_item_label.md_bg_color = config.second_transaction_item['Color']
 
     def del_myself(self):
         self.parent.remove_widget(self)
@@ -298,6 +306,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             return False
 
     def write_transaction(self, sum):
+        if sum[-1] == '.':
+            sum = sum[:-1]
         print('# writing transaction:', sum)
 
 
@@ -348,8 +358,8 @@ class MoneyStatApp(MDApp):
         Builder.load_file('manager.kv')
         Builder.load_file('menu_for_a_new_transaction.kv')
 
-        # return Manager()
-        return menu_for_a_new_transaction()
+        return Manager()
+        # return menu_for_a_new_transaction()
 
 
 if __name__ == '__main__':
