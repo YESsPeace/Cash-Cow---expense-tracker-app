@@ -5,31 +5,32 @@
 def get_data_from_1money(money_file_path, categories_data_file_path, accounts_data_file_path):
 
     with open(categories_data_file_path, mode='r+', encoding="utf-8-sig") as categories_data_file:
-        color_categories_data_dict = {}
+        categories_data_dict = {}
 
         for line in categories_data_file:
-            name_of_categories = line.split('-')[1]
-            color_of_categories = tuple([float(i) for i in line.split('-')[2][:-1].split(',')])
+            line = line.split('-')
 
-            color_categories_data_dict[name_of_categories] = color_of_categories
+            id_of_categories = line[0]
+            name_of_categories = line[1]
+            color_of_categories = tuple([float(i) for i in line[2].split(',')])
+
+            categories_data_dict[name_of_categories] = {'id': id_of_categories, 'Color': color_of_categories}
+
+        latest_id_of_categories = id_of_categories
 
     with open(accounts_data_file_path, mode='r+', encoding="utf-8-sig") as accounts_and_savings_data_file:
-        color_accounts_data_dict = {}
+        accounts_data_dict = {}
 
         for line in accounts_and_savings_data_file:
             data_list = line.split('-')
 
-            try:
-                name_of_account = data_list[1]
-                color_of_account = tuple([float(i) for i in data_list[2][:-1].split(',')])
+            id_of_account = data_list[0]
+            name_of_account = data_list[1]
+            color_of_account = tuple([float(i) for i in data_list[2].split(',')])
 
-                color_accounts_data_dict[name_of_account] = color_of_account
+            accounts_data_dict[name_of_account] = {'id': id_of_account, 'Color': color_of_account}
 
-            except IndexError:
-                continue
-
-            except ValueError:
-                continue
+        latest_id_of_account = id_of_account
 
     with open(money_file_path, encoding="utf-8-sig") as csvfile:
         import csv
@@ -62,17 +63,39 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
                     clean_row.append(i)
                     num_of_i += 1
 
-            if clean_row[2] in color_accounts_data_dict:
-                clean_row[2] = {'Name': clean_row[2], 'Color': color_accounts_data_dict[clean_row[2]]}
+            if clean_row[2] in accounts_data_dict:
+                name_of = clean_row[2]
+                id_of = accounts_data_dict[name_of]['id']
+                color_of = accounts_data_dict[name_of]['Color']
 
-            elif not clean_row[2] in color_accounts_data_dict:
+                clean_row[2] = {'id': id_of, 'Name': name_of, 'Color': color_of}
+
+            elif not clean_row[2] in accounts_data_dict:
+                latest_id_of_account = latest_id_of_account.split('_')
+                name_id = latest_id_of_account[0]
+                num_id = str(int(latest_id_of_account[1]) + 1)
+                latest_id_of_account = f'{name_id}_{num_id}'
+
+                accounts_data_dict[clean_row[2]] = {'id': latest_id_of_account, 'Color': (0, 0.41, 0.24, 1)}
+
                 clean_row[2] = {'Name': clean_row[2], 'Color': (0, 0.41, 0.24, 1)}
 
-            if clean_row[3] in color_categories_data_dict:
-                clean_row[3] = {'Name': clean_row[3], 'Color': color_categories_data_dict[clean_row[3]]}
+            if clean_row[3] in categories_data_dict:
+                name_of = clean_row[3]
+                id_of = categories_data_dict[name_of]['id']
+                color_of = categories_data_dict[name_of]['Color']
 
-            elif not clean_row[3] in color_categories_data_dict:
-                clean_row[3] = {'Name': clean_row[3], 'Color': (0.38, 0.39, 0.61, 1)}
+                clean_row[3] = {'id': id_of, 'Name': name_of, 'Color': color_of}
+
+            elif not clean_row[3] in categories_data_dict:
+                latest_id_of_categories = latest_id_of_categories.split('_')
+                name_id = latest_id_of_categories[0]
+                num_id = str(int(latest_id_of_categories[1]) + 1)
+                latest_id_of_categories = f'{name_id}_{num_id}'
+
+                categories_data_dict[clean_row[3]] = {'id': latest_id_of_categories, 'Color': (0.38, 0.39, 0.61, 1)}
+
+                clean_row[3] = {'id': latest_id_of_categories, 'Name': clean_row[3], 'Color': (0.38, 0.39, 0.61, 1)}
 
             transaction_dict[num_of_row] = {}
 
