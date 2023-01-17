@@ -278,24 +278,25 @@ def set_history_data_from_1money(
 
         writer = csv.writer(history_file, delimiter=',')
 
-        for transaction in history_dict_from_1money.values():
-            Date = transaction['Date']
-            Type = transaction['Type']
-            From = transaction['From']['Name']
-            To = transaction['To']['Name']
-            FromSUM = transaction['FromSUM']
-            FromCurrency = transaction['FromCurrency']
-            ToSUM = transaction['ToSUM']
-            ToCurrency = transaction['ToCurrency']
+        for trans_id in history_dict_from_1money:
 
-            if 'Сomment' in transaction:
-                Сomment = transaction['Сomment']
+            Date = history_dict_from_1money[trans_id]['Date']
+            Type = history_dict_from_1money[trans_id]['Type']
+            From = history_dict_from_1money[trans_id]['From']['Name']
+            To = history_dict_from_1money[trans_id]['To']['Name']
+            FromSUM = history_dict_from_1money[trans_id]['FromSUM']
+            FromCurrency = history_dict_from_1money[trans_id]['FromCurrency']
+            ToSUM = history_dict_from_1money[trans_id]['ToSUM']
+            ToCurrency = history_dict_from_1money[trans_id]['ToCurrency']
+
+            if 'Сomment' in history_dict_from_1money[trans_id]:
+                Сomment = history_dict_from_1money[trans_id]['Сomment']
             else:
                 Сomment = None
 
             writer.writerow(
-                [Date] + [Type] + [From] + [To] + [FromSUM] + [FromCurrency] + [ToSUM] +
-                [ToCurrency] + [Сomment])
+                [trans_id] + [Date] + [Type] + [From] + [To] + [FromSUM] +
+                [FromCurrency] + [ToSUM] + [ToCurrency] + [Сomment])
 
 def set_incomes_data_from_1money():
     pass
@@ -311,7 +312,10 @@ if __name__ == '__main__':
 
     from AppData.data_scripts.GetData.GetDataFrom1Money import get_data_from_1money
 
-    data_dict_from_1money = get_data_from_1money()
+    data_dict_from_1money = get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
+                         categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
+                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+                                )
 
     n = int(input('Ответ (цифра): '))
 

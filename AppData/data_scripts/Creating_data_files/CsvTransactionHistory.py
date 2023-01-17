@@ -19,8 +19,8 @@ def create_transaction_history_file(path):
         writer = csv.writer(file, delimiter=',', quotechar='"')
 
         writer.writerow(
-            ['Date'] + ['Type'] + ['From'] + ['To'] + ['FromSUM'] + ['FromCurrency'] + ['ToSUM'] +
-            ['ToCurrency'] + ['Сomment'])
+            ['id'] + ['Date'] + ['Type'] + ['From'] + ['To'] + ['FromSUM'] +
+            ['FromCurrency'] + ['ToSUM'] + ['ToCurrency'] + ['Сomment'])
 
         print('# data_file: transaction-history.csv is open')
 

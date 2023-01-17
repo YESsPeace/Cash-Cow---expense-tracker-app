@@ -34,7 +34,8 @@ class Transaction_menu_in(MDScreen):
         print(*history_dict_for_the_period.items(), sep='\n')
 
         if len(history_dict_for_the_period) != 0:
-            config.Transaction_menu_in_last_date = history_dict_for_the_period[0]['Date']
+            last_id = list(history_dict_for_the_period)[-1]
+            config.Transaction_menu_in_last_date = history_dict_for_the_period[last_id]['Date']
 
             self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
             box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5),
