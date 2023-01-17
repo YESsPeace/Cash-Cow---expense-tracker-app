@@ -121,7 +121,18 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
 
             num_of_row += 1
 
-        return transaction_dict
+        # changing transaction id
+        # the newer transaction the bigger number of it
+        changed_transaction_dict = {}
+        latest_new_key = 0
+
+        for old_key in range(num_of_row - 1, -1, -1):
+            changed_transaction_dict[latest_new_key] = transaction_dict[old_key]
+            del transaction_dict[old_key]
+            latest_new_key += 1
+
+
+        return changed_transaction_dict
 
 
 if __name__ == '__main__':
