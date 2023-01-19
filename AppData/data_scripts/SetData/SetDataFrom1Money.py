@@ -282,8 +282,8 @@ def set_history_data_from_1money(
 
             Date = history_dict_from_1money[trans_id]['Date']
             Type = history_dict_from_1money[trans_id]['Type']
-            From = history_dict_from_1money[trans_id]['From']['Name']
-            To = history_dict_from_1money[trans_id]['To']['Name']
+            From = history_dict_from_1money[trans_id]['From']
+            To = history_dict_from_1money[trans_id]['To']
             FromSUM = history_dict_from_1money[trans_id]['FromSUM']
             FromCurrency = history_dict_from_1money[trans_id]['FromCurrency']
             ToSUM = history_dict_from_1money[trans_id]['ToSUM']
