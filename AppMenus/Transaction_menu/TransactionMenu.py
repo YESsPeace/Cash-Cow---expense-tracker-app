@@ -21,8 +21,6 @@ class Transaction_menu(MDScreen):
         # getting history data
         config.history_dict = get_transaction_history(
             history_file_path='AppData/data_files/transaction-history.csv',
-            categories_data_file_path='AppData/data_files/categories-data.txt',
-            accounts_data_file_path='AppData/data_files/accounts-data.txt'
         )
         print(*config.history_dict.items(), sep='\n')
 
