@@ -1,6 +1,7 @@
 import datetime
 from calendar import monthrange, month_name
 
+# ___date___
 date_today = datetime.date.today()
 
 current_year = date_today.year
@@ -23,8 +24,13 @@ current_menu_month = current_month
 days_in_current_menu_month = monthrange(current_menu_year, current_menu_month)[1]
 current_menu_month_name = month_name[current_menu_month]
 
+# Accounts Menu
+
+# transaction menu
 history_dict = None
 Transaction_menu_in_last_date = None
 
+# menu for adding a transaction
+last_transaction = None
 first_transaction_item = None
 second_transaction_item = None

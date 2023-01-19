@@ -190,10 +190,11 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
     def put(self, widget, **kwargs):
         self.status = 'closed'
-        config.second_transaction_item = {'Name': widget.text, 'Color': widget.md_bg_color}
+        # config.first_transaction_item = self.get_first_transaction_item()
+        config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+        print(config.first_transaction_item)
         print(config.second_transaction_item)
         self.parent.add_widget(menu_for_a_new_transaction())
-
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction

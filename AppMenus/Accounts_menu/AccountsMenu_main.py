@@ -5,7 +5,6 @@ from kivymd.uix.screen import MDScreen
 
 from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_savings_data
 
-
 class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,6 +12,7 @@ class AccountsMenu_main(MDScreen):
         self.accounts_data_dict = get_accounts_data(
             accounts_data_file_path='AppData/data_files/accounts-data.txt'
         )
+
         self.savings_data_dict = get_savings_data(
             savings_data_file_path='AppData/data_files/savings-data.txt'
         )

@@ -18,10 +18,10 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
 
         latest_id_of_categories = id_of_categories
 
-    with open(accounts_data_file_path, mode='r+', encoding="utf-8-sig") as accounts_and_savings_data_file:
+    with open(accounts_data_file_path, mode='r+', encoding="utf-8-sig") as accounts_data_file:
         accounts_data_dict = {}
 
-        for line in accounts_and_savings_data_file:
+        for line in accounts_data_file:
             data_list = line.split('-')
 
             id_of_account = data_list[0]
@@ -31,6 +31,20 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
             accounts_data_dict[name_of_account] = {'id': id_of_account, 'Color': color_of_account}
 
         latest_id_of_account = id_of_account
+
+    # with open(savings_data_file_path, mode='r+', encoding="utf-8-sig") as savings_data_file:
+    #     savings_data_dict = {}
+    #
+    #     for line in savings_data_file:
+    #         line = line.split('-')
+    #
+    #         id_of_savings = line[0]
+    #         name_of_savings = line[1]
+    #         color_of_savings = tuple([float(i) for i in line[2].split(',')])
+    #
+    #         savings_data_dict[name_of_savings] = {'id': id_of_savings, 'Color': color_of_savings}
+    #
+    #     latest_id_of_savings = id_of_savings
 
     with open(money_file_path, encoding="utf-8-sig") as csvfile:
         import csv
@@ -62,13 +76,12 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
 
                     clean_row.append(i)
                     num_of_i += 1
-
+            # in accounts dict
             if clean_row[2] in accounts_data_dict:
                 name_of = clean_row[2]
                 id_of = accounts_data_dict[name_of]['id']
-                color_of = accounts_data_dict[name_of]['Color']
 
-                clean_row[2] = {'id': id_of, 'Name': name_of, 'Color': color_of}
+                clean_row[2] = id_of
 
             elif not clean_row[2] in accounts_data_dict:
                 latest_id_of_account = latest_id_of_account.split('_')
@@ -76,16 +89,16 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
                 num_id = str(int(latest_id_of_account[1]) + 1)
                 latest_id_of_account = f'{name_id}_{num_id}'
 
-                accounts_data_dict[clean_row[2]] = {'id': latest_id_of_account, 'Color': (0, 0.41, 0.24, 1)}
+                accounts_data_dict[clean_row[2]] = {'id': latest_id_of_account}
 
-                clean_row[2] = {'Name': clean_row[2], 'Color': (0, 0.41, 0.24, 1)}
+                clean_row[2] = latest_id_of_account
 
+            # in categories dict
             if clean_row[3] in categories_data_dict:
                 name_of = clean_row[3]
                 id_of = categories_data_dict[name_of]['id']
-                color_of = categories_data_dict[name_of]['Color']
 
-                clean_row[3] = {'id': id_of, 'Name': name_of, 'Color': color_of}
+                clean_row[3] = id_of
 
             elif not clean_row[3] in categories_data_dict:
                 latest_id_of_categories = latest_id_of_categories.split('_')
@@ -93,9 +106,9 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
                 num_id = str(int(latest_id_of_categories[1]) + 1)
                 latest_id_of_categories = f'{name_id}_{num_id}'
 
-                categories_data_dict[clean_row[3]] = {'id': latest_id_of_categories, 'Color': (0.38, 0.39, 0.61, 1)}
+                categories_data_dict[clean_row[3]] = {'id': latest_id_of_categories}
 
-                clean_row[3] = {'id': latest_id_of_categories, 'Name': clean_row[3], 'Color': (0.38, 0.39, 0.61, 1)}
+                clean_row[3] = latest_id_of_categories
 
             transaction_dict[num_of_row] = {}
 
@@ -141,6 +154,7 @@ if __name__ == '__main__':
     start_time = datetime.now()
     print(*get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
                          categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
-                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt'
+                         accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt',
+                         # savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt'
                                 ).items(), sep='\n')
     print(f'This worked {datetime.now() - start_time}')
