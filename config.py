@@ -25,6 +25,8 @@ days_in_current_menu_month = monthrange(current_menu_year, current_menu_month)[1
 current_menu_month_name = month_name[current_menu_month]
 
 # Accounts Menu
+global_accounts_data_dict = None
+global_savings_data_dict = None
 
 # transaction menu
 history_dict = None

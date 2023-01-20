@@ -46,7 +46,8 @@ class Transaction_menu_in(MDScreen):
                 if transaction['Date'] == config.Transaction_menu_in_last_date:
                     box.add_widget(MDRectangleFlatIconButton(
                         text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
-                        halign='left', size_hint=(1, 1)
+                        md_bg_color=(config.global_accounts_data_dict[transaction['From']]['Color']),
+                        halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
                     ))
 
                 else:
@@ -61,7 +62,8 @@ class Transaction_menu_in(MDScreen):
                     self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
                     box.add_widget(MDRectangleFlatIconButton(
                         text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
-                        halign='left', size_hint=(1, 1)
+                        md_bg_color=(config.global_accounts_data_dict[transaction['From']]['Color']),
+                        halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
                     ))
 
             box.height = dp(50) * len(box.children)
