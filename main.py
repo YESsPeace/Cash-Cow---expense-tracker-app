@@ -190,7 +190,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
     def put(self, widget, **kwargs):
         self.status = 'closed'
-        # config.first_transaction_item = self.get_first_transaction_item()
+        last_account = config.history_dict[list(config.history_dict)[-1]]['From']
+        config.first_transaction_item = {'id': last_account,
+                                         'Name': config.global_accounts_data_dict[last_account]['Name'],
+                                         'Color': config.global_accounts_data_dict[last_account]['Color']}
         config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
         print(config.first_transaction_item)
         print(config.second_transaction_item)
@@ -242,8 +245,10 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.ids.ifrst_item_label.text = config.first_transaction_item['Name']
-        # self.ids.ifrst_item_label.md_bg_color = config.first_transaction_item['Color']
+
+        self.ids.first_item_label.text = config.first_transaction_item['Name']
+        self.ids.first_item_label.md_bg_color = config.first_transaction_item['Color']
+
         self.ids.second_item_label.text = config.second_transaction_item['Name']
         self.ids.second_item_label.md_bg_color = config.second_transaction_item['Color']
 

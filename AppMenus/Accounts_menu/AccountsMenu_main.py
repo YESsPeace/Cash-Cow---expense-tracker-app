@@ -30,7 +30,7 @@ class AccountsMenu_main(MDScreen):
 
         for account_id in self.accounts_data_dict:
             my_widget = MDRectangleFlatIconButton(
-                id=account_id, icon='Icons/Btn_icon/Accounts-icon-white.png',
+                id=str(account_id), icon='Icons/Btn_icon/Accounts-icon-white.png',
                 text=self.accounts_data_dict[account_id]['Name'],
                 text_color='white',
                 md_bg_color=self.accounts_data_dict[account_id]['Color'],
@@ -53,7 +53,7 @@ class AccountsMenu_main(MDScreen):
 
         for savings_id in self.savings_data_dict:
             my_widget = MDRectangleFlatIconButton(
-                id=savings_id, icon='Icons/Btn_icon/Accounts-icon-white.png',
+                id=str(savings_id), icon='Icons/Btn_icon/Accounts-icon-white.png',
                 text=self.savings_data_dict[savings_id]['Name'],
                 text_color='white',
                 md_bg_color=self.savings_data_dict[savings_id]['Color'],
