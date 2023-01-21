@@ -5,6 +5,9 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
+from random import choice
+from config import icon_list
+
 from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
 
 
@@ -35,6 +38,7 @@ class Categories_buttons_menu(MDScreen):
                 MDIconButton(
                     id=button_id,
                     text=button['Name'],
+                    icon=choice(icon_list),
                     md_bg_color=button['Color'],
                     pos_hint={'center_x': .5},
                     icon_size="40sp",

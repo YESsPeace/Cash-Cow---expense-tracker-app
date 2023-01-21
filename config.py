@@ -28,6 +28,19 @@ current_menu_month_name = month_name[current_menu_month]
 global_accounts_data_dict = None
 global_savings_data_dict = None
 
+# Categories Menu
+icon_list = [
+    'youtube',
+    'android',
+    'youtube-tv',
+    'align-vertical-bottom',
+    'alpha',
+    'alert-octagon-outline',
+    'aline',
+    'aws',
+    'axis'
+]
+
 # transaction menu
 history_dict = None
 Transaction_menu_in_last_date = None

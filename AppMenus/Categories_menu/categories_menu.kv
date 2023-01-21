@@ -6,7 +6,7 @@
         pos_hint: {"top": 1}
         orientation: 'vertical'
         size_hint_y: None
-        height: top_btn_bar.height + month_menu.height
+        height: top_btn_bar.height
 
         MDBoxLayout:
             id: top_btn_bar
@@ -30,52 +30,11 @@
             MDIconButton:
                 icon: 'Icons/Btn_icon/pencil.png'
 
-        MDBoxLayout:
-            id: month_menu
-            size_hint_y: None
-            height: dp(40)
-
-            md_bg_color: 0, 1, 1, 1
-
-            MDIconButton:
-                icon: 'Icons/Btn_icon/next - Copy.png'
-                icon_size: "24sp"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release:
-                    root.load_previous_month()
-
-            MDLabel:
-
-            MDRectangleFlatIconButton:
-                id: month_label
-
-                text: root.current_menu_month_name
-                line_color: self.parent.md_bg_color
-                line_color: 0, 0, 0, 0
-                pos_hint: {"center_x": .5, "center_y": .5}
-
-                icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
-
-
-            MDLabel:
-
-            MDIconButton:
-                icon: 'Icons/Btn_icon/next.png'
-                icon_size: "24sp"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release:
-                    root.load_next_month()
-
-    Carousel:
-        id: my_swiper
+    Categories_buttons_menu:
+        id: categories_buttons_menu
         size_hint_y: None
         height: root.height - top_bar.height
         y: root.height - self.height - top_bar.height
-
-        ignore_perpendicular_swipes: True
-
-        Categories_buttons_menu:
-            name: root.current_menu_date
 
     MyNavigationDrawer:
         id: nav_drawer
