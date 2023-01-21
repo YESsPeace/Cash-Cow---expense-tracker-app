@@ -29,6 +29,9 @@ global_accounts_data_dict = None
 global_savings_data_dict = None
 
 # Categories Menu
+level = 0
+color = None
+
 icon_list = [
     'youtube',
     'android',

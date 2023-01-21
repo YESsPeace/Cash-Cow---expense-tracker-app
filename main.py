@@ -365,7 +365,6 @@ class MoneyStatApp(MDApp):
         Builder.load_file('menu_for_a_new_transaction.kv')
 
         return Manager()
-        # return menu_for_a_new_transaction()
 
 
 if __name__ == '__main__':

@@ -1,16 +1,16 @@
-﻿Categories_0-Шкила-.71, .72, .69, 1
-Categories_1-Снэки-.90, .17, .31, 1
-Categories_2-Столовая-.7, .39, .71, 1
-Categories_3-Игры-.26, .19, .54, 1
-Categories_4-not stonks-.47, .87, .91, 1
-Categories_5-Покупки-1, .87, .52, 1
-Categories_6-Подписки-.61, .18, .19, 1
-Categories_7-Донаат-.38, .39, .61, 1
-Categories_8-Покупки -.38, .39, .61, 1
-Categories_9-+-.38, .39, .61, 1
-Categories_10-+-.38, .39, .61, 1
-Categories_11-+-.38, .39, .61, 1
-Categories_12-+-.38, .39, .61, 1
-Categories_13-+-.38, .39, .61, 1
-Categories_14-+-.38, .39, .61, 1
-Categories_15-+-.38, .39, .61, 1
+﻿Categories_0-Шкила-.71, .72, .69, .75
+Categories_1-Снэки-.90, .17, .31, .75
+Categories_2-Столовая-.7, .39, .71, .75
+Categories_3-Игры-.26, .19, .54, .75
+Categories_4-not stonks-.47, .87, .91, .75
+Categories_5-Покупки-1, .87, .52, .75
+Categories_6-Подписки-.61, .18, .19, .75
+Categories_7-Донаат-.38, .39, .61, .75
+Categories_8-Покупки -.38, .39, .61, .75
+Categories_9-+-.38, .39, .61, .75
+Categories_10-+-.38, .39, .61, .75
+Categories_11-+-.38, .39, .61, .75
+Categories_12-+-.38, .39, .61, .75
+Categories_13-+-.38, .39, .61, .75
+Categories_14-+-.38, .39, .61, .75
+Categories_15-+-.38, .39, .61, .75
