@@ -1,6 +1,8 @@
 import datetime
 from calendar import monthrange, month_name
 
+from kivymd.icon_definitions import md_icons
+
 # ___date___
 date_today = datetime.date.today()
 
@@ -32,17 +34,7 @@ global_savings_data_dict = None
 level = 0
 color = None
 
-icon_list = [
-    'youtube',
-    'android',
-    'youtube-tv',
-    'align-vertical-bottom',
-    'alpha',
-    'alert-octagon-outline',
-    'aline',
-    'aws',
-    'axis'
-]
+icon_list = list(md_icons.keys())
 
 # transaction menu
 history_dict = None
