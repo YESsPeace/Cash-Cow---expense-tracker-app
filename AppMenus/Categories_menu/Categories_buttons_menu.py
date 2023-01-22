@@ -21,9 +21,6 @@ class WaterFill(Widget):
         self.color = config.color
         super().__init__(*args, **kwargs)
 
-class MyIconButton(MDIconButton):
-    pass
-
 class Categories_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,7 +61,6 @@ class Categories_buttons_menu(MDScreen):
             container.add_widget(MDIconButton(
                 pos_hint={'center_x': 0.5, 'top': 0.5},
                 id=str(button_id),
-                md_bg_color=button['Color'],
                 icon=choice(icon_list),
             ))
 

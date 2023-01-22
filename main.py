@@ -126,7 +126,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
     def adding_buttons_to_expense_tab(self, *args):
         Clock.schedule_once(self.get_new_func_to_transfer_buttons)
 
-        for button in self.expense_dict.values():
+        for button_id in self.expense_dict:
             box = MDScreen(
                 md_bg_color=(.8, .3, .4, 1)
             )
@@ -134,8 +134,9 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
             anchor_btn.add_widget(
                 MDIconButton(
-                    text=button['Name'],
-                    md_bg_color=button['Color'],
+                    id=str(button_id),
+                    text=self.expense_dict[button_id]['Name'],
+                    md_bg_color=list(self.expense_dict[button_id]['Color'][:-1]) + [1],
                     icon_size="32sp",
                     on_release=self.put
                 )
@@ -144,7 +145,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
             box.add_widget(
                 MDLabel(
-                    text=button['Name'],
+                    text=self.expense_dict[button_id]['Name'],
                     pos_hint={'center_x': .5, 'top': 1},
                     size_hint=(1, .25),
                     halign='center',
@@ -190,13 +191,20 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
     def put(self, widget, **kwargs):
         self.status = 'closed'
-        last_account = config.history_dict[list(config.history_dict)[-1]]['From']
+        last_transaction = config.history_dict[list(config.history_dict)[-1]]
+        config.currency_dict['FromCurrency'] = last_transaction['FromCurrency']
+
+        last_account = last_transaction['From']
+
         config.first_transaction_item = {'id': last_account,
                                          'Name': config.global_accounts_data_dict[last_account]['Name'],
-                                         'Color': config.global_accounts_data_dict[last_account]['Color']}
+                                         'Color': config.global_accounts_data_dict[last_account]['Color'],
+                                         }
         config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+
         print(config.first_transaction_item)
         print(config.second_transaction_item)
+
         self.parent.add_widget(menu_for_a_new_transaction())
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -244,6 +252,12 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             self.opacity = 1
 
     def __init__(self, *args, **kwargs):
+        self.currency_first = config.currency_dict['FromCurrency']
+        self.currency_first = '$'
+        print(type(self.currency_first), self.currency_first)
+
+        self.default_sum_label_text = f'{self.currency_first} 0'
+
         super().__init__(*args, **kwargs)
 
         self.ids.first_item_label.text = config.first_transaction_item['Name']
@@ -251,6 +265,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         self.ids.second_item_label.text = config.second_transaction_item['Name']
         self.ids.second_item_label.md_bg_color = config.second_transaction_item['Color']
+
 
     def del_myself(self):
         self.parent.remove_widget(self)
@@ -269,12 +284,12 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         self.ids.done_btn.text = '='
 
     def calculate_btn_pressed(self):
-        self.ids.sum_label.text = self.calculate_it(self.ids.sum_label.text)
+        self.ids.sum_label.text = f'{self.currency_first} {self.calculate_it(self.ids.sum_label.text)}'
 
     def calculate_it(self, expression):
         if '+' in expression:
             num_1, num_2 = expression.split('+')
-            answer = float(num_1) + float(num_2)
+            answer = float(num_1[2:]) + float(num_2)
             answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
@@ -283,7 +298,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         elif '-' in expression:
             num_1, num_2 = expression.split('-')
-            answer = float(num_1) - float(num_2)
+            answer = float(num_1[2:]) - float(num_2)
             answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
@@ -292,7 +307,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         elif '÷' in expression:
             num_1, num_2 = expression.split('÷')
-            answer = float(num_1) / float(num_2)
+            answer = float(num_1[2:]) / float(num_2)
             answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)
@@ -301,7 +316,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         elif 'x' in expression:
             num_1, num_2 = expression.split('x')
-            answer = float(num_1) * float(num_2)
+            answer = float(num_1[2:]) * float(num_2)
             answer = float("{:.2f}".format(answer))
             if answer % 1 == 0:
                 answer = int(answer)

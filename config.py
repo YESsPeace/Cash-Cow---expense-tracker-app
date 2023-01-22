@@ -40,7 +40,7 @@ icon_list = list(md_icons.keys())
 history_dict = None
 Transaction_menu_in_last_date = None
 
-# menu for adding a transaction
-last_transaction = None
+# menu for a new transaction
+currency_dict = {}
 first_transaction_item = None
 second_transaction_item = None
