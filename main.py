@@ -190,21 +190,34 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             button.bind(on_press=self.put)
 
     def put(self, widget, **kwargs):
+        # closing the old menu
         self.status = 'closed'
+
+        # getting info for a new menu
+        # first_item
         last_transaction = config.history_dict[list(config.history_dict)[-1]]
-        config.currency_dict['FromCurrency'] = last_transaction['FromCurrency']
 
         last_account = last_transaction['From']
 
         config.first_transaction_item = {'id': last_account,
                                          'Name': config.global_accounts_data_dict[last_account]['Name'],
                                          'Color': config.global_accounts_data_dict[last_account]['Color'],
+                                         'Currency': last_transaction['FromCurrency']
                                          }
+        # second item
         config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
 
+        if str(widget.id) in self.transfer:
+            config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+        else:
+            config.second_transaction_item['Currency'] = None
+
+
+        # checking
         print(config.first_transaction_item)
         print(config.second_transaction_item)
 
+        # adding a new menu to the app
         self.parent.add_widget(menu_for_a_new_transaction())
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -252,10 +265,17 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             self.opacity = 1
 
     def __init__(self, *args, **kwargs):
-        self.currency_first = config.currency_dict['FromCurrency']
-        self.currency_first = '$'
-        print(type(self.currency_first), self.currency_first)
+        # getting currency code name like USD
+        self.code_name_of_first_currency = config.first_transaction_item['Currency']
+        self.code_name_of_second_currency = config.second_transaction_item['Currency']
+        print(f'from: {self.code_name_of_first_currency}; to: {self.code_name_of_second_currency}')
 
+        # getting symbol of the currency like USD = $
+        self.currency_first = config.currency_symbol_dict[self.code_name_of_first_currency]
+        self.second_currency = config.currency_symbol_dict[self.code_name_of_second_currency]
+        print(f'from: {self.currency_first}; to: {self.second_currency}')
+
+        # default text in calculator
         self.default_sum_label_text = f'{self.currency_first} 0'
 
         super().__init__(*args, **kwargs)
