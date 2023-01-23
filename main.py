@@ -8,6 +8,7 @@ from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
+from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
@@ -303,6 +304,20 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         self.ids.done_btn.text = '='
 
+    def show_date_picker(self):
+        date_dialog = MDDatePicker(year=config.current_year, month=config.current_month, day=config.current_day,
+                                   primary_color=(.6, .1, .2, 1), accent_color=(.15, .15, .15, 1),
+                                   selector_color=(.6, .1, .2, 1), text_color='white',
+                                   text_current_color=(.9, .15, .3, 1), text_button_color='white',
+                                   )
+
+        date_dialog.bind(on_save=self.date_check)
+
+        date_dialog.open()
+
+    def date_check(self, instance, value, date_range):
+        print(f'Date: type - {type(value)}, date - {value}')
+
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency_first} {self.calculate_it(self.ids.sum_label.text)}'
 
@@ -400,7 +415,6 @@ class MoneyStatApp(MDApp):
         Builder.load_file('menu_for_a_new_transaction.kv')
 
         return Manager()
-
 
 if __name__ == '__main__':
     # makes empty data files
