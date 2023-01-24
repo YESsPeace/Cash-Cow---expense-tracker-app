@@ -41,6 +41,7 @@ history_dict = None
 Transaction_menu_in_last_date = None
 
 # menu for a new transaction
+last_transaction_id = None
 currency_symbol_dict = {
     'RUB': '₽',
     'USD': '$',

@@ -1,3 +1,5 @@
+import datetime
+
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
@@ -196,7 +198,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
         # getting info for a new menu
         # first_item
-        last_transaction = config.history_dict[list(config.history_dict)[-1]]
+        config.last_transaction_id = list(config.history_dict)[-1]
+        last_transaction = config.history_dict[config.last_transaction_id]
 
         last_account = last_transaction['From']
 
@@ -215,8 +218,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
 
         # checking
-        print(config.first_transaction_item)
-        print(config.second_transaction_item)
+        print('# first_transaction_item', config.first_transaction_item)
+        print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
         self.parent.add_widget(menu_for_a_new_transaction())
@@ -266,12 +269,14 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             self.opacity = 1
 
     def __init__(self, *args, **kwargs):
-        # getting currency code name like USD
+        # getting currency code name like 'USD'
+        # the first item is from last transaction account in class transaction menu
         self.code_name_of_first_currency = config.first_transaction_item['Currency']
+        # the second is from the pressed button in class MenuForTransactionAdding
         self.code_name_of_second_currency = config.second_transaction_item['Currency']
         print(f'from: {self.code_name_of_first_currency}; to: {self.code_name_of_second_currency}')
 
-        # getting symbol of the currency like USD = $
+        # getting symbol of the currency like 'USD' = '$'
         self.currency_first = config.currency_symbol_dict[self.code_name_of_first_currency]
         self.second_currency = config.currency_symbol_dict[self.code_name_of_second_currency]
         print(f'from: {self.currency_first}; to: {self.second_currency}')
@@ -279,8 +284,21 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         # default text in calculator
         self.default_sum_label_text = f'{self.currency_first} 0'
 
+        # transaction value to write
+        # default value for a transaction
+        self.date_ = str(config.date_today)  # default value
+
+        # getting type of transaction
+        self.type_ = None
+        if config.second_transaction_item['id'].split('_')[0] == 'Categories':
+            self.type_ = 'Expenses'
+        elif config.first_transaction_item['id'].split('_')[0] == config.second_transaction_item['id'].split('_')[0]:
+            self.type_ = 'Transfer'
+
+        # after creating all kivy widgets
         super().__init__(*args, **kwargs)
 
+        # setting info for transaction items into widgets
         self.ids.first_item_label.text = config.first_transaction_item['Name']
         self.ids.first_item_label.md_bg_color = config.first_transaction_item['Color']
 
@@ -311,11 +329,12 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
                                    text_current_color=(.9, .15, .3, 1), text_button_color='white',
                                    )
 
-        date_dialog.bind(on_save=self.date_check)
+        date_dialog.bind(on_save=self.change_date)
 
         date_dialog.open()
 
-    def date_check(self, instance, value, date_range):
+    def change_date(self, instance, value, date_range):
+        self.date_ = str(value)
         print(f'Date: type - {type(value)}, date - {value}')
 
     def calculate_btn_pressed(self):
@@ -362,9 +381,34 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             return False
 
     def write_transaction(self, sum):
+        # type of transaction
+
+        # getting sum in transaction
+        sum = sum[2:]  # del currency
+
         if sum[-1] == '.':
             sum = sum[:-1]
-        print('# writing transaction:', sum)
+        if sum == str(int(sum)):
+            sum = int(sum)
+        else:
+            sum = float(sum)
+
+        # the values were got in the __init__
+        transaction_ = {}
+        transaction_['id'] = int(config.last_transaction_id) + 1
+        config.last_transaction_id = str(transaction_['id'])
+        transaction_['Date'] = self.date_
+        transaction_['Type'] = self.type_
+        transaction_['From'] = config.first_transaction_item['id']
+        transaction_['FromSUM'] = sum
+        transaction_['FromCurrency'] = self.code_name_of_first_currency
+        transaction_['To'] = config.second_transaction_item['id']
+        transaction_['ToSUM'] = sum
+        transaction_['ToCurrency'] = self.code_name_of_second_currency
+
+        print('# writing transaction:', transaction_)
+
+        # writing
 
 
 class Manager(ScreenManager):
