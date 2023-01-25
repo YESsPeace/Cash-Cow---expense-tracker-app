@@ -1,3 +1,4 @@
+import csv
 import datetime
 
 from kivy.core.window import Window
@@ -286,7 +287,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         # transaction value to write
         # default value for a transaction
-        self.date_ = str(config.date_today)  # default value
+        self.date_ = str(config.date_today).split('-')[::-1]  # default value
+        self.date_ = '.'.join(item for item in self.date_)
 
         # getting type of transaction
         self.type_ = None
@@ -400,16 +402,23 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         transaction_['Date'] = self.date_
         transaction_['Type'] = self.type_
         transaction_['From'] = config.first_transaction_item['id']
+        transaction_['To'] = config.second_transaction_item['id']
         transaction_['FromSUM'] = sum
         transaction_['FromCurrency'] = self.code_name_of_first_currency
-        transaction_['To'] = config.second_transaction_item['id']
         transaction_['ToSUM'] = sum
-        transaction_['ToCurrency'] = self.code_name_of_second_currency
+        transaction_['ToCurrency'] = transaction_['FromCurrency']
+
+        if not self.ids.note_input.text == 'notes':
+            transaction_['Comment'] = self.ids.note_input.text
 
         print('# writing transaction:', transaction_)
 
         # writing
+        with open('AppData/data_files/transaction-history.csv',
+                  encoding='utf-8', mode='a+', newline='') as history_file:
+            writer = csv.writer(history_file, delimiter=',')
 
+            writer.writerow(transaction_.values())
 
 class Manager(ScreenManager):
     pass
