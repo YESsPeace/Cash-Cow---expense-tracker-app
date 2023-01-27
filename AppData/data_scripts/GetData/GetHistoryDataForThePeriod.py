@@ -67,7 +67,7 @@ def get_transaction_for_the_period(from_date, to_date, history_dict):
                                                                     [int(i) for i in item[1]['Date'].split('.')][0]
                                                                     ).strftime('%Y%m%d'))
                                               # convert to string format (YYYYMMDD) and then to int
-                                              ))
+                                              )[::-1])
 
 
 

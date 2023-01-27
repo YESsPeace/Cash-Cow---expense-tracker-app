@@ -34,7 +34,7 @@ class Transaction_menu_in(MDScreen):
         print(*history_dict_for_the_period.items(), sep='\n')
 
         if len(history_dict_for_the_period) != 0:
-            last_id = list(history_dict_for_the_period)[-1]
+            last_id = list(history_dict_for_the_period)[0]
             config.Transaction_menu_in_last_date = history_dict_for_the_period[last_id]['Date']
             config.last_transaction = history_dict_for_the_period[last_id]
 
