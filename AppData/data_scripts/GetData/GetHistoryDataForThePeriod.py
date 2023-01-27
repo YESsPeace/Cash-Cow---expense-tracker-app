@@ -58,6 +58,20 @@ def get_transaction_for_the_period(from_date, to_date, history_dict):
         if (item_date >= from_date) and (item_date <= to_date):
             history_for_the_period_dict[trans_id] = history_dict[trans_id]
 
+    history_for_the_period_dict = dict(sorted(history_for_the_period_dict.items(),
+                                              # key for creating my own sort func
+                                              key=lambda item:
+                                              # datetime has a func for typing date, which you need
+                                              int(datetime.datetime([int(i) for i in item[1]['Date'].split('.')][2],
+                                                                    [int(i) for i in item[1]['Date'].split('.')][1],
+                                                                    [int(i) for i in item[1]['Date'].split('.')][0]
+                                                                    ).strftime('%Y%m%d'))
+                                              # convert to string format (YYYYMMDD) and then to int
+                                              ))
+
+
+
+
     return history_for_the_period_dict
 
 
@@ -85,11 +99,14 @@ if __name__ == '__main__':
 
         start_time = datetime.datetime.now()
 
-        print(*get_transaction_for_the_period(
+        history_period_dict = get_transaction_for_the_period(
             from_date='2023-01-01',
             to_date='2023-01-30',
             history_dict=get_transaction_history(
                 history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
             )
-        ).items(), sep='\n')
+        )
+
+        print(*history_period_dict.items(), sep='\n')
+
         print(f'This worked {datetime.datetime.now() - start_time}')
