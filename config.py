@@ -26,6 +26,11 @@ current_menu_month = current_month
 days_in_current_menu_month = monthrange(current_menu_year, current_menu_month)[1]
 current_menu_month_name = month_name[current_menu_month]
 
+#MainScreen
+
+main_screen_pos = None
+main_screen_size = None
+
 # Accounts Menu
 global_accounts_data_dict = None
 global_savings_data_dict = None

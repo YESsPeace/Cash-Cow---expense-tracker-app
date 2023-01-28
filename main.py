@@ -2,6 +2,7 @@ import csv
 import datetime
 
 from kivy.core.window import Window
+from kivy.graphics import Rectangle, Color
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
@@ -40,13 +41,20 @@ class MainSrceen(MDScreen):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        config.main_screen_pos = self.pos
+        config.main_screen_size = self.size
 
     def open_menu_for_transaction_adding(self):
         self.ids.menu_for_transaction_adding.pos_hint = {'center_x': .5}
         self.ids.menu_for_transaction_adding.status = 'opened'
 
+        self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].pos = self.pos
+        self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].size = self.size
+
+
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())
+
 
     def current_menu_month_name(self):
         return config.current_menu_month_name
@@ -299,6 +307,11 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         # after creating all kivy widgets
         super().__init__(*args, **kwargs)
+
+        # just dark background
+        with self.canvas.before:
+            Color(0, 0, 0, .5)
+            Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
         # setting info for transaction items into widgets
         self.ids.first_item_label.text = config.first_transaction_item['Name']

@@ -15,3 +15,4 @@ id, Date,Type,From,To,FromSUM,FromCurrency,ToSUM,ToCurrency,Сomment
 387,28.01.2023,Transfer,account_4,Categories_12,100,RUB,100,RUB,
 388,28.01.2023,Expenses,account_3,Categories_2,40,RUB,40,RUB,Курник
 389,27.01.2023,Expenses,account_3,Categories_6,65,RUB,65,RUB
+390,28.01.2023,Expenses,account_3,Categories_2,224,RUB,224,RUB
