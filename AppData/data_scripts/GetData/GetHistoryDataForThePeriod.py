@@ -71,7 +71,6 @@ def get_transaction_for_the_period(from_date, to_date, history_dict):
 
 
 
-
     return history_for_the_period_dict
 
 

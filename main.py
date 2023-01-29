@@ -396,7 +396,14 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             return False
 
     def write_transaction(self, sum):
-        # type of transaction
+        # menu
+        self.status = 'closed'
+
+        print(self.parent.ids.screen3.ids)
+
+        self.parent.ids.screen3.clear_widgets()
+
+        self.parent.ids.screen3.add_widget(Transaction_menu())
 
         # getting sum in transaction
         sum = sum[2:]  # del currency
@@ -432,6 +439,19 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             writer = csv.writer(history_file, delimiter=',')
 
             writer.writerow(transaction_.values())
+
+        # updating history_dict
+
+        config.history_dict[transaction_['id']] = {
+            'Date': transaction_['Date'],
+            'Type': transaction_['Type'],
+            'From': transaction_['From'],
+            'To': transaction_['To'],
+            'FromSUM': transaction_['FromSUM'],
+            'FromCurrency': transaction_['FromCurrency'],
+            'ToSUM': transaction_['ToSUM'],
+            'ToCurrency': transaction_['ToCurrency']
+        }
 
 class Manager(ScreenManager):
     pass

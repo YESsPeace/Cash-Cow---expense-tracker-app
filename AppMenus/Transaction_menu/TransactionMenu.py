@@ -2,6 +2,7 @@ import datetime
 from calendar import monthrange, month_name
 
 from kivymd.uix.screen import MDScreen
+from kivy.clock import Clock
 
 import config
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history
@@ -9,8 +10,18 @@ from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 
 
 class Transaction_menu(MDScreen):
+    # getting history data
+    config.history_dict = get_transaction_history(
+        history_file_path='AppData/data_files/transaction-history.csv',
+    )
+    print(*config.history_dict.items(), sep='\n')
+
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        # getting history data
+        config.history_dict = get_transaction_history(
+            history_file_path='AppData/data_files/transaction-history.csv',
+        )
+        print(*config.history_dict.items(), sep='\n')
 
         # getting actually data for menu settings and meny title
         self.current_menu_date = str(config.current_menu_date)[:-3]
@@ -18,11 +29,7 @@ class Transaction_menu(MDScreen):
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        # getting history data
-        config.history_dict = get_transaction_history(
-            history_file_path='AppData/data_files/transaction-history.csv',
-        )
-        print(*config.history_dict.items(), sep='\n')
+        super().__init__(*args, **kwargs)
 
     def load_previous_month(self):
         last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)
