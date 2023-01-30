@@ -324,6 +324,19 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
     def del_myself(self):
         self.parent.remove_widget(self)
 
+    def first_trans_item_pressed(self, widget):
+        config.first_transaction_item = None
+
+        self.parent.open_menu_for_transaction_adding()
+
+        self.parent.ids.menu_for_transaction_adding.ids.tab_manager.switch_to(
+            self.parent.ids.menu_for_transaction_adding.ids.transfer_tab, do_scroll=False)
+
+        self.del_myself()
+
+    def second_trans_item_pressed(self):
+        pass
+
     def sign_btn_pressed(self, btn):
         if len(set(self.ids.sum_label.text).intersection({'+', '-', '÷', 'x'})):
             self.calculate_btn_pressed()
@@ -349,8 +362,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         date_dialog.open()
 
     def change_date(self, instance, value, date_range):
-        self.date_ = str(value)
-        print(f'Date: type - {type(value)}, date - {value}')
+        self.date_ = '.'.join(str(value).replace('-', '.').split('.')[::-1 ])
+        print(f'Date: type - {type(value)}, {value}; date - {self.date_}')
 
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency_first} {self.calculate_it(self.ids.sum_label.text)}'
