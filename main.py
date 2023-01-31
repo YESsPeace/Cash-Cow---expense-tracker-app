@@ -206,24 +206,35 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         self.status = 'closed'
 
         # getting info for a new menu
-        # first_item
-        config.last_transaction_id = list(config.history_dict)[-1]
-        last_transaction = config.history_dict[config.last_transaction_id]
 
-        last_account = last_transaction['From']
+        # reselection the first item
+        if config.choosing_first_transaction:
+            if str(widget.id) in self.transfer:
+                config.first_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color,
+                                                 'Currency': self.transfer[str(widget.id)]['Currency']}
 
-        config.first_transaction_item = {'id': last_account,
-                                         'Name': config.global_accounts_data_dict[last_account]['Name'],
-                                         'Color': config.global_accounts_data_dict[last_account]['Color'],
-                                         'Currency': last_transaction['FromCurrency']
-                                         }
-        # second item
-        config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+            config.choosing_first_transaction = False
 
-        if str(widget.id) in self.transfer:
-            config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+        # typical selection
         else:
-            config.second_transaction_item['Currency'] = None
+            # first_item
+            config.last_transaction_id = list(config.history_dict)[-1]
+            last_transaction = config.history_dict[config.last_transaction_id]
+
+            last_account = last_transaction['From']
+
+            config.first_transaction_item = {'id': last_account,
+                                             'Name': config.global_accounts_data_dict[last_account]['Name'],
+                                             'Color': config.global_accounts_data_dict[last_account]['Color'],
+                                             'Currency': last_transaction['FromCurrency']
+                                             }
+            # second item
+            config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+
+            if str(widget.id) in self.transfer:
+                config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+            else:
+                config.second_transaction_item['Currency'] = None
 
 
         # checking
@@ -331,6 +342,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         self.parent.ids.menu_for_transaction_adding.ids.tab_manager.switch_to(
             self.parent.ids.menu_for_transaction_adding.ids.transfer_tab, do_scroll=False)
+
+        config.choosing_first_transaction = True
 
         self.del_myself()
 
