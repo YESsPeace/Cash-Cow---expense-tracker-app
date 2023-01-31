@@ -338,7 +338,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
     def del_myself(self):
         self.parent.remove_widget(self)
 
-    def first_trans_item_pressed(self, widget):
+    def first_trans_item_pressed(self, *args):
+        print('FIRST')
         config.first_transaction_item = None
 
         self.parent.open_menu_for_transaction_adding()
@@ -350,8 +351,15 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         self.del_myself()
 
-    def second_trans_item_pressed(self):
-        pass
+    def second_trans_item_pressed(self, *args):
+        print('SECOND')
+
+        self.parent.open_menu_for_transaction_adding()
+
+        self.parent.ids.menu_for_transaction_adding.ids.tab_manager.switch_to(
+            self.parent.ids.menu_for_transaction_adding.ids.expense_tab, do_scroll=False)
+
+        self.del_myself()
 
     def sign_btn_pressed(self, btn):
         if len(set(self.ids.sum_label.text).intersection({'+', '-', '÷', 'x'})):

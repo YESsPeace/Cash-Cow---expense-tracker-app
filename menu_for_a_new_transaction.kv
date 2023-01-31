@@ -11,14 +11,17 @@
             spacing: dp(1)
             height: dp(85)
 
-            MDLabel:
+            MDRaisedButton:
                 id: first_item_label
                 halign: 'center'
-                on_touch_down: root.first_trans_item_pressed(self)
+                size_hint: .5, 1
+                on_release: root.first_trans_item_pressed()
 
-            MDLabel:
+            MDRaisedButton:
                 id: second_item_label
                 halign: 'center'
+                size_hint: .5, 1
+                on_release: root.second_trans_item_pressed()
 
         MDBoxLayout:
             orientation: 'vertical'
