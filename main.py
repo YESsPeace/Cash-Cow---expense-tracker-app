@@ -103,6 +103,9 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             self.status = "closed"
             self.state = "close"
 
+            # when person start reselection first item, but close the menu not finish
+            config.choosing_first_transaction = False
+
         elif status in (
                 "opening_with_swipe",
                 "opening_with_animation",
