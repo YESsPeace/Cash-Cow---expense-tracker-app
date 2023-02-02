@@ -11,16 +11,18 @@
             spacing: dp(1)
             height: dp(85)
 
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 id: first_item_label
                 size_hint: 1, 1
-                elevation: 0
+                text_color: "white"
+                line_color: self.md_bg_color
                 on_release: root.first_trans_item_pressed()
 
-            MDRaisedButton:
+            MDRectangleFlatButton:
                 id: second_item_label
                 size_hint: 1, 1
-                elevation: 0
+                text_color: "white"
+                line_color: self.md_bg_color
                 on_release: root.second_trans_item_pressed()
 
         MDBoxLayout:
