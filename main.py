@@ -8,11 +8,15 @@ from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
+from kivymd.color_definitions import hue
 from kivymd.uix.anchorlayout import MDAnchorLayout
+from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.button import MDIconButton
+from kivymd.uix.dialog import BaseDialog
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
+from kivymd.uix.pickers.datepicker import BaseDialogPicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
@@ -51,10 +55,8 @@ class MainSrceen(MDScreen):
         self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].pos = self.pos
         self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].size = self.size
 
-
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())
-
 
     def current_menu_month_name(self):
         return config.current_menu_month_name
@@ -137,7 +139,6 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         # adding button to expense tab
         Clock.schedule_once(self.adding_buttons_to_expense_tab)
 
-
     def adding_buttons_to_expense_tab(self, *args):
         Clock.schedule_once(self.get_new_func_to_transfer_buttons)
 
@@ -168,8 +169,6 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             )
 
             self.ids.expense_layout.add_widget(box)
-
-
 
     def adding_buttons_to_transfer_tab(self, *args):
         for account in self.transfer.values():
@@ -239,13 +238,13 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             else:
                 config.second_transaction_item['Currency'] = None
 
-
         # checking
         print('# first_transaction_item', config.first_transaction_item)
         print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
         self.parent.add_widget(menu_for_a_new_transaction())
+
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
@@ -334,7 +333,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         self.ids.second_item_label.text = config.second_transaction_item['Name']
         self.ids.second_item_label.md_bg_color = config.second_transaction_item['Color']
 
-
     def del_myself(self):
         self.parent.remove_widget(self)
 
@@ -377,8 +375,9 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
     def show_date_picker(self):
         date_dialog = MDDatePicker(year=config.current_year, month=config.current_month, day=config.current_day,
                                    primary_color=(.6, .1, .2, 1), accent_color=(.15, .15, .15, 1),
-                                   selector_color=(.6, .1, .2, 1), text_color='white',
-                                   text_current_color=(.9, .15, .3, 1), text_button_color='white',
+                                   selector_color=(.6, .1, .2, 1), text_color=(1, 1, 1, 1),
+                                   text_current_color=(.9, .15, .3, 1), text_button_color=(1, 1, 1, 1),
+                                   radius=[0, 0, 0, 0], elevation=0, shadow_softness=0, shadow_offset=(0, 0),
                                    )
 
         date_dialog.bind(on_save=self.change_date)
@@ -386,7 +385,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         date_dialog.open()
 
     def change_date(self, instance, value, date_range):
-        self.date_ = '.'.join(str(value).replace('-', '.').split('.')[::-1 ])
+        self.date_ = '.'.join(str(value).replace('-', '.').split('.')[::-1])
         print(f'Date: type - {type(value)}, {value}; date - {self.date_}')
 
     def calculate_btn_pressed(self):
@@ -490,6 +489,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             'ToCurrency': transaction_['ToCurrency']
         }
 
+
 class Manager(ScreenManager):
     pass
 
@@ -538,6 +538,7 @@ class MoneyStatApp(MDApp):
         Builder.load_file('menu_for_a_new_transaction.kv')
 
         return Manager()
+
 
 if __name__ == '__main__':
     # makes empty data files
