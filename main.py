@@ -378,10 +378,10 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
                                    selector_color=(.6, .1, .2, 1), text_color=(1, 1, 1, 1),
                                    text_current_color=(.9, .15, .3, 1), text_button_color=(1, 1, 1, 1),
                                    radius=[0, 0, 0, 0], elevation=0, shadow_radius=0, shadow_softness=0,
-                                   shadow_softness_size=2, shadow_offset=(0, 0)
+                                   shadow_softness_size=2, shadow_offset=(0, 0), shadow_color=[0, 0, 0, 0],
                                    )
 
-        date_dialog.bind(on_save=self.change_date)
+        # date_dialog.bind(on_save=self.change_date)
 
         date_dialog.open()
 
