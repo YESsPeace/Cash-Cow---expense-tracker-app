@@ -377,9 +377,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
                                    primary_color=(.6, .1, .2, 1), accent_color=(.15, .15, .15, 1),
                                    selector_color=(.6, .1, .2, 1), text_color=(1, 1, 1, 1),
                                    text_current_color=(.9, .15, .3, 1), text_button_color=(1, 1, 1, 1),
-                                   radius=[0, 0, 0, 0], elevation=0, shadow_softness=0, shadow_offset=(0, 0),
-                                   background_color=[0, 0, 0, 0], border=[0, 0, 0, 0], overlay_color=[0, 0, 0, 0],
-                                   _anim_duration=0, widget_style='android', background_hue='A700',
+                                   radius=[0, 0, 0, 0], elevation=0, shadow_radius=0, shadow_softness=0,
+                                   shadow_softness_size=2, shadow_offset=(0, 0)
                                    )
 
         date_dialog.bind(on_save=self.change_date)
@@ -512,7 +511,7 @@ class ContentNavigationDrawer(MDScrollView):
 
 class MoneyStatApp(MDApp):
     def build(self):
-        self.theme_cls.material_style = "M2"
+        self.theme_cls.material_style = "M3"
         self.theme_cls.theme_style = "Dark"
 
         # loading multiple .kv files
