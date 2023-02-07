@@ -1,5 +1,6 @@
 <Transaction_menu>:
     id: Transaction_menu
+
     MDBoxLayout:
         id: top_bar
         pos_hint: {"top": 1}
@@ -13,22 +14,41 @@
             orientation: 'horizontal'
             size_hint_y: None
             height: dp(60)
-            md_bg_color: .9, .7, .3, 1
+            md_bg_color: .5, .7, .3, 1
 
             MDIconButton:
                 icon: 'menu'
+                size_hint_y: 1
+                width: self.height
+
                 on_release:
                     nav_drawer.set_state("open")
+
+                canvas.before:
+                    Color:
+                        rgba: .9, .7, .3, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
             MDLabel:
                 text: '12904₽'
                 font_size: 26
                 halign: "center"
                 valign: "middle"
-                md_bg_color: .5, .7, .3, 1
 
             MDIconButton:
                 icon: 'magnify'
+                size_hint_y: 1
+                width: self.height
+
+                canvas.before:
+                    Color:
+                        rgba: .9, .7, .3, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
 
         MDBoxLayout:
             id: month_menu
@@ -46,15 +66,23 @@
 
             MDLabel:
 
-            MDRectangleFlatIconButton:
-                id: month_label
+            MDBoxLayout
+                size_hint_x: 2
 
-                text: root.current_menu_month_name
-                line_color: self.parent.md_bg_color
-                line_color: 0, 0, 0, 0
-                pos_hint: {"center_x": .5, "center_y": .5}
+                MDIconButton
+                    icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+                    size_hint_y: .5
+                    width: self.height
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-                icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+                MDRectangleFlatButton:
+                    id: month_label
+                    text: root.current_menu_month_name
+                    line_color: 0, 0, 0, 0
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    font_size: '18sp'
 
 
             MDLabel:

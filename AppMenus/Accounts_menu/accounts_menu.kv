@@ -3,25 +3,53 @@
         orientation: 'vertical'
 
         MDBoxLayout:
-            orientation: 'horizontal'
+            id: top_bar
+            pos_hint: {"top": 1}
+            orientation: 'vertical'
             size_hint_y: None
-            height: dp(60)
-            md_bg_color: .9, .7, .3, 1
+            height: top_btn_bar.height
 
-            MDIconButton:
-                icon: 'menu'
-                on_release:
-                    nav_drawer.set_state("open")
-
-            MDLabel:
-                text: '12904₽'
-                font_size: 26
-                halign: "center"
-                valign: "middle"
+            MDBoxLayout:
+                id: top_btn_bar
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
                 md_bg_color: .5, .7, .3, 1
 
-            MDIconButton:
-                icon: 'plus'
+                MDIconButton:
+                    icon: 'menu'
+                    size_hint_y: 1
+                    width: self.height
+
+                    on_release:
+                        nav_drawer.set_state("open")
+
+                    canvas.before:
+                        Color:
+                            rgba: .9, .7, .3, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                MDLabel:
+                    text: '12904₽'
+                    font_size: 26
+                    halign: "center"
+                    valign: "middle"
+
+
+                MDIconButton:
+                    icon: 'plus'
+                    size_hint_y: 1
+                    width: self.height
+
+                    canvas.before:
+                        Color:
+                            rgba: .9, .7, .3, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
 
         TabbedPanel:
             id: tab_manager

@@ -1,6 +1,7 @@
 <menu_for_a_new_transaction>:
     pos_hint: {'center_x': .5}
     size_hint: 1, .75
+#    md_bg_color: 0, 0, 0, 0
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -27,16 +28,16 @@
 
         MDBoxLayout:
             orientation: 'vertical'
-            md_bg_color: .3, .05, .1, 1
+            md_bg_color: .6, .1, .2, 1
             size_hint_y: None
             height: dp(115)
 
             MDLabel:
                 id: sum_label
                 text: root.default_sum_label_text
+                text_color: 1, 1, 1, 1
                 halign: 'center'
                 size_hint_y: .65
-                md_bg_color: .6, .1, .2, 1
 
             TextInput:
                 id: note_input

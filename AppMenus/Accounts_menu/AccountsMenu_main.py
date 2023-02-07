@@ -1,5 +1,6 @@
 from kivy.clock import Clock
-from kivymd.uix.button import MDRectangleFlatIconButton
+from kivy.metrics import dp
+from kivymd.uix.button import MDRectangleFlatIconButton, MDRaisedButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
@@ -29,10 +30,12 @@ class AccountsMenu_main(MDScreen):
         accounts_amount, savings_amount = 0, 0
 
         for account_id in self.accounts_data_dict:
-            my_widget = MDRectangleFlatIconButton(
-                id=str(account_id), icon='Icons/Btn_icon/Accounts-icon-white.png',
+            my_widget = MDRaisedButton(
+                id=str(account_id),
+                # icon='Icons/Btn_icon/Accounts-icon-white.png',
                 text=self.accounts_data_dict[account_id]['Name'],
                 text_color='white',
+                height=dp(75),
                 md_bg_color=self.accounts_data_dict[account_id]['Color'],
                 size_hint=(1, 1), halign='left'
             )
@@ -52,8 +55,9 @@ class AccountsMenu_main(MDScreen):
         self.ids.accounts_amount.text = str(accounts_amount)
 
         for savings_id in self.savings_data_dict:
-            my_widget = MDRectangleFlatIconButton(
-                id=str(savings_id), icon='Icons/Btn_icon/Accounts-icon-white.png',
+            my_widget = MDRaisedButton(
+                id=str(savings_id),
+                # icon='Icons/Btn_icon/Accounts-icon-white.png',
                 text=self.savings_data_dict[savings_id]['Name'],
                 text_color='white',
                 md_bg_color=self.savings_data_dict[savings_id]['Color'],

@@ -1,17 +1,23 @@
 import csv
 import datetime
 
+from KivyCalendar.calendar_ui import CalendarWidget
 from kivy.core.window import Window
 from kivy.graphics import Rectangle, Color
 from kivy.lang import Builder
+from kivy.metrics import dp
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivymd.color_definitions import hue
+from kivymd.icon_definitions import md_icons
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.behaviors import CommonElevationBehavior
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDRectangleFlatIconButton
+from kivymd.uix.card import MDCard
 from kivymd.uix.dialog import BaseDialog
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
@@ -377,13 +383,12 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
                                    primary_color=(.6, .1, .2, 1), accent_color=(.15, .15, .15, 1),
                                    selector_color=(.6, .1, .2, 1), text_color=(1, 1, 1, 1),
                                    text_current_color=(.9, .15, .3, 1), text_button_color=(1, 1, 1, 1),
-                                   radius=[0, 0, 0, 0], elevation=0, shadow_radius=0, shadow_softness=0,
-                                   shadow_softness_size=2, shadow_offset=(0, 0), shadow_color=[0, 0, 0, 0],
+                                   elevation=0, radius=[0, 0, 0, 0]
                                    )
 
-        # date_dialog.bind(on_save=self.change_date)
+        date_dialog.bind(on_save=self.change_date)
 
-        date_dialog.open()
+        date_dialog.open(animation=False)
 
     def change_date(self, instance, value, date_range):
         self.date_ = '.'.join(str(value).replace('-', '.').split('.')[::-1])
@@ -490,7 +495,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             'ToCurrency': transaction_['ToCurrency']
         }
 
-
 class Manager(ScreenManager):
     pass
 
@@ -547,6 +551,12 @@ if __name__ == '__main__':
     create_categories_data_file('AppData/data_files/categories-data.txt')
     create_accounts_data_file('AppData/data_files/accounts-data.txt')
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
+
+    # add custom_icons
+    md_icons['twenty-eight_black_square'] = 'Icons/Month_days_icons/twenty-eight.png'
+    md_icons['twenty-nine_black_square'] = 'Icons/Month_days_icons/twenty-nine.png'
+    md_icons['thirty_black_square'] = 'Icons/Month_days_icons/thirty.png'
+    md_icons['thirty-one_black_square'] = 'Icons/Month_days_icons/thirty-one.png'
 
     # smartphone screen checking
     Window.size = (0.6 * 640, 0.6 * 1136)
