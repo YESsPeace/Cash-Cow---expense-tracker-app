@@ -1,5 +1,6 @@
 
 <MainSrceen>:
+    md_bg_color: app.theme_color
 
     MDBottomNavigation:
         id: bottom_navigation
@@ -7,6 +8,7 @@
         text_color_normal: .55, .55, .55, 1
         text_color_active: .99, .99, .99, 1
         panel_color: .15, .15, .15, 1
+        md_bg_color: app.theme_color
 
         MDBottomNavigationItem:
             id: screen1
@@ -24,10 +26,10 @@
             text: 'Categories'
             icon: 'Icons/Btn_icon/Categories-icon-white.png'
 
-            on_tab_press:
-                root.ids.CategoriesMenu.ids.month_label.text = root.current_menu_month_name()
-                root.del_widgets_with_month()
-                root.set_categories_menu_buttons()
+#            on_tab_press:
+#                root.ids.CategoriesMenu.ids.month_label.text = root.current_menu_month_name()
+#                root.del_widgets_with_month()
+#                root.set_categories_menu_buttons()
 
 
             CategoriesMenu:
@@ -39,10 +41,10 @@
             text: "Transaction"
             icon: 'Icons/Btn_icon/Transaction-icon-white.png'
 
-            on_tab_press:
-                root.ids.Transaction_menu.ids.month_label.text = root.current_menu_month_name()
-                root.del_widgets_with_month()
-                root.set_transaction_menu_in()
+#            on_tab_press:
+#                root.ids.Transaction_menu.ids.month_label.text = root.current_menu_month_name()
+#                root.del_widgets_with_month()
+#                root.set_transaction_menu_in()
 
             Transaction_menu:
                 id: Transaction_menu

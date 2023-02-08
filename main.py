@@ -517,6 +517,7 @@ class MoneyStatApp(MDApp):
     def build(self):
         self.theme_cls.material_style = "M3"
         self.theme_cls.theme_style = "Dark"
+        self.theme_color = [0, 0, 0, 1]
 
         # loading multiple .kv files
 
