@@ -15,20 +15,21 @@ from config import icon_list
 
 from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
 
+
 class WaterFill(Widget):
     def __init__(self, *args, **kwargs):
         self.level = config.level
         self.color = config.color
         super().__init__(*args, **kwargs)
 
+
 class Categories_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         # getting data for categories
-        self.categories_menu_button_data_dictionary = get_categories_data_from(
-            categories_data_file_path='AppData/data_files/categories-data.txt'
-        )
+        self.categories_menu_button_data_dictionary = config.global_categories_data_dict
+
         print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
 
         Clock.schedule_once(self.button_data_setter, -1)
@@ -41,7 +42,6 @@ class Categories_buttons_menu(MDScreen):
                 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
             ])
             config.color = button['Color']
-
 
             print('Another', config.level)
 

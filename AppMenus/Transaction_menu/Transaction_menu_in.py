@@ -1,7 +1,7 @@
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRectangleFlatIconButton
+from kivymd.uix.button import MDRectangleFlatIconButton, MDIconButton
 from kivymd.uix.screen import MDScreen
 
 import config
@@ -39,32 +39,66 @@ class Transaction_menu_in(MDScreen):
             config.last_transaction = history_dict_for_the_period[last_id]
 
             self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
-            box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5),
+            box = MDBoxLayout(orientation='vertical', spacing=dp(1),
                               size_hint=(1, None))
 
             for transaction in history_dict_for_the_period.values():
                 if transaction['Date'] == config.Transaction_menu_in_last_date:
-                    box.add_widget(MDRectangleFlatIconButton(
-                        text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
-                        md_bg_color=(config.global_accounts_data_dict[transaction['From']]['Color']),
-                        halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
-                    ))
+                    try:
+                        icon_button = MDIconButton(
+                            md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color']),
+                        )
+                    except KeyError:
+                        icon_button = MDIconButton()
+
+                    box.add_widget(
+                        MDBoxLayout(
+                            icon_button,
+                            MDBoxLayout(
+                                MDRectangleFlatIconButton(
+                                    text=f"{transaction['Type']}: {transaction['From']}\n{transaction['To']}",
+                                    icon='',
+                                    line_color=(0, 0, 0, 0),
+                                    md_bg_color=(.35, .35, .35, 1),
+                                    halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
+                                ),
+
+                            ),
+                            md_bg_color=(.35, .35, .35, 1)
+                        )
+                    )
 
                 else:
                     box.height = dp(50) * len(box.children)
                     self.ids.GridLayout_in_ScrollView.add_widget(box)
 
-                    box = MDBoxLayout(orientation='vertical', padding=dp(5), spacing=dp(5),
+                    box = MDBoxLayout(orientation='vertical', spacing=dp(1),
                                       size_hint=(1, None))
 
                     config.Transaction_menu_in_last_date = transaction['Date']
 
                     self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
-                    box.add_widget(MDRectangleFlatIconButton(
-                        text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
-                        md_bg_color=(config.global_accounts_data_dict[transaction['From']]['Color']),
-                        halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
-                    ))
+
+                    try:
+                        icon_button = MDIconButton(
+                            md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color']),
+                        )
+                    except KeyError:
+                        icon_button = MDIconButton()
+
+                    box.add_widget(
+                        MDBoxLayout(
+                            icon_button,
+                            MDRectangleFlatIconButton(
+                                text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
+                                icon='',
+                                line_color=(0, 0, 0, 0),
+                                md_bg_color=(.35, .35, .35, 1),
+                                halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
+                            ),
+                            md_bg_color=(.35, .35, .35, 1)
+                        )
+                    )
 
             box.height = dp(50) * len(box.children)
             self.ids.GridLayout_in_ScrollView.add_widget(box)

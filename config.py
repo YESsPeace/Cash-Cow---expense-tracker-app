@@ -36,6 +36,7 @@ global_accounts_data_dict = None
 global_savings_data_dict = None
 
 # Categories Menu
+global_categories_data_dict = None
 level = 0
 color = None
 

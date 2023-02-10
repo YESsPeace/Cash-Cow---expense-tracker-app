@@ -4,12 +4,19 @@ from calendar import month_name, monthrange
 from kivymd.uix.screen import MDScreen
 
 import config
+from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
 
 
 class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        # getting data for categories
+        config.global_categories_data_dict = get_categories_data_from(
+            categories_data_file_path='AppData/data_files/categories-data.txt'
+        )
+
         # just for first creating widgets
         self.current_menu_date = str(config.current_menu_date)[:-3]
         self.current_menu_month_name = config.current_menu_month_name
