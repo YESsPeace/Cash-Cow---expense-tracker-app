@@ -2,6 +2,7 @@ from kivy.clock import Clock
 from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatIconButton, MDIconButton
+from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
@@ -45,24 +46,50 @@ class Transaction_menu_in(MDScreen):
             for transaction in history_dict_for_the_period.values():
                 if transaction['Date'] == config.Transaction_menu_in_last_date:
                     try:
-                        icon_button = MDIconButton(
-                            md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color']),
-                        )
+                        if transaction['Type'] == 'Expenses':
+                            icon_button = MDIconButton(
+                                md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color'][:-1] + (1,)),
+                            )
+
+                        else:
+                            icon_button = None
+
                     except KeyError:
-                        icon_button = MDIconButton()
+                        icon_button = None
+
+                    if transaction['Type'] == 'Expenses':
+                        trans_label = MDLabel(text=f"-{transaction['FromSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(1, 0, 0, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    elif transaction['Type'] == 'Transfer':
+                        trans_label = MDLabel(text=f"{transaction['ToSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(1, 1, 1, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    elif transaction['Type'] == 'Income':
+                        trans_label = MDLabel(text=f"+{transaction['ToSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(0, 1, 0, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    else:
+                        trans_label = None
 
                     box.add_widget(
                         MDBoxLayout(
                             icon_button,
                             MDBoxLayout(
                                 MDRectangleFlatIconButton(
-                                    text=f"{transaction['Type']}: {transaction['From']}\n{transaction['To']}",
+                                    text=f"{transaction['From']}\n{transaction['To']}",
                                     icon='',
                                     line_color=(0, 0, 0, 0),
-                                    md_bg_color=(.35, .35, .35, 1),
+                                    md_bg_color=(.75, .75, .75, 1),
                                     halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
                                 ),
-
+                                trans_label
                             ),
                             md_bg_color=(.35, .35, .35, 1)
                         )
@@ -80,21 +107,51 @@ class Transaction_menu_in(MDScreen):
                     self.ids.GridLayout_in_ScrollView.add_widget(date_label_for_transaction_history_menu())
 
                     try:
-                        icon_button = MDIconButton(
-                            md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color']),
-                        )
+                        if transaction['Type'] == 'Expenses':
+                            icon_button = MDIconButton(
+                                md_bg_color=(
+                                            config.global_categories_data_dict[transaction['To']]['Color'][:-1] + (1,)),
+                            )
+
+                        else:
+                            icon_button = None
+
                     except KeyError:
-                        icon_button = MDIconButton()
+                        icon_button = None
+
+                    if transaction['Type'] == 'Expenses':
+                        trans_label = MDLabel(text=f"-{transaction['FromSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(1, 0, 0, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    elif transaction['Type'] == 'Transfer':
+                        trans_label = MDLabel(text=f"{transaction['ToSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(1, 1, 1, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    elif transaction['Type'] == 'Income':
+                        trans_label = MDLabel(text=f"+{transaction['ToSUM']}",
+                                              halign='center',
+                                              theme_text_color='Custom', text_color=(0, 1, 0, 1),
+                                              size_hint_x=None, width=dp(45))
+
+                    else:
+                        trans_label = None
 
                     box.add_widget(
                         MDBoxLayout(
                             icon_button,
-                            MDRectangleFlatIconButton(
-                                text=f"{transaction['Type']}: {transaction['From']} -> {transaction['To']}",
-                                icon='',
-                                line_color=(0, 0, 0, 0),
-                                md_bg_color=(.35, .35, .35, 1),
-                                halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
+                            MDBoxLayout(
+                                MDRectangleFlatIconButton(
+                                    text=f"{transaction['From']}\n{transaction['To']}",
+                                    icon='',
+                                    line_color=(0, 0, 0, 0),
+                                    md_bg_color=(.75, .75, .75, 1),
+                                    halign='left', size_hint=(1, 1), text_color=(1, 1, 1, 1)
+                                ),
+                                trans_label,
                             ),
                             md_bg_color=(.35, .35, .35, 1)
                         )
