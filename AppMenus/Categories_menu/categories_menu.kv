@@ -94,15 +94,14 @@
                 on_release:
                     root.load_next_month()
 
-    Carousel:
+    ScreenManager:
         id: my_swiper
         size_hint_y: None
         height: root.height - top_bar.height
         y: root.height - self.height - top_bar.height
 
-        ignore_perpendicular_swipes: True
-
         Categories_buttons_menu:
+            id: buttons_menu
             name: root.current_menu_date
 
     MyNavigationDrawer:

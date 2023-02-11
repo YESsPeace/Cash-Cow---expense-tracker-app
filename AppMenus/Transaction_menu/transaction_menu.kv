@@ -1,3 +1,5 @@
+#: import NoTransition kivy.uix.screenmanager.TransitionBase
+
 <Transaction_menu>:
     id: Transaction_menu
 
@@ -94,14 +96,12 @@
                 on_release:
                     root.load_next_month()
 
-    Carousel:
+    ScreenManager:
         id: my_swiper
         size_hint: None, None
         height: root.height - top_bar.height
         y: root.height - self.height - top_bar.height
         width: root.width
-
-        ignore_perpendicular_swipes: True
 
         Transaction_menu_in:
             id: Transaction_menu_in
@@ -114,8 +114,6 @@
         md_bg_color: .6, .2, 0, 1
         on_release:
             app.root.ids.main.open_menu_for_transaction_adding()
-
-
 
     MyNavigationDrawer:
         id: nav_drawer
