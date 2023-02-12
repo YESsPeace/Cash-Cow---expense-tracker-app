@@ -1,28 +1,19 @@
 import csv
-import datetime
 
-from KivyCalendar.calendar_ui import CalendarWidget
 from kivy.core.window import Window
 from kivy.graphics import Rectangle, Color
 from kivy.lang import Builder
-from kivy.metrics import dp
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.color_definitions import hue
 from kivymd.icon_definitions import md_icons
 from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivymd.uix.behaviors import CommonElevationBehavior
-from kivymd.uix.button import MDIconButton, MDRectangleFlatIconButton
-from kivymd.uix.card import MDCard
-from kivymd.uix.dialog import BaseDialog
+from kivymd.uix.bottomnavigation import MDBottomNavigation
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.pickers.datepicker import BaseDialogPicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
@@ -498,7 +489,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 class Manager(ScreenManager):
     pass
 
-
 class MyNavigationDrawer(MDNavigationDrawer):
 
     def open_main(self):
@@ -552,12 +542,6 @@ if __name__ == '__main__':
     create_categories_data_file('AppData/data_files/categories-data.txt')
     create_accounts_data_file('AppData/data_files/accounts-data.txt')
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
-
-    # add custom_icons
-    md_icons['twenty-eight_black_square'] = 'Icons/Month_days_icons/twenty-eight.png'
-    md_icons['twenty-nine_black_square'] = 'Icons/Month_days_icons/twenty-nine.png'
-    md_icons['thirty_black_square'] = 'Icons/Month_days_icons/thirty.png'
-    md_icons['thirty-one_black_square'] = 'Icons/Month_days_icons/thirty-one.png'
 
     # smartphone screen checking
     Window.size = (0.6 * 640, 0.6 * 1136)
