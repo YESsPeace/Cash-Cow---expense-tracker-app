@@ -42,7 +42,7 @@ class CategoriesMenu(MDScreen):
 
         # update data in menu
         self.ids.month_label.text = config.current_menu_month_name
-        self.ids.month_label.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
+        self.ids.month_icon.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
 
         name_ = last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m")
 
@@ -63,7 +63,7 @@ class CategoriesMenu(MDScreen):
 
         # update data in menu
         self.ids.month_label.text = config.current_menu_month_name
-        self.ids.month_label.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
+        self.ids.month_icon.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
 
         name_ = next_month_date.strftime("%Y") + '-' + next_month_date.strftime("%m")
 

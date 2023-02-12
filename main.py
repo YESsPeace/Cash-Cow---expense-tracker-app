@@ -58,6 +58,11 @@ class MainSrceen(MDScreen):
     def current_menu_month_name(self):
         return config.current_menu_month_name
 
+    def current_menu_month_icon(self):
+        return config.days_in_month_icon_dict[
+            config.days_in_current_menu_month
+        ]
+
     def set_transaction_menu_in(self):
         self.ids.Transaction_menu.ids.my_swiper.add_widget(Transaction_menu_in(name=str(config.current_menu_date)[:-3]))
 
