@@ -63,11 +63,16 @@ class MainSrceen(MDScreen):
             self.ids.CategoriesMenu.ids.month_icon.icon = config.days_in_month_icon_dict[  # update icon
                 config.days_in_current_menu_month
             ]
-            # del old menu
-            self.ids.CategoriesMenu.ids.my_swiper.clear_widgets()
-            # set categories menu buttons
-            self.ids.CategoriesMenu.ids.my_swiper.add_widget(
-                Categories_buttons_menu(name=str(config.current_menu_date)[:-3]))
+
+            if self.ids.CategoriesMenu.ids.my_swiper.has_screen(self.ids.Transaction_menu.ids.my_swiper.current):
+                self.ids.CategoriesMenu.ids.my_swiper.current = self.ids.Transaction_menu.ids.my_swiper.current
+
+            else:
+                # del old menu
+                self.ids.CategoriesMenu.ids.my_swiper.clear_widgets()
+                # set categories menu buttons
+                self.ids.CategoriesMenu.ids.my_swiper.add_widget(
+                    Categories_buttons_menu(name=str(config.current_menu_date)[:-3]))
 
             # then updating the TransactionMenu
             self.update_month_in_TransactionMenu()
@@ -81,11 +86,16 @@ class MainSrceen(MDScreen):
             self.ids.Transaction_menu.ids.month_icon.icon = config.days_in_month_icon_dict[  # update icon
                 config.days_in_current_menu_month
             ]
-            # del old menu
-            self.ids.Transaction_menu.ids.my_swiper.clear_widgets()
-            # set categories menu buttons
-            self.ids.Transaction_menu.ids.my_swiper.add_widget(
-                Transaction_menu_in(name=str(config.current_menu_date)[:-3]))
+
+            if self.ids.Transaction_menu.ids.my_swiper.has_screen(self.ids.CategoriesMenu.ids.my_swiper.current):
+                self.ids.Transaction_menu.ids.my_swiper.current = self.ids.CategoriesMenu.ids.my_swiper.current
+
+            else:
+                # del old menu
+                self.ids.Transaction_menu.ids.my_swiper.clear_widgets()
+                # set categories menu buttons
+                self.ids.Transaction_menu.ids.my_swiper.add_widget(
+                    Transaction_menu_in(name=str(config.current_menu_date)[:-3]))
 
             # then updating the CategoriesMenu
             self.update_month_in_CategoriesMenu()
