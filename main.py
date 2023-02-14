@@ -1,5 +1,4 @@
-import csv
-
+# Kivy and kivymd
 from kivy.core.window import Window
 from kivy.graphics import Rectangle, Color
 from kivy.lang import Builder
@@ -7,9 +6,7 @@ from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
-from kivymd.icon_definitions import md_icons
 from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
@@ -17,20 +14,26 @@ from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
+# AccountsMenu
 from AppMenus.Accounts_menu.AccountsMenu import AccountsMenu
 from AppMenus.Accounts_menu.AccountsMenu_main import AccountsMenu_main
 from AppMenus.Accounts_menu.AccountsMenu_debts import AccountsMenu_debts
 from AppMenus.Accounts_menu.AccountsMenu_stat import AccountsMenu_stat
 
+# CategoriesMenu
 from AppMenus.Categories_menu.CategoriesMenu import CategoriesMenu
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
 
+# Transaction Menu
 from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import date_label_for_transaction_history_menu
 
+# configuration file
 import config
 
+# for reading and writing data
+import csv
 from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
 from AppData.data_scripts.Creating_data_files.TxtAccountsData import create_accounts_data_file
 from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file

@@ -26,10 +26,22 @@ class CategoriesMenu(MDScreen):
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
         Clock.schedule_once(self.set_transition)
+        Clock.schedule_once(self.add_pre_loaded_months)
 
     def set_transition(self, *args):
-
         self.ids.my_swiper.transition = NoTransition()
+
+    def add_pre_loaded_months(self, *args):
+        for _ in range(config.months_loaded_at_startup):
+            self.load_previous_month()
+
+        for _ in range(config.months_loaded_at_startup * 2):
+            self.load_next_month()
+
+        for _ in range(config.months_loaded_at_startup):
+            self.load_previous_month()
+
+        print('CategoriesMenu', self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
         last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)

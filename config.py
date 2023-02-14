@@ -26,8 +26,8 @@ current_menu_month = current_month
 days_in_current_menu_month = monthrange(current_menu_year, current_menu_month)[1]
 current_menu_month_name = month_name[current_menu_month]
 
-#MainScreen
-
+# MainScreen
+months_loaded_at_startup = 0
 main_screen_pos = None
 main_screen_size = None
 

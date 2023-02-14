@@ -43,7 +43,7 @@ class Categories_buttons_menu(MDScreen):
             ])
             config.color = button['Color']
 
-            print('Another', config.level)
+            # print('Another', config.level)
 
             box = MDBoxLayout(
                 orientation='vertical',
