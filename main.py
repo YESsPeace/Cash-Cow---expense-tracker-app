@@ -68,15 +68,14 @@ class MainSrceen(MDScreen):
                 self.ids.CategoriesMenu.ids.my_swiper.current = self.ids.Transaction_menu.ids.my_swiper.current
 
             else:
-                # del old menu
-                self.ids.CategoriesMenu.ids.my_swiper.clear_widgets()
-                # set categories menu buttons
+                # add categories menu buttons
                 self.ids.CategoriesMenu.ids.my_swiper.add_widget(
                     Categories_buttons_menu(name=str(config.current_menu_date)[:-3]))
+                # set current categories menu buttons
+                self.ids.CategoriesMenu.ids.my_swiper.current = str(config.current_menu_date)[:-3]
 
             # then updating the TransactionMenu
             self.update_month_in_TransactionMenu()
-
 
     def update_month_in_TransactionMenu(self):
         if not self.ids.CategoriesMenu.ids.my_swiper.current == \
@@ -91,11 +90,11 @@ class MainSrceen(MDScreen):
                 self.ids.Transaction_menu.ids.my_swiper.current = self.ids.CategoriesMenu.ids.my_swiper.current
 
             else:
-                # del old menu
-                self.ids.Transaction_menu.ids.my_swiper.clear_widgets()
-                # set categories menu buttons
+                # add transaction_menu_in menu
                 self.ids.Transaction_menu.ids.my_swiper.add_widget(
                     Transaction_menu_in(name=str(config.current_menu_date)[:-3]))
+                # set current menu
+                self.ids.Transaction_menu.ids.my_swiper.current = str(config.current_menu_date)[:-3]
 
             # then updating the CategoriesMenu
             self.update_month_in_CategoriesMenu()

@@ -62,6 +62,7 @@
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release:
                     root.load_previous_month()
+                    app.root.ids.main.update_month_in_TransactionMenu()
 
             MDLabel:
 
@@ -93,6 +94,7 @@
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release:
                     root.load_next_month()
+                    app.root.ids.main.update_month_in_TransactionMenu()
 
     ScreenManager:
         id: my_swiper
