@@ -156,7 +156,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         self.expense_dict = get_categories_data_from(
             categories_data_file_path='AppData/data_files/categories-data.txt'
         )
-        print("# expense_dict", *self.expense_dict.items(), sep='\n')
+        # print("# expense_dict", *self.expense_dict.items(), sep='\n')
 
         # getting data for transfer
         self.transfer = get_accounts_data(
@@ -164,7 +164,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         ) | get_savings_data(
             savings_data_file_path='AppData/data_files/savings-data.txt'
         )
-        print('# transfer_dict', *self.transfer.items(), sep='\n')
+        # print('# transfer_dict', *self.transfer.items(), sep='\n')
 
         # adding button to expense tab
         Clock.schedule_once(self.adding_buttons_to_expense_tab)
@@ -269,8 +269,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
                 config.second_transaction_item['Currency'] = None
 
         # checking
-        print('# first_transaction_item', config.first_transaction_item)
-        print('# second_transaction_item', config.second_transaction_item)
+        # print('# first_transaction_item', config.first_transaction_item)
+        # print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
         self.parent.add_widget(menu_for_a_new_transaction())

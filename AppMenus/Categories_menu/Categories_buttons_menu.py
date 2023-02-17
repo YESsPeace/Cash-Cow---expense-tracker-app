@@ -11,6 +11,10 @@ from kivymd.uix.screen import MDScreen
 from random import choice
 
 import config
+from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
+from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
+from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
+    get_transaction_history
 from config import icon_list
 
 from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
@@ -29,21 +33,48 @@ class Categories_buttons_menu(MDScreen):
 
         # getting data for categories
         self.categories_menu_button_data_dictionary = config.global_categories_data_dict
+        print("# categories_menu_button_data_dictionary:", *self.categories_menu_button_data_dictionary.items(),
+              sep='\n')
 
-        print("# categories_menu_button_data_dictionary:", self.categories_menu_button_data_dictionary)
+        self.categories_month_data_dict = \
+            get_categories_month_data(get_transaction_for_the_period(
+                from_date=str(config.current_menu_date.replace(day=1)),
+                to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+                history_dict=get_transaction_history(
+                    history_file_path='AppData/data_files/transaction-history.csv',
+                )
+            )
+            )
+
+        print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
         Clock.schedule_once(self.button_data_setter, -1)
 
     def button_data_setter(self, *args):
+        self.categories_budget_data_dict = get_categories_budget_data(
+            'AppData/data_files/Budget_files/' + str(self.name) + '/caregories-data.csv'
+        )
+        if not self.categories_budget_data_dict is None:
+            print('Categories_Budget_data_dict', *self.categories_budget_data_dict.items(), sep='\n')
+
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
 
-            config.level = choice([
-                0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
-            ])
-            config.color = button['Color']
+            # config.level = choice([
+            #     0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
+            # ])
+            if (button_id in self.categories_month_data_dict) and \
+                    (button_id in self.categories_budget_data_dict):
+                config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
+                               int(self.categories_budget_data_dict[button_id]['SUM'])
 
-            # print('Another', config.level)
+                if config.level > 1:
+                    config.level = 1
+
+            else:
+                config.level = 1
+
+            config.color = button['Color']
 
             box = MDBoxLayout(
                 orientation='vertical',

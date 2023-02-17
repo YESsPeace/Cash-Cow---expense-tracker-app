@@ -69,7 +69,7 @@ def get_categories_data_from(categories_data_file_path):
 
                 number_of_category = line[0]
                 name = line[1]
-                color = tuple([float(i) for i in line[2][:-1].split(',')])
+                color = tuple([float(i) for i in line[2].split(',')])
 
                 categories_data_dictionary[number_of_category] = {
                     "Name": name,
