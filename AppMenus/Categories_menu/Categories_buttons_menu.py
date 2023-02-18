@@ -1,8 +1,10 @@
 from kivy.clock import Clock
+from kivy.graphics import Color, RoundedRectangle, Rectangle
 from kivy.metrics import dp
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
+from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton, MDRoundFlatButton
 from kivymd.uix.label import MDLabel
@@ -49,7 +51,6 @@ class Categories_buttons_menu(MDScreen):
         print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
         Clock.schedule_once(self.button_data_setter, -1)
-
     def button_data_setter(self, *args):
         self.categories_budget_data_dict = get_categories_budget_data(
             'AppData/data_files/Budget_files/' + str(self.name) + '/caregories-data.csv'
@@ -60,9 +61,6 @@ class Categories_buttons_menu(MDScreen):
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
 
-            # config.level = choice([
-            #     0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1
-            # ])
             if (button_id in self.categories_month_data_dict) and \
                     (button_id in self.categories_budget_data_dict):
                 config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
@@ -79,7 +77,7 @@ class Categories_buttons_menu(MDScreen):
             box = MDBoxLayout(
                 orientation='vertical',
                 size_hint_y=None,
-                md_bg_color=(.23, .6, .5, 1),
+                # md_bg_color=(.23, .6, .5, 1),
                 height=dp(100)
             )
             container = AnchorLayout()

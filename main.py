@@ -1,12 +1,13 @@
 # Kivy and kivymd
 from kivy.core.window import Window
-from kivy.graphics import Rectangle, Color
+from kivy.graphics import Rectangle, Color, RoundedRectangle
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.anchorlayout import MDAnchorLayout
+from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
@@ -536,7 +537,6 @@ class MyNavigationDrawer(MDNavigationDrawer):
 class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
-
 
 class MoneyStatApp(MDApp):
     def build(self):
