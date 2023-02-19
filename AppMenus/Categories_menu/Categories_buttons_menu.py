@@ -84,7 +84,7 @@ class Categories_buttons_menu(MDScreen):
 
             container.add_widget(WaterFill(
                 pos_hint={'center_x': 0.5, 'top': 1},
-                size=(dp(48), dp(48))
+                size=(dp(55), dp(55))
             ))
 
             container.add_widget(MDIconButton(
