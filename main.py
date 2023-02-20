@@ -30,6 +30,9 @@ from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import date_label_for_transaction_history_menu
 
+# BudgetMenu
+from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
+
 # configuration file
 import config
 
@@ -561,6 +564,9 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
         Builder.load_file('AppMenus/Transaction_menu/date_label_for_transaction_history_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/menu_for_transaction_adding.kv')
+
+        # BudgeMenu
+        Builder.load_file('AppMenus/Budget_menu/BudgetMenu_in.kv')
 
         # main
         Builder.load_file('main_screen.kv')

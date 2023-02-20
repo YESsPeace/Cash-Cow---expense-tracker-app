@@ -3,6 +3,8 @@ def get_categories_budget_data(budget_data_file_path):
         with open(budget_data_file_path, encoding='utf-8') as budget_file:
             import csv
 
+            next(budget_file)
+
             reader = csv.reader(budget_file, delimiter=',')
 
             budget_data_dict = {}

@@ -1,0 +1,87 @@
+<BudgetMenu_in>:
+    md_bg_color: .125, .125, .125, 1
+
+    MDScrollView:
+        size_hint: 1, None
+        pos_hint_y: 1
+        size: self.parent.size
+        adaptive_height: True
+
+        MDBoxLayout:
+            size_hint_y: None
+            md_bg_color: .7, .4, .55, 1
+            orientation: 'vertical'
+            padding: dp(3)
+            spacing: dp(3)
+            adaptive_height: True
+
+            MDBoxLayout:
+                id: categories_budget
+                md_bg_color: .1, .5, .1, 1
+                orientation: 'vertical'
+                padding: dp(3)
+                spacing: dp(3)
+                size_hint_y: None
+                adaptive_height: True
+
+                MDBoxLayout:
+                    id: all_categories_budget
+                    md_bg_color: .45, .3, .1, 1
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: dp(60)
+
+                    MDBoxLayout:
+                        MDLabel:
+                            text: 'Expenses'
+                            halign: 'left'
+                        MDLabel:
+                            text: '$0'
+                            halign: 'right'
+
+                    MDScreen:
+                        ProgressBar:
+                            max: 100
+                            value: 30
+
+                    MDBoxLayout:
+                        MDLabel:
+                            text: 'spent: $0'
+                            halign: 'left'
+
+                        MDLabel:
+                            text: 'budgeted $0'
+                            halign: 'right'
+
+                MDGridLayout:
+                    md_bg_color: .5, .1, .3, 1
+                    size_hint_y: None
+                    height: dp(60)
+
+            MDBoxLayout:
+                md_bg_color: .2, .5, .1, 1
+                orientation: 'vertical'
+                padding: dp(3)
+                spacing: dp(3)
+                size_hint_y: None
+                height: dp(150)
+
+                MDBoxLayout:
+                    md_bg_color: .45, .3, .1, 1
+
+                MDGridLayout:
+                    md_bg_color: .5, .1, .3, 1
+
+            MDBoxLayout:
+                md_bg_color: .3, .5, .1, 1
+                orientation: 'vertical'
+                padding: dp(3)
+                spacing: dp(3)
+                size_hint_y: None
+                height: dp(150)
+
+                MDBoxLayout:
+                    md_bg_color: .45, .3, .1, 1
+
+                MDGridLayout:
+                    md_bg_color: .5, .1, .3, 1
