@@ -50,14 +50,14 @@ class Categories_buttons_menu(MDScreen):
 
         print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
-        Clock.schedule_once(self.button_data_setter, -1)
-    def button_data_setter(self, *args):
         self.categories_budget_data_dict = get_categories_budget_data(
-            'AppData/data_files/Budget_files/' + str(self.name) + '/caregories-data.csv'
+            'AppData/data_files/Budget_files/' + str(config.current_menu_date)[:-3] + '/caregories-data.csv'
         )
         if not self.categories_budget_data_dict is None:
-            print('Categories_Budget_data_dict', *self.categories_budget_data_dict.items(), sep='\n')
+            print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
 
+        Clock.schedule_once(self.button_data_setter, -1)
+    def button_data_setter(self, *args):
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
 
@@ -77,7 +77,6 @@ class Categories_buttons_menu(MDScreen):
             box = MDBoxLayout(
                 orientation='vertical',
                 size_hint_y=None,
-                # md_bg_color=(.23, .6, .5, 1),
                 height=dp(100)
             )
             container = AnchorLayout()
