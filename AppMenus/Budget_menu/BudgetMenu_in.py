@@ -1,7 +1,9 @@
 from kivy.clock import Clock
 from kivy.metrics import dp, sp
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.progressbar import ProgressBar
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
@@ -16,6 +18,8 @@ from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transact
 class BudgetMenu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.all_categories_spent = 0
 
         self.categories_month_data_dict = \
             get_categories_month_data(get_transaction_for_the_period(
@@ -41,14 +45,17 @@ class BudgetMenu_in(MDScreen):
             if category_id in self.categories_month_data_dict:
                 spent = int(self.categories_month_data_dict[category_id]['SUM'])
 
+                self.all_categories_spent += \
+                    (spent / int(self.categories_budget_data_dict[category_id]['SUM']))
+
             else:
                 spent = 0
-
 
             progress = MDBoxLayout(
                 MDBoxLayout(
                     MDLabel(
-                        text=str(category_id),
+                        text=str(category_id) + ' ' +
+                             str(config.global_categories_data_dict[category_id]['Name']),
                         halign='left'
                     ),
                     MDLabel(
@@ -89,12 +96,43 @@ class BudgetMenu_in(MDScreen):
             self.ids.categories_budget.add_widget(progress)
 
         Clock.schedule_once(self.set_categories_list)
+        Clock.schedule_once(self.calculate_n_set_categories_spent)
 
-    def set_categories_list(self, *args):
+    def calculate_n_set_categories_spent(self, *args) -> None:
+        print((self.all_categories_spent / len(self.categories_budget_data_dict)))
+        self.ids.all_categories_ProgressBar.value = \
+            (self.all_categories_spent / len(self.categories_budget_data_dict)) * 100
+
+    def set_categories_list(self, *args) -> None:
         category_grid = MDGridLayout(
             md_bg_color=(.3, .5, .4, 1),
             size_hint_y=None,
             adaptive_height=True,
+            cols=4
         )
+
+        for category_id in config.global_categories_data_dict:
+            if category_id in self.categories_budget_data_dict:
+                continue
+
+            category = config.global_categories_data_dict[category_id]
+
+            category_grid.add_widget(
+                MDBoxLayout(
+                    MDIconButton(
+                        pos_hint={'center_x': 0.5, 'top': 0.5},
+                        id=str(category_id),
+                        md_bg_color=category['Color'][:-1] + (1,)
+                    ),
+                    MDLabel(
+                        text=category['Name'],
+                        size_hint=(1, .25),
+                        halign='center',
+                    ),
+                    orientation='vertical',
+                    size_hint_y=None,
+                    height=dp(80)
+                ),
+            )
 
         self.ids.categories_budget.add_widget(category_grid)
