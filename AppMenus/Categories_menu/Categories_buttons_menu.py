@@ -17,9 +17,10 @@ from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import g
 from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
     get_transaction_history
+from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from config import icon_list
 
-from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
+from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from, get_accounts_data, get_savings_data
 
 
 class WaterFill(Widget):
@@ -56,7 +57,15 @@ class Categories_buttons_menu(MDScreen):
         if not self.categories_budget_data_dict is None:
             print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
 
+        # getting info for a_new_transaction_menu
+        self.transfer = get_accounts_data(
+            accounts_data_file_path='AppData/data_files/accounts-data.txt'
+        ) | get_savings_data(
+            savings_data_file_path='AppData/data_files/savings-data.txt'
+        )
+
         Clock.schedule_once(self.button_data_setter, -1)
+
     def button_data_setter(self, *args):
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
@@ -86,11 +95,14 @@ class Categories_buttons_menu(MDScreen):
                 size=(dp(55), dp(55))
             ))
 
-            container.add_widget(MDIconButton(
-                pos_hint={'center_x': 0.5, 'top': 0.5},
-                id=str(button_id),
-                icon=choice(icon_list),
-            ))
+            container.add_widget(
+                MDIconButton(
+                    pos_hint={'center_x': 0.5, 'top': 0.5},
+                    id=str(button_id),
+                    icon=choice(icon_list),
+                    on_release=self.open_menu_for_a_new_transaction
+                )
+            )
 
             box.add_widget(container)
 
@@ -103,3 +115,42 @@ class Categories_buttons_menu(MDScreen):
             )
 
             self.ids.GridCategoriesMenu.add_widget(box)
+
+    def open_menu_for_a_new_transaction(self, widget, *args) -> None:
+        # getting info for a new menu
+
+        # reselection the first item
+        if config.choosing_first_transaction:
+            if str(widget.id) in self.transfer:
+                config.first_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color,
+                                                 'Currency': self.transfer[str(widget.id)]['Currency']}
+
+            config.choosing_first_transaction = False
+
+        # typical selection
+        else:
+            # first_item
+            config.last_transaction_id = list(config.history_dict)[-1]
+            last_transaction = config.history_dict[config.last_transaction_id]
+
+            last_account = last_transaction['From']
+
+            config.first_transaction_item = {'id': last_account,
+                                             'Name': config.global_accounts_data_dict[last_account]['Name'],
+                                             'Color': config.global_accounts_data_dict[last_account]['Color'],
+                                             'Currency': last_transaction['FromCurrency']
+                                             }
+            # second item
+            config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+
+            if str(widget.id) in self.transfer:
+                config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+            else:
+                config.second_transaction_item['Currency'] = None
+
+        # checking
+        # print('# first_transaction_item', config.first_transaction_item)
+        # print('# second_transaction_item', config.second_transaction_item)
+
+        # adding a new menu to the app
+        self.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

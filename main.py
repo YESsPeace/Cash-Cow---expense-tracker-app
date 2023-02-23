@@ -33,6 +33,9 @@ from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import da
 # BudgetMenu
 from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
 
+# CashMenus
+from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
+
 # configuration file
 import config
 
