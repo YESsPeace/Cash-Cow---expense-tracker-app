@@ -17,7 +17,8 @@ from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import g
 from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
     get_transaction_history
-from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction, BackGround
+from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
+
 from config import icon_list
 
 from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from, get_accounts_data, get_savings_data
@@ -141,7 +142,10 @@ class Categories_buttons_menu(MDScreen):
                                              'Currency': last_transaction['FromCurrency']
                                              }
             # second item
-            config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+            config.second_transaction_item = {'id': widget.id,
+                                              'Name': self.categories_menu_button_data_dictionary[widget.id]['Name'],
+                                              'Color': self.categories_menu_button_data_dictionary[widget.id]
+                                                       ['Color'][:-1] + (1,)}
 
             if str(widget.id) in self.transfer:
                 config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
@@ -153,7 +157,4 @@ class Categories_buttons_menu(MDScreen):
         # print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
-        self.parent.parent.add_widget(
-            BackGround()
-        )
         self.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

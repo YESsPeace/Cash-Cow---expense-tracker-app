@@ -10,10 +10,6 @@ from kivymd.uix.pickers import MDDatePicker
 import config
 from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
 
-
-class BackGround(Widget):
-    pass
-
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
     # Account, Category of expense and other
@@ -59,6 +55,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             self.opacity = 1
 
     def __init__(self, *args, **kwargs):
+
         # getting currency code name like 'USD'
         # the first item is from last transaction account in class transaction menu
         self.code_name_of_first_currency = config.first_transaction_item['Currency']
