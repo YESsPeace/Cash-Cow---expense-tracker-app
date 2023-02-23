@@ -7,6 +7,7 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.scrollview import MDScrollView
 
 import config
 from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
@@ -99,16 +100,33 @@ class BudgetMenu_in(MDScreen):
         Clock.schedule_once(self.calculate_n_set_categories_spent)
 
     def calculate_n_set_categories_spent(self, *args) -> None:
-        print((self.all_categories_spent / len(self.categories_budget_data_dict)))
+        print('All categories spent:',
+        self.all_categories_spent / len(self.categories_budget_data_dict))
         self.ids.all_categories_ProgressBar.value = \
             (self.all_categories_spent / len(self.categories_budget_data_dict)) * 100
 
     def set_categories_list(self, *args) -> None:
-        category_grid = MDGridLayout(
+        self.category_grid = MDGridLayout(
+            MDBoxLayout(
+                MDIconButton(
+                    pos_hint={'center_x': 0.5, 'top': 0.5},
+                    md_bg_color=(.66, .66, .66, 1),
+                    icon_size=dp(15),
+                    on_release=self.open_categories_grid,
+                ),
+                MDLabel(
+                    text='More',
+                    size_hint=(1, .25),
+                    halign='center',
+                ),
+                orientation='vertical',
+                size_hint_y=None,
+                height=dp(60)
+            ),
             md_bg_color=(.3, .5, .4, 1),
             size_hint_y=None,
             adaptive_height=True,
-            cols=4
+            cols=4,
         )
 
         for category_id in config.global_categories_data_dict:
@@ -117,12 +135,13 @@ class BudgetMenu_in(MDScreen):
 
             category = config.global_categories_data_dict[category_id]
 
-            category_grid.add_widget(
+            self.category_grid.add_widget(
                 MDBoxLayout(
                     MDIconButton(
                         pos_hint={'center_x': 0.5, 'top': 0.5},
                         id=str(category_id),
-                        md_bg_color=category['Color'][:-1] + (1,)
+                        md_bg_color=category['Color'][:-1] + (1,),
+                        icon_size=dp(15),
                     ),
                     MDLabel(
                         text=category['Name'],
@@ -131,8 +150,62 @@ class BudgetMenu_in(MDScreen):
                     ),
                     orientation='vertical',
                     size_hint_y=None,
-                    height=dp(80)
+                    height=dp(60)
                 ),
             )
 
-        self.ids.categories_budget.add_widget(category_grid)
+        self.category_ScrollView = MDScrollView(
+                self.category_grid,
+                adaptive_height=True,
+                size_hint=(1, None),
+                height=dp(60),
+            )
+
+        self.ids.categories_budget.add_widget(self.category_ScrollView)
+
+    def open_categories_grid(self, *args) -> None:
+        print('Open pressed')
+
+        self.category_ScrollView.size = self.category_grid.size
+
+        self.category_grid.children[-1].clear_widgets()
+
+        self.category_grid.children[-1].add_widget(
+                MDIconButton(
+                    pos_hint={'center_x': 0.5, 'top': 0.5},
+                    md_bg_color=(.66, .66, .66, 1),
+                    icon_size=dp(15),
+                    on_release=self.close_categories_grid,
+                ),
+        )
+
+        self.category_grid.children[-1].add_widget(
+            MDLabel(
+                text='Less',
+                size_hint=(1, .25),
+                halign='center',
+            ),
+        )
+    def close_categories_grid(self, *args) -> None:
+        print('Close pressed')
+
+        self.category_ScrollView.height = dp(60)
+
+        self.category_grid.children[-1].clear_widgets()
+
+        self.category_grid.children[-1].add_widget(
+            MDIconButton(
+                pos_hint={'center_x': 0.5, 'top': 0.5},
+                md_bg_color=(.66, .66, .66, 1),
+                icon_size=dp(15),
+                on_release=self.open_categories_grid,
+            ),
+        )
+
+        self.category_grid.children[-1].add_widget(
+            MDLabel(
+                text='More',
+                size_hint=(1, .25),
+                halign='center',
+            ),
+        )
