@@ -571,11 +571,13 @@ class MoneyStatApp(MDApp):
         # BudgeMenu
         Builder.load_file('AppMenus/Budget_menu/BudgetMenu_in.kv')
 
+        # CashMenus
+        Builder.load_file('AppMenus/CashMenus/menu_for_a_new_transaction.kv')
+
         # main
         Builder.load_file('main_screen.kv')
         Builder.load_file('my_navigation_drawer.kv')
         Builder.load_file('manager.kv')
-        Builder.load_file('menu_for_a_new_transaction.kv')
 
         return Manager()
 

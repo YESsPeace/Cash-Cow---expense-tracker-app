@@ -17,7 +17,7 @@ from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import g
 from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
     get_transaction_history
-from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
+from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction, BackGround
 from config import icon_list
 
 from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from, get_accounts_data, get_savings_data
@@ -92,7 +92,7 @@ class Categories_buttons_menu(MDScreen):
 
             container.add_widget(WaterFill(
                 pos_hint={'center_x': 0.5, 'top': 1},
-                size=(dp(55), dp(55))
+                size=(dp(47.85555), dp(47.85555))
             ))
 
             container.add_widget(
@@ -100,7 +100,7 @@ class Categories_buttons_menu(MDScreen):
                     pos_hint={'center_x': 0.5, 'top': 0.5},
                     id=str(button_id),
                     icon=choice(icon_list),
-                    on_release=self.open_menu_for_a_new_transaction
+                    on_release=self.open_menu_for_a_new_transaction,
                 )
             )
 
@@ -153,4 +153,7 @@ class Categories_buttons_menu(MDScreen):
         # print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
+        self.parent.parent.add_widget(
+            BackGround()
+        )
         self.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

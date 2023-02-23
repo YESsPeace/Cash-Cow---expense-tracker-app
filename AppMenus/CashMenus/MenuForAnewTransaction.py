@@ -3,12 +3,16 @@ import csv
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.properties import OptionProperty, BooleanProperty
+from kivy.uix.widget import Widget
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
 
 import config
 from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
 
+
+class BackGround(Widget):
+    pass
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
