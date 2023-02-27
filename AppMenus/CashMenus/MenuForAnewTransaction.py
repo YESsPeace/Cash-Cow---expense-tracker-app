@@ -3,12 +3,12 @@ import csv
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.properties import OptionProperty, BooleanProperty
-from kivy.uix.widget import Widget
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
 
 import config
-from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
+from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
+
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
@@ -200,11 +200,16 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         # menu
         self.status = 'closed'
 
-        print(self.parent.ids.screen3.ids)
+        # update transaction_menu_in screen
+        self.parent.ids.Transaction_menu.ids.my_swiper.remove_widget(
+            self.parent.ids.Transaction_menu.ids.my_swiper.current_screen
+        )
 
-        self.parent.ids.screen3.clear_widgets()
+        name_ = str(config.current_menu_date)[:-3]
 
-        self.parent.ids.screen3.add_widget(Transaction_menu())
+        self.parent.ids.Transaction_menu.ids.my_swiper.add_widget(
+            Transaction_menu_in(name=name_)
+        )
 
         # getting sum in transaction
         sum = sum[2:]  # del currency

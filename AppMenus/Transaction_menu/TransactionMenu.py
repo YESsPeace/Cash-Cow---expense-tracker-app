@@ -51,7 +51,6 @@ class Transaction_menu(MDScreen):
 
         print('TransactionMenu', self.ids.my_swiper.screen_names)
 
-
     def load_previous_month(self):
 
         last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)
