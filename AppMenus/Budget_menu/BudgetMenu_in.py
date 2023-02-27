@@ -41,7 +41,7 @@ class BudgetMenu_in(MDScreen):
             print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
             Clock.schedule_once(self.set_categories_budget)
 
-    def set_categories_budget(self, *args):
+    def set_categories_budget(self, *args) -> None:
         for category_id in self.categories_budget_data_dict:
             if category_id in self.categories_month_data_dict:
                 spent = int(self.categories_month_data_dict[category_id]['SUM'])
@@ -101,7 +101,7 @@ class BudgetMenu_in(MDScreen):
 
     def calculate_n_set_categories_spent(self, *args) -> None:
         print('All categories spent:',
-        self.all_categories_spent / len(self.categories_budget_data_dict))
+              self.all_categories_spent / len(self.categories_budget_data_dict))
         self.ids.all_categories_ProgressBar.value = \
             (self.all_categories_spent / len(self.categories_budget_data_dict)) * 100
 
@@ -155,11 +155,11 @@ class BudgetMenu_in(MDScreen):
             )
 
         self.category_ScrollView = MDScrollView(
-                self.category_grid,
-                adaptive_height=True,
-                size_hint=(1, None),
-                height=dp(60),
-            )
+            self.category_grid,
+            adaptive_height=True,
+            size_hint=(1, None),
+            height=dp(60),
+        )
 
         self.ids.categories_budget.add_widget(self.category_ScrollView)
 
@@ -171,12 +171,12 @@ class BudgetMenu_in(MDScreen):
         self.category_grid.children[-1].clear_widgets()
 
         self.category_grid.children[-1].add_widget(
-                MDIconButton(
-                    pos_hint={'center_x': 0.5, 'top': 0.5},
-                    md_bg_color=(.66, .66, .66, 1),
-                    icon_size=dp(15),
-                    on_release=self.close_categories_grid,
-                ),
+            MDIconButton(
+                pos_hint={'center_x': 0.5, 'top': 0.5},
+                md_bg_color=(.66, .66, .66, 1),
+                icon_size=dp(15),
+                on_release=self.close_categories_grid,
+            ),
         )
 
         self.category_grid.children[-1].add_widget(
@@ -186,6 +186,7 @@ class BudgetMenu_in(MDScreen):
                 halign='center',
             ),
         )
+
     def close_categories_grid(self, *args) -> None:
         print('Close pressed')
 
