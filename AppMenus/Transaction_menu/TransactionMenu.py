@@ -53,7 +53,9 @@ class Transaction_menu(MDScreen):
 
     def load_previous_month(self):
 
-        last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)
+        config.current_menu_date = config.current_menu_date.replace(day=1)
+
+        last_month_date = config.current_menu_date - datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = last_month_date
@@ -72,11 +74,14 @@ class Transaction_menu(MDScreen):
 
         self.ids.my_swiper.current = name_
 
+        print('now screen name is', name_)
 
     def load_next_month(self):
 
+        config.current_menu_date = config.current_menu_date.replace(day=int(config.days_in_current_menu_month))
+
         # getting next month
-        next_month_date = config.current_menu_date + datetime.timedelta(days=config.days_in_current_menu_month)
+        next_month_date = config.current_menu_date + datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = next_month_date
@@ -94,5 +99,3 @@ class Transaction_menu(MDScreen):
             self.ids.my_swiper.add_widget(Transaction_menu_in(name=name_))
 
         self.ids.my_swiper.current = name_
-
-
