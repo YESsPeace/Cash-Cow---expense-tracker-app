@@ -5,12 +5,12 @@ def get_categories_month_data(month_history_dict):
         if transaction['Type'] == 'Expenses':
             if transaction['To'] in categories_month_data_dict:
                 categories_month_data_dict[transaction['To']]['SUM'] += \
-                    int(transaction['ToSUM'])
+                    float(transaction['ToSUM'])
 
             else:
                 categories_month_data_dict[transaction['To']] = {
                     'Currency': transaction['ToCurrency'],
-                    'SUM': int(transaction['ToSUM'])
+                    'SUM': float(transaction['ToSUM'])
                 }
 
     return categories_month_data_dict

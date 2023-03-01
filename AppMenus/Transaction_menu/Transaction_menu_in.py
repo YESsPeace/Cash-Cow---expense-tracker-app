@@ -19,8 +19,11 @@ class Transaction_menu_in(MDScreen):
         self.history_dict = config.history_dict
         print(*self.history_dict.items(), sep='\n')
 
-        print(str(config.current_menu_date.replace(day=1)))
-        print(str(config.current_menu_date))
+        self.current_menu_date_from = config.current_menu_date.replace(day=1)
+        self.current_menu_date_to = config.current_menu_date.replace(day=config.days_in_current_menu_month)
+
+        print(self.current_menu_date_from)
+        print(config.current_menu_date)
 
         Clock.schedule_once(self.history_setter_month, 0)
 
@@ -28,8 +31,8 @@ class Transaction_menu_in(MDScreen):
         # the period is current menu month
         # it's from first day of the month to now
         history_dict_for_the_period = get_transaction_for_the_period(
-            from_date=str(config.current_menu_date.replace(day=1)),
-            to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+            from_date=str(self.current_menu_date_from),
+            to_date=str(self.current_menu_date_to),
             history_dict=self.history_dict
         )
         print(*history_dict_for_the_period.items(), sep='\n')
