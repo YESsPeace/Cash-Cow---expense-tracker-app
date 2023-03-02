@@ -14,16 +14,13 @@ class CategoriesMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # getting data for categories
-        config.global_categories_data_dict = get_categories_data_from(
-            categories_data_file_path='AppData/data_files/categories-data.txt'
-        )
-
         # just for first creating widgets
         self.current_menu_date = str(config.current_menu_date)[:-3]
         self.current_menu_month_name = config.current_menu_month_name
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
+
+        self.months_loaded_at_startup = config.months_loaded_at_startup
 
         Clock.schedule_once(self.set_transition)
         Clock.schedule_once(self.add_pre_loaded_months)
@@ -32,19 +29,20 @@ class CategoriesMenu(MDScreen):
         self.ids.my_swiper.transition = NoTransition()
 
     def add_pre_loaded_months(self, *args):
-        for _ in range(config.months_loaded_at_startup):
+        print('CategoriesMenu.add_pre_loaded_months')
+        for _ in range(self.months_loaded_at_startup):
             self.load_previous_month()
 
-        for _ in range(config.months_loaded_at_startup * 2):
+        for _ in range(self.months_loaded_at_startup):
             self.load_next_month()
 
-        for _ in range(config.months_loaded_at_startup):
-            self.load_previous_month()
 
-        print('CategoriesMenu', self.ids.my_swiper.screen_names)
+        print("CategoriesMenu's Screens", self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
-        last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)
+        config.current_menu_date = config.current_menu_date.replace(day=1)
+
+        last_month_date = config.current_menu_date - datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = last_month_date
@@ -60,12 +58,16 @@ class CategoriesMenu(MDScreen):
 
         if not self.ids.my_swiper.has_screen(name_):
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=name_))
+            print('new screen in CategoriesMenu', name_)
 
         self.ids.my_swiper.current = name_
 
     def load_next_month(self):
+
+        config.current_menu_date = config.current_menu_date.replace(day=int(config.days_in_current_menu_month))
+
         # getting next month
-        next_month_date = config.current_menu_date + datetime.timedelta(days=config.days_in_current_menu_month)
+        next_month_date = config.current_menu_date + datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = next_month_date
@@ -81,5 +83,6 @@ class CategoriesMenu(MDScreen):
 
         if not self.ids.my_swiper.has_screen(name_):
             self.ids.my_swiper.add_widget(Categories_buttons_menu(name=name_))
+            print('new screen in CategoriesMenu', name_)
 
         self.ids.my_swiper.current = name_

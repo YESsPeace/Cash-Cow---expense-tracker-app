@@ -58,20 +58,60 @@ def get_transaction_for_the_period(from_date, to_date, history_dict):
         if (item_date >= from_date) and (item_date <= to_date):
             history_for_the_period_dict[trans_id] = history_dict[trans_id]
 
-    history_for_the_period_dict = dict(sorted(history_for_the_period_dict.items(),
-                                              # key for creating my own sort func
-                                              key=lambda item:
-                                              # datetime has a func for typing date, which you need
-                                              int(datetime.datetime([int(i) for i in item[1]['Date'].split('.')][2],
-                                                                    [int(i) for i in item[1]['Date'].split('.')][1],
-                                                                    [int(i) for i in item[1]['Date'].split('.')][0]
-                                                                    ).strftime('%Y%m%d'))
-                                              # convert to string format (YYYYMMDD) and then to int
-                                              )[::-1])
-
-
+    history_for_the_period_dict = get_sorted_history_dict_by_date(history_for_the_period_dict)
 
     return history_for_the_period_dict
+
+
+def get_all_history_period(history_dict):
+    if len(history_dict) != 0:
+
+        import datetime
+        from dateutil.relativedelta import relativedelta
+
+        history_dict = get_sorted_history_dict_by_date(history_dict)
+
+        first_trans_id = list(history_dict)[-1]
+        first_date = history_dict[first_trans_id]['Date']
+
+        last_trans_id = list(history_dict)[0]
+        last_date = history_dict[last_trans_id]['Date']
+
+        first_date = first_date.split('.')
+        first_date = [int(i) for i in first_date]
+        first_date = datetime.datetime(first_date[2], first_date[1], first_date[0])
+
+        print('# first_date:', first_date)
+
+        last_date = last_date.split('.')
+        last_date = [int(i) for i in last_date]
+        last_date = datetime.datetime(last_date[2], last_date[1], last_date[0])
+
+        print('# last_date:', last_date)
+
+        difference_in_months = relativedelta(last_date, first_date).months
+
+        print('# difference_in_months:', difference_in_months)
+
+        return difference_in_months
+
+    else:
+        return 0
+
+
+def get_sorted_history_dict_by_date(history_dict):
+    import datetime
+
+    return dict(sorted(history_dict.items(),
+                       # key for creating my own sort func
+                       key=lambda item:
+                       # datetime has a func for typing date, which you need
+                       int(datetime.datetime([int(i) for i in item[1]['Date'].split('.')][2],
+                                             [int(i) for i in item[1]['Date'].split('.')][1],
+                                             [int(i) for i in item[1]['Date'].split('.')][0]
+                                             ).strftime('%Y%m%d'))
+                       # convert to string format (YYYYMMDD) and then to int
+                       )[::-1])
 
 
 if __name__ == '__main__':

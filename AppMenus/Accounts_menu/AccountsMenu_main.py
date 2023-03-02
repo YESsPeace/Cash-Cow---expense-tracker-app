@@ -11,14 +11,10 @@ class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        config.global_accounts_data_dict = get_accounts_data(
-            accounts_data_file_path='AppData/data_files/accounts-data.txt'
-        )
+
         self.accounts_data_dict = config.global_accounts_data_dict
 
-        config.global_savings_data_dict = get_savings_data(
-            savings_data_file_path='AppData/data_files/savings-data.txt'
-        )
+
         self.savings_data_dict = config.global_savings_data_dict
 
         print("# accounts_data_dictionary:", self.accounts_data_dict)

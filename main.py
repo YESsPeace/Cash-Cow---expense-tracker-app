@@ -301,7 +301,6 @@ class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
 
-
 class MoneyStatApp(MDApp):
     def build(self):
         self.theme_cls.material_style = "M3"

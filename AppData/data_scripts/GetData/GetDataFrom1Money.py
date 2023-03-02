@@ -1,6 +1,6 @@
 # this function return data dictionary  like
 # {'date': {'Type': 'Expenses', 'From': {'Name': 'Cash', 'Color':... and other}}
-# with it I can get data from 1Money's .csv file, who have all transaction
+# with it, I can get data from 1Money's .csv file, who have all transaction
 
 def get_data_from_1money(money_file_path, categories_data_file_path, accounts_data_file_path):
 
@@ -31,20 +31,6 @@ def get_data_from_1money(money_file_path, categories_data_file_path, accounts_da
             accounts_data_dict[name_of_account] = {'id': id_of_account, 'Color': color_of_account}
 
         latest_id_of_account = id_of_account
-
-    # with open(savings_data_file_path, mode='r+', encoding="utf-8-sig") as savings_data_file:
-    #     savings_data_dict = {}
-    #
-    #     for line in savings_data_file:
-    #         line = line.split('-')
-    #
-    #         id_of_savings = line[0]
-    #         name_of_savings = line[1]
-    #         color_of_savings = tuple([float(i) for i in line[2].split(',')])
-    #
-    #         savings_data_dict[name_of_savings] = {'id': id_of_savings, 'Color': color_of_savings}
-    #
-    #     latest_id_of_savings = id_of_savings
 
     with open(money_file_path, encoding="utf-8-sig") as csvfile:
         import csv
@@ -155,6 +141,5 @@ if __name__ == '__main__':
     print(*get_data_from_1money(money_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/1Money_30_04_2022.csv',
                          categories_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_categories-data.txt',
                          accounts_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_accounts-data.txt',
-                         # savings_data_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/test_savings-data.txt'
                                 ).items(), sep='\n')
     print(f'This worked {datetime.now() - start_time}')

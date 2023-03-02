@@ -1,29 +1,25 @@
 import datetime
 from calendar import monthrange, month_name
-from time import sleep
 
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 import config
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history
+from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_history, get_all_history_period
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 
 
-class Transaction_menu(MDScreen):
-    # getting history data
-    config.history_dict = get_transaction_history(
-        history_file_path='AppData/data_files/transaction-history.csv',
-    )
-    print(*config.history_dict.items(), sep='\n')
 
+
+class Transaction_menu(MDScreen):
     def __init__(self, *args, **kwargs):
         # getting history data
-        config.history_dict = get_transaction_history(
-            history_file_path='AppData/data_files/transaction-history.csv',
-        )
         print(*config.history_dict.items(), sep='\n')
+
+        self.months_loaded_at_startup = config.months_loaded_at_startup
+
+        print('months_loaded_at_startup:', self.months_loaded_at_startup)
 
         # getting actually data for menu settings and meny title
         self.current_menu_date = str(config.current_menu_date)[:-3]
@@ -40,16 +36,14 @@ class Transaction_menu(MDScreen):
         self.ids.my_swiper.transition = NoTransition()
 
     def add_pre_loaded_months(self, *args):
-        for _ in range(config.months_loaded_at_startup):
+        print('TransactionMenu.add_pre_loaded_months')
+        for _ in range(self.months_loaded_at_startup):
             self.load_previous_month()
 
-        for _ in range(config.months_loaded_at_startup * 2):
+        for _ in range(self.months_loaded_at_startup):
             self.load_next_month()
 
-        for _ in range(config.months_loaded_at_startup):
-            self.load_previous_month()
-
-        print('TransactionMenu', self.ids.my_swiper.screen_names)
+        print("TransactionMenu's Screens:", self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
 
