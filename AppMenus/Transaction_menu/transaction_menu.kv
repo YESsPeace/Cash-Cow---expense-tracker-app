@@ -12,11 +12,10 @@
 
         MDBoxLayout:
             id: top_btn_bar
-
             orientation: 'horizontal'
             size_hint_y: None
             height: dp(60)
-            md_bg_color: .5, .7, .3, 1
+            md_bg_color: .6, .1, .2, 1
 
             MDIconButton:
                 icon: 'menu'
@@ -28,7 +27,7 @@
 
                 canvas.before:
                     Color:
-                        rgba: .9, .7, .3, 1
+                        rgba: .6, .1, .2, 1
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -39,6 +38,7 @@
                 halign: "center"
                 valign: "middle"
 
+
             MDIconButton:
                 icon: 'magnify'
                 size_hint_y: 1
@@ -46,7 +46,7 @@
 
                 canvas.before:
                     Color:
-                        rgba: .9, .7, .3, 1
+                        rgba: .6, .1, .2, 1
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -57,10 +57,10 @@
             size_hint_y: None
             height: dp(40)
 
-            md_bg_color: 0, 1, 1, 1
+            md_bg_color: .6, .1, .2, 1
 
             MDIconButton:
-                icon: 'Icons/Btn_icon/next - Copy.png'
+                icon: 'arrow-left'
                 icon_size: "24sp"
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release:
@@ -92,7 +92,7 @@
             MDLabel:
 
             MDIconButton:
-                icon: 'Icons/Btn_icon/next.png'
+                icon: 'arrow-right'
                 icon_size: "24sp"
                 pos_hint: {"center_x": .5, "center_y": .5}
                 on_release:

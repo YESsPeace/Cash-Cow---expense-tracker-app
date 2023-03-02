@@ -10,8 +10,6 @@ from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transact
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 
 
-
-
 class Transaction_menu(MDScreen):
     def __init__(self, *args, **kwargs):
         # getting history data

@@ -19,13 +19,28 @@ class BudgetMenu(MDScreen):
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
+        self.months_loaded_at_startup = config.months_loaded_at_startup
+
         Clock.schedule_once(self.set_transition)
+        Clock.schedule_once(self.add_pre_loaded_months)
+
+    def add_pre_loaded_months(self, *args):
+        print('BudgetMenu.add_pre_loaded_months')
+        for _ in range(self.months_loaded_at_startup):
+            self.load_previous_month()
+
+        for _ in range(self.months_loaded_at_startup):
+            self.load_next_month()
+
+        print("BudgetMenu's Screens:", self.ids.my_swiper.screen_names)
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
 
     def load_previous_month(self):
-        last_month_date = config.current_menu_date - datetime.timedelta(days=config.days_in_current_menu_month)
+        config.current_menu_date = config.current_menu_date.replace(day=1)
+
+        last_month_date = config.current_menu_date - datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = last_month_date
@@ -45,8 +60,10 @@ class BudgetMenu(MDScreen):
         self.ids.my_swiper.current = name_
 
     def load_next_month(self):
+        config.current_menu_date = config.current_menu_date.replace(day=int(config.days_in_current_menu_month))
+
         # getting next month
-        next_month_date = config.current_menu_date + datetime.timedelta(days=config.days_in_current_menu_month)
+        next_month_date = config.current_menu_date + datetime.timedelta(days=1)
 
         # update data in python
         config.current_menu_date = next_month_date

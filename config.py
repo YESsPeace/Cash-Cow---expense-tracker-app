@@ -36,19 +36,18 @@ current_menu_month_name = month_name[current_menu_month]
 main_screen_pos = None
 main_screen_size = None
 
-
 # Accounts Menu
 global_accounts_data_dict = get_accounts_data(
-        accounts_data_file_path='AppData/data_files/accounts-data.txt'
-    )
+    accounts_data_file_path='AppData/data_files/accounts-data.txt'
+)
 global_savings_data_dict = get_savings_data(
-        savings_data_file_path='AppData/data_files/savings-data.txt'
-    )
+    savings_data_file_path='AppData/data_files/savings-data.txt'
+)
 
 # Categories Menu
 global_categories_data_dict = get_categories_data_from(
-        categories_data_file_path='AppData/data_files/categories-data.txt'
-    )
+    categories_data_file_path='AppData/data_files/categories-data.txt'
+)
 level = 0
 color = None
 
@@ -56,12 +55,15 @@ icon_list = list(md_icons.keys())
 
 # transaction menu
 history_dict = get_transaction_history(
-            history_file_path='AppData/data_files/transaction-history.csv',
-        )
+    history_file_path='AppData/data_files/transaction-history.csv',
+)
 Transaction_menu_in_last_date = None
 
 # all menus
 months_loaded_at_startup = get_all_history_period(history_dict) + 1
+
+if months_loaded_at_startup > 6:
+    months_loaded_at_startup = 6
 
 # menu for a new transaction
 last_transaction_id = None
