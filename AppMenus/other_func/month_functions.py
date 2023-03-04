@@ -34,6 +34,5 @@ def load_month(self, date, menu):
 
     if not self.ids.my_swiper.has_screen(name_):
         self.ids.my_swiper.add_widget(menu(name=name_))
-        print('new screen in CategoriesMenu', name_)
 
     self.ids.my_swiper.current = name_

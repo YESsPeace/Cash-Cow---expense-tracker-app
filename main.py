@@ -66,49 +66,26 @@ class MainSrceen(MDScreen):
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())
 
-    def update_month_in_CategoriesMenu(self):
-        if not self.ids.CategoriesMenu.ids.my_swiper.current == \
-               self.ids.Transaction_menu.ids.my_swiper.current:  # if the months in menus are not the same
+    def update_month_menu_group(self):
+        month_screen_name = str(config.current_menu_date)[:-3]
 
-            self.ids.CategoriesMenu.ids.month_label.text = config.current_menu_month_name  # update label
-            self.ids.CategoriesMenu.ids.month_icon.icon = config.days_in_month_icon_dict[  # update icon
-                config.days_in_current_menu_month
-            ]
+        for month_menu in [(self.ids.CategoriesMenu, Categories_buttons_menu),
+                           (self.ids.Transaction_menu, Transaction_menu_in),
+                           (self.ids.BudgetMenu, BudgetMenu_in)]:
 
-            if self.ids.CategoriesMenu.ids.my_swiper.has_screen(self.ids.Transaction_menu.ids.my_swiper.current):
-                self.ids.CategoriesMenu.ids.my_swiper.current = self.ids.Transaction_menu.ids.my_swiper.current
+            if month_menu[0].ids.my_swiper.current != month_screen_name:
+                month_menu[0].ids.month_label.text = config.current_menu_month_name
+                month_menu[0].ids.month_icon.icon = config.days_in_month_icon_dict[
+                    config.days_in_current_menu_month
+                ]
 
-            else:
-                # add categories menu buttons
-                self.ids.CategoriesMenu.ids.my_swiper.add_widget(
-                    Categories_buttons_menu(name=str(config.current_menu_date)[:-3]))
-                # set current categories menu buttons
-                self.ids.CategoriesMenu.ids.my_swiper.current = str(config.current_menu_date)[:-3]
+                if month_menu[0].ids.my_swiper.has_screen(month_screen_name):
+                    month_menu[0].ids.my_swiper.current = month_screen_name
 
-            # then updating the TransactionMenu
-            self.update_month_in_TransactionMenu()
-
-    def update_month_in_TransactionMenu(self):
-        if not self.ids.CategoriesMenu.ids.my_swiper.current == \
-               self.ids.Transaction_menu.ids.my_swiper.current:  # if the months in menus are not the same
-
-            self.ids.Transaction_menu.ids.month_label.text = config.current_menu_month_name  # update label
-            self.ids.Transaction_menu.ids.month_icon.icon = config.days_in_month_icon_dict[  # update icon
-                config.days_in_current_menu_month
-            ]
-
-            if self.ids.Transaction_menu.ids.my_swiper.has_screen(self.ids.CategoriesMenu.ids.my_swiper.current):
-                self.ids.Transaction_menu.ids.my_swiper.current = self.ids.CategoriesMenu.ids.my_swiper.current
-
-            else:
-                # add transaction_menu_in menu
-                self.ids.Transaction_menu.ids.my_swiper.add_widget(
-                    Transaction_menu_in(name=str(config.current_menu_date)[:-3]))
-                # set current menu
-                self.ids.Transaction_menu.ids.my_swiper.current = str(config.current_menu_date)[:-3]
-
-            # then updating the CategoriesMenu
-            self.update_month_in_CategoriesMenu()
+                else:
+                    month_menu[0].ids.my_swiper.add_widget(
+                        month_menu[1](name=month_screen_name)
+                    )
 
 
 class MenuForTransactionAdding(MDNavigationDrawer):
@@ -300,6 +277,7 @@ class MyNavigationDrawer(MDNavigationDrawer):
 class ContentNavigationDrawer(MDScrollView):
     screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
+
 
 class MoneyStatApp(MDApp):
     def build(self):
