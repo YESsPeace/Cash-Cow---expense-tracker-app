@@ -1,6 +1,3 @@
-import datetime
-from calendar import month_name, monthrange
-
 from kivy.clock import Clock
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
@@ -9,7 +6,6 @@ import config
 
 from AppMenus.other_func import load_next_month, load_previous_month
 
-from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
 
 

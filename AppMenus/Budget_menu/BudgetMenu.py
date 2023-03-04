@@ -1,12 +1,10 @@
-import datetime
-from calendar import month_name, monthrange
-
 from kivy.clock import Clock
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
 
 import config
 from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
+from AppMenus.other_func import load_next_month, load_previous_month
 
 
 class BudgetMenu(MDScreen):
@@ -38,46 +36,7 @@ class BudgetMenu(MDScreen):
         self.ids.my_swiper.transition = NoTransition()
 
     def load_previous_month(self):
-        config.current_menu_date = config.current_menu_date.replace(day=1)
-
-        last_month_date = config.current_menu_date - datetime.timedelta(days=1)
-
-        # update data in python
-        config.current_menu_date = last_month_date
-
-        config.days_in_current_menu_month = monthrange(config.current_menu_date.year, config.current_menu_date.month)[1]
-        config.current_menu_month_name = month_name[config.current_menu_date.month]
-
-        # update data in menu
-        self.ids.month_label.text = config.current_menu_month_name
-        self.ids.month_icon.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
-
-        name_ = last_month_date.strftime("%Y") + '-' + last_month_date.strftime("%m")
-
-        if not self.ids.my_swiper.has_screen(name_):
-            self.ids.my_swiper.add_widget(BudgetMenu_in(name=name_))
-
-        self.ids.my_swiper.current = name_
+        load_previous_month(self, BudgetMenu_in)
 
     def load_next_month(self):
-        config.current_menu_date = config.current_menu_date.replace(day=int(config.days_in_current_menu_month))
-
-        # getting next month
-        next_month_date = config.current_menu_date + datetime.timedelta(days=1)
-
-        # update data in python
-        config.current_menu_date = next_month_date
-
-        config.days_in_current_menu_month = monthrange(config.current_menu_date.year, config.current_menu_date.month)[1]
-        config.current_menu_month_name = month_name[config.current_menu_date.month]
-
-        # update data in menu
-        self.ids.month_label.text = config.current_menu_month_name
-        self.ids.month_icon.icon = config.days_in_month_icon_dict[config.days_in_current_menu_month]
-
-        name_ = next_month_date.strftime("%Y") + '-' + next_month_date.strftime("%m")
-
-        if not self.ids.my_swiper.has_screen(name_):
-            self.ids.my_swiper.add_widget(BudgetMenu_in(name=name_))
-
-        self.ids.my_swiper.current = name_
+        load_next_month(self, BudgetMenu_in)
