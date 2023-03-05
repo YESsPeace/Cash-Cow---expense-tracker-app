@@ -12,14 +12,13 @@ from random import choice
 import config
 from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
 from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
-    get_transaction_history
+from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 
 from config import icon_list
 
 from database import accounts_db_read
-from database.sqlite_db import savings_db_read
+from database.sqlite_db import savings_db_read, transaction_db_read
 
 
 class WaterFill(Widget):
@@ -42,9 +41,7 @@ class Categories_buttons_menu(MDScreen):
             get_categories_month_data(get_transaction_for_the_period(
                 from_date=str(config.current_menu_date.replace(day=1)),
                 to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
-                history_dict=get_transaction_history(
-                    history_file_path='AppData/data_files/transaction-history.csv',
-                )
+                history_dict=transaction_db_read()
             )
             )
 
@@ -126,7 +123,7 @@ class Categories_buttons_menu(MDScreen):
         # typical selection
         else:
             # first_item
-            config.last_transaction_id = list(config.history_dict)[-1].split('_')[-1]
+            config.last_transaction_id = list(config.history_dict)[-1]
             last_transaction = config.history_dict[config.last_transaction_id]
 
             last_account = last_transaction['From']

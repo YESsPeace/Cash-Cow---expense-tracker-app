@@ -12,8 +12,8 @@ from kivymd.uix.scrollview import MDScrollView
 import config
 from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
 from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period, \
-    get_transaction_history
+from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period
+from database import transaction_db_read
 
 
 class BudgetMenu_in(MDScreen):
@@ -26,9 +26,7 @@ class BudgetMenu_in(MDScreen):
             get_categories_month_data(get_transaction_for_the_period(
                 from_date=str(config.current_menu_date.replace(day=1)),
                 to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
-                history_dict=get_transaction_history(
-                    history_file_path='AppData/data_files/transaction-history.csv',
-                )
+                history_dict=transaction_db_read()
             )
             )
 

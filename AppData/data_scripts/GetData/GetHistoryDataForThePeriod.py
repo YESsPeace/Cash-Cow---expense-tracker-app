@@ -1,39 +1,3 @@
-def get_transaction_history(history_file_path):
-    with open(history_file_path, encoding='utf-8') as history_file:
-        import csv
-
-        reader = csv.reader(history_file, delimiter=',', quotechar='"')
-
-        transaction_dict = {}
-
-        next(history_file)
-
-        for row in reader:
-            transaction_dict[row[0]] = {}
-
-            transaction_dict[row[0]]['Date'] = row[1]
-
-            transaction_dict[row[0]]['Type'] = row[2]
-
-            if transaction_dict[row[0]]['Type'] == 'Income':
-                transaction_dict[row[0]]['From'] = row[4]
-                transaction_dict[row[0]]['To'] = row[3]
-
-            else:
-                transaction_dict[row[0]]['From'] = row[3]
-                transaction_dict[row[0]]['To'] = row[4]
-
-            transaction_dict[row[0]]['FromSUM'] = row[5]
-            transaction_dict[row[0]]['FromCurrency'] = row[6]
-            transaction_dict[row[0]]['ToSUM'] = row[7]
-            transaction_dict[row[0]]['ToCurrency'] = row[8]
-
-            if len(row) == 10:
-                transaction_dict[row[0]]['Сomment'] = row[9]
-
-    return transaction_dict
-
-
 def get_transaction_for_the_period(from_date, to_date, history_dict):
     import datetime
 

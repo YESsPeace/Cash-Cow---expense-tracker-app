@@ -41,8 +41,6 @@ from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 import config
 
 # for reading and writing data
-from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
-from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savings_data_file
 from database import accounts_db_read, categories_db_read
 from database.sqlite_db import savings_db_read
 
@@ -310,10 +308,6 @@ class MoneyStatApp(MDApp):
 
 
 if __name__ == '__main__':
-    # makes empty data files
-    create_savings_data_file('AppData/data_files/savings-data.txt')
-    create_transaction_history_file('AppData/data_files/transaction-history.csv')
-
     # smartphone screen checking
     Window.size = (0.6 * 640, 0.6 * 1136)
 

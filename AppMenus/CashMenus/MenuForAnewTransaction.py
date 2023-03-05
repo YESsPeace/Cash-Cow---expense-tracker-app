@@ -9,6 +9,7 @@ from kivymd.uix.pickers import MDDatePicker
 
 import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
+from database import transaction_db_write, transaction_db_read
 
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -256,8 +257,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         # the values were got in the __init__
         transaction_ = {}
-        transaction_['id'] = int(config.last_transaction_id) + 1
-        config.last_transaction_id = str(transaction_['id'])
+
         transaction_['Date'] = self.date_
         transaction_['Type'] = self.type_
         transaction_['From'] = config.first_transaction_item['id']
@@ -266,30 +266,18 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         transaction_['FromCurrency'] = self.code_name_of_first_currency
         transaction_['ToSUM'] = sum
         transaction_['ToCurrency'] = transaction_['FromCurrency']
+        transaction_['Comment'] = ''
 
         if not self.ids.note_input.text == 'notes':
             transaction_['Comment'] = self.ids.note_input.text
 
+
         print('# writing transaction:', transaction_)
 
         # writing
-        with open('AppData/data_files/transaction-history.csv',
-                  encoding='utf-8', mode='a+', newline='') as history_file:
-            writer = csv.writer(history_file, delimiter=',')
-
-            writer.writerow(transaction_.values())
+        transaction_db_write(transaction_)
 
         # updating history_dict
-
-        config.history_dict[transaction_['id']] = {
-            'Date': transaction_['Date'],
-            'Type': transaction_['Type'],
-            'From': transaction_['From'],
-            'To': transaction_['To'],
-            'FromSUM': transaction_['FromSUM'],
-            'FromCurrency': transaction_['FromCurrency'],
-            'ToSUM': transaction_['ToSUM'],
-            'ToCurrency': transaction_['ToCurrency']
-        }
+        config.history_dict = transaction_db_read()
 
         self.update_Transaction_menu()

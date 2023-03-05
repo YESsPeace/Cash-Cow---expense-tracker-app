@@ -1,6 +1,7 @@
 import json
 import sqlite3 as sq
 
+
 def sql_start():
     global base, cur
     base = sq.connect('AppDataBase.db')
@@ -36,6 +37,7 @@ def sql_start():
 
     base.commit()
 
+
 def accounts_db_read():
     accounts_data_dict = {}
 
@@ -49,6 +51,7 @@ def accounts_db_read():
         }
 
     return accounts_data_dict
+
 
 def savings_db_read():
     savings_data_dict = {}
@@ -66,6 +69,7 @@ def savings_db_read():
 
     return savings_data_dict
 
+
 def categories_db_read():
     categories_data_dict = {}
 
@@ -79,11 +83,44 @@ def categories_db_read():
     return categories_data_dict
 
 
-def add_to_savings_db(data_dict):
-    for data_list in data_dict.values():
-        color = json.dumps(data_list['Color'])
+def transaction_db_read():
+    transaction_dict = {}
 
-        cur.execute(f'INSERT INTO savings_db (name, color, balance, goal, currency) VALUES (?, ?, ?, ?, ?)',
-                    (data_list['Name'], color, data_list['Balance'], None, data_list['Currency']))
+    for row in cur.execute(f'SELECT * FROM transaction_db').fetchall():
+        trans_id = row[0]
+
+        transaction_dict[trans_id] = {}
+
+        transaction_dict[trans_id]['Date'] = row[1]
+        transaction_dict[trans_id]['Type'] = row[2]
+        transaction_dict[trans_id]['From'] = row[3]
+        transaction_dict[trans_id]['To'] = row[4]
+        transaction_dict[trans_id]['FromSUM'] = row[5]
+        transaction_dict[trans_id]['FromCurrency'] = row[6]
+        transaction_dict[trans_id]['ToSUM'] = row[7]
+        transaction_dict[trans_id]['ToCurrency'] = row[8]
+        transaction_dict[trans_id]['Сomment'] = row[9]
+
+    return transaction_dict
+
+def transaction_db_write(trans_data_dict):
+    cur.execute(f'INSERT INTO transaction_db '
+                    f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
+                    f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    (trans_data_dict['Date'], trans_data_dict['Type'], trans_data_dict['From'], trans_data_dict['To'],
+                     trans_data_dict['FromSUM'], trans_data_dict['FromCurrency'], trans_data_dict['ToSUM'],
+                     trans_data_dict['ToCurrency'], trans_data_dict['Comment'])
+                    )
+    base.commit()
+
+def add_to_transaction_db(data_dict):
+    for data_list in data_dict.values():
+        cur.execute(f'INSERT INTO transaction_db '
+                    f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
+                    f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                    (data_list['Date'], data_list['Type'], data_list['From'], data_list['To'],
+                     data_list['FromSUM'], data_list['FromCurrency'], data_list['ToSUM'],
+                     data_list['ToCurrency'], data_list['Comment'])
+                    )
 
     base.commit()
