@@ -41,12 +41,10 @@ from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 import config
 
 # for reading and writing data
-import csv
 from AppData.data_scripts.Creating_data_files.CsvTransactionHistory import create_transaction_history_file
-from AppData.data_scripts.Creating_data_files.TxtAccountsData import create_accounts_data_file
-from AppData.data_scripts.Creating_data_files.TxtCategoriesData import create_categories_data_file
 from AppData.data_scripts.Creating_data_files.TxtSavingsData import create_savings_data_file
-from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_categories_data_from, get_savings_data
+from database import accounts_db_read, categories_db_read
+from database.sqlite_db import savings_db_read
 
 
 class MainSrceen(MDScreen):
@@ -138,18 +136,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # getting data for expense
-        self.expense_dict = get_categories_data_from(
-            categories_data_file_path='AppData/data_files/categories-data.txt'
-        )
-        # print("# expense_dict", *self.expense_dict.items(), sep='\n')
+        self.expense_dict = categories_db_read()
 
         # getting data for transfer
-        self.transfer = get_accounts_data(
-            accounts_data_file_path='AppData/data_files/accounts-data.txt'
-        ) | get_savings_data(
-            savings_data_file_path='AppData/data_files/savings-data.txt'
-        )
-        # print('# transfer_dict', *self.transfer.items(), sep='\n')
+        self.transfer = accounts_db_read() | savings_db_read()
 
         # adding button to expense tab
         Clock.schedule_once(self.adding_buttons_to_expense_tab)
@@ -241,7 +231,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             last_account = last_transaction['From']
 
             config.first_transaction_item = {'id': last_account,
-                                             'Name': config.global_accounts_data_dict[last_account]['Name'],
+                                             'Name':
+                                                 config.global_accounts_data_dict[last_account]['Name'],
                                              'Color': config.global_accounts_data_dict[last_account]['Color'],
                                              'Currency': last_transaction['FromCurrency']
                                              }
@@ -321,8 +312,6 @@ class MoneyStatApp(MDApp):
 if __name__ == '__main__':
     # makes empty data files
     create_savings_data_file('AppData/data_files/savings-data.txt')
-    create_categories_data_file('AppData/data_files/categories-data.txt')
-    create_accounts_data_file('AppData/data_files/accounts-data.txt')
     create_transaction_history_file('AppData/data_files/transaction-history.csv')
 
     # smartphone screen checking

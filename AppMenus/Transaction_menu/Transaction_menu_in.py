@@ -51,7 +51,7 @@ class Transaction_menu_in(MDScreen):
                     try:
                         if transaction['Type'] == 'Expenses':
                             icon_button = MDIconButton(
-                                md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color'][:-1] + (1,))
+                                md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color'][:-1] + [1])
                             )
 
                         else:
@@ -113,7 +113,7 @@ class Transaction_menu_in(MDScreen):
                         if transaction['Type'] == 'Expenses':
                             icon_button = MDIconButton(
                                 md_bg_color=(
-                                            config.global_categories_data_dict[transaction['To']]['Color'][:-1] + (1,))
+                                            config.global_categories_data_dict[transaction['To']]['Color'][:-1] + [1])
                             )
 
                         else:

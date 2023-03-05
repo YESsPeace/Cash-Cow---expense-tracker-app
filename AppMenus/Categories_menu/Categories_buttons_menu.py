@@ -1,12 +1,9 @@
 from kivy.clock import Clock
-from kivy.graphics import Color, RoundedRectangle, Rectangle
 from kivy.metrics import dp
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
-from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton, MDRoundFlatButton
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
@@ -21,7 +18,8 @@ from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 
 from config import icon_list
 
-from AppData.data_scripts.GetData.GetDataFilesData import get_categories_data_from, get_accounts_data, get_savings_data
+from database import accounts_db_read
+from database.sqlite_db import savings_db_read
 
 
 class WaterFill(Widget):
@@ -59,11 +57,7 @@ class Categories_buttons_menu(MDScreen):
             print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
 
         # getting info for a_new_transaction_menu
-        self.transfer = get_accounts_data(
-            accounts_data_file_path='AppData/data_files/accounts-data.txt'
-        ) | get_savings_data(
-            savings_data_file_path='AppData/data_files/savings-data.txt'
-        )
+        self.transfer = accounts_db_read() | savings_db_read()
 
         Clock.schedule_once(self.button_data_setter, -1)
 
@@ -72,6 +66,7 @@ class Categories_buttons_menu(MDScreen):
             button = self.categories_menu_button_data_dictionary[button_id]
 
             if (button_id in self.categories_month_data_dict) and \
+                    (not self.categories_budget_data_dict is None) and \
                     (button_id in self.categories_budget_data_dict):
                 config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
                                int(self.categories_budget_data_dict[button_id]['SUM'])
@@ -131,13 +126,14 @@ class Categories_buttons_menu(MDScreen):
         # typical selection
         else:
             # first_item
-            config.last_transaction_id = list(config.history_dict)[-1]
+            config.last_transaction_id = list(config.history_dict)[-1].split('_')[-1]
             last_transaction = config.history_dict[config.last_transaction_id]
 
             last_account = last_transaction['From']
 
             config.first_transaction_item = {'id': last_account,
-                                             'Name': config.global_accounts_data_dict[last_account]['Name'],
+                                             'Name':
+                                                 config.global_accounts_data_dict[last_account]['Name'],
                                              'Color': config.global_accounts_data_dict[last_account]['Color'],
                                              'Currency': last_transaction['FromCurrency']
                                              }
@@ -145,16 +141,12 @@ class Categories_buttons_menu(MDScreen):
             config.second_transaction_item = {'id': widget.id,
                                               'Name': self.categories_menu_button_data_dictionary[widget.id]['Name'],
                                               'Color': self.categories_menu_button_data_dictionary[widget.id]
-                                                       ['Color'][:-1] + (1,)}
+                                                       ['Color'][:-1] + [1]}
 
             if str(widget.id) in self.transfer:
                 config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
             else:
                 config.second_transaction_item['Currency'] = None
-
-        # checking
-        # print('# first_transaction_item', config.first_transaction_item)
-        # print('# second_transaction_item', config.second_transaction_item)
 
         # adding a new menu to the app
         self.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

@@ -3,8 +3,10 @@ from calendar import monthrange, month_name
 
 from kivymd.icon_definitions import md_icons
 
-from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_savings_data, get_categories_data_from
 from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_all_history_period, get_transaction_history
+
+from database import categories_db_read, sql_start, accounts_db_read
+from database.sqlite_db import savings_db_read
 
 # app checking
 start_app_time = datetime.datetime.now()
@@ -36,18 +38,16 @@ current_menu_month_name = month_name[current_menu_month]
 main_screen_pos = None
 main_screen_size = None
 
+sql_start()
+
 # Accounts Menu
-global_accounts_data_dict = get_accounts_data(
-    accounts_data_file_path='AppData/data_files/accounts-data.txt'
-)
-global_savings_data_dict = get_savings_data(
-    savings_data_file_path='AppData/data_files/savings-data.txt'
-)
+global_accounts_data_dict = accounts_db_read()
+
+global_savings_data_dict = savings_db_read()
 
 # Categories Menu
-global_categories_data_dict = get_categories_data_from(
-    categories_data_file_path='AppData/data_files/categories-data.txt'
-)
+global_categories_data_dict = categories_db_read()
+
 level = 0
 color = None
 

@@ -29,3 +29,5 @@ id, Date,Type,From,To,FromSUM,FromCurrency,ToSUM,ToCurrency,Сomment
 401,27.02.2023,Expenses,account_3,Categories_2,6,RUB,6,RUB
 402,27.02.2023,Expenses,account_3,Categories_2,6,RUB,6,RUB
 403,17.01.2023,Expenses,account_3,Categories_2,6,RUB,6,RUB
+404,05.03.2023,Expenses,account_3,Categories_7,6,RUB,6,RUB
+405,05.03.2023,Transfer,account_3,account_1,6,RUB,6,RUB

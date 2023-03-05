@@ -10,9 +10,9 @@ def get_categories_budget_data(budget_data_file_path):
             budget_data_dict = {}
 
             for row in reader:
-                categories_id = row[0]
+                categories_id = 'Categories_' + str(row[0])
 
-                budget_data_dict[row[0]] = {}
+                budget_data_dict[categories_id] = {}
 
                 budget_data_dict[categories_id]['Currency'] = row[1]
                 budget_data_dict[categories_id]['SUM'] = row[2]

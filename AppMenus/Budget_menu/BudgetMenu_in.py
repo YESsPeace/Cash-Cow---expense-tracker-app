@@ -140,7 +140,7 @@ class BudgetMenu_in(MDScreen):
                     MDIconButton(
                         pos_hint={'center_x': 0.5, 'top': 0.5},
                         id=str(category_id),
-                        md_bg_color=category['Color'][:-1] + (1,),
+                        md_bg_color=category['Color'][:-1] + [1],
                         icon_size=dp(15),
                     ),
                     MDLabel(

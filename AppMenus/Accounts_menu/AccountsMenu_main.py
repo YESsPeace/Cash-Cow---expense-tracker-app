@@ -5,7 +5,6 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
-from AppData.data_scripts.GetData.GetDataFilesData import get_accounts_data, get_savings_data
 
 class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -38,7 +37,7 @@ class AccountsMenu_main(MDScreen):
 
             my_widget.add_widget(
                 MDLabel(
-                    text=self.accounts_data_dict[account_id]['Balance'] + ' ' +
+                    text=str(self.accounts_data_dict[account_id]['Balance']) + ' ' +
                          self.accounts_data_dict[account_id]['Currency'],
                     halign='right'
                 )
