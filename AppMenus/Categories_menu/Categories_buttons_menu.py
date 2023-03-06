@@ -11,14 +11,12 @@ from random import choice
 
 import config
 from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
-from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 
 from config import icon_list
 
-from database import accounts_db_read
-from database.sqlite_db import savings_db_read, transaction_db_read
+from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
+    get_categories_month_data
 
 
 class WaterFill(Widget):

@@ -9,24 +9,28 @@ def sql_start():
     if base:
         print('Date base connected OK')
 
+    # categories_db
     base.execute(
         f'CREATE TABLE IF NOT EXISTS categories_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
         f'name TEXT, color TEXT)'
     )
 
+    # accounts_db
     base.execute(
         f'CREATE TABLE IF NOT EXISTS accounts_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
         f'name TEXT, color TEXT, balance TEXT, currency TEXT)'
     )
 
+    # savings_db
     base.execute(
         f'CREATE TABLE IF NOT EXISTS savings_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
         f'name TEXT, color TEXT, balance TEXT, goal TEXT, currency TEXT)'
     )
 
+    # transaction_db
     base.execute(
         f'CREATE TABLE IF NOT EXISTS transaction_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
@@ -103,15 +107,17 @@ def transaction_db_read():
 
     return transaction_dict
 
+
 def transaction_db_write(trans_data_dict):
     cur.execute(f'INSERT INTO transaction_db '
-                    f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
-                    f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                    (trans_data_dict['Date'], trans_data_dict['Type'], trans_data_dict['From'], trans_data_dict['To'],
-                     trans_data_dict['FromSUM'], trans_data_dict['FromCurrency'], trans_data_dict['ToSUM'],
-                     trans_data_dict['ToCurrency'], trans_data_dict['Comment'])
-                    )
+                f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
+                f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                (trans_data_dict['Date'], trans_data_dict['Type'], trans_data_dict['From'], trans_data_dict['To'],
+                 trans_data_dict['FromSUM'], trans_data_dict['FromCurrency'], trans_data_dict['ToSUM'],
+                 trans_data_dict['ToCurrency'], trans_data_dict['Comment'])
+                )
     base.commit()
+
 
 def add_to_transaction_db(data_dict):
     for data_list in data_dict.values():

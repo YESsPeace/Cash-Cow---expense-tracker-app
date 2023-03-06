@@ -6,7 +6,6 @@ from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 import config
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_all_history_period
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from AppMenus.other_func import load_previous_month, load_next_month
 

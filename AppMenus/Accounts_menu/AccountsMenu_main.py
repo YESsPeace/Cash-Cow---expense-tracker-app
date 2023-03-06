@@ -1,18 +1,17 @@
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivymd.uix.button import MDRectangleFlatIconButton, MDRaisedButton
+from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
 
+
 class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-
         self.accounts_data_dict = config.global_accounts_data_dict
-
 
         self.savings_data_dict = config.global_savings_data_dict
 

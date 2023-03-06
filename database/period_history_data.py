@@ -27,7 +27,7 @@ def get_transaction_for_the_period(from_date, to_date, history_dict):
     return history_for_the_period_dict
 
 
-def get_all_history_period(history_dict):
+def month_in_history(history_dict):
     if len(history_dict) != 0:
 
         import datetime
@@ -78,38 +78,19 @@ def get_sorted_history_dict_by_date(history_dict):
                        )[::-1])
 
 
-if __name__ == '__main__':
-    # date_today = datetime.date.today()
-    # first_day = str(date_today.replace(day=1)).replace('-', '.')
-    # date_today = str(date_today).replace('-', '.')
+def get_categories_month_data(month_history_dict):
+    categories_month_data_dict = {}
 
-    print('Что чекнуть?')
-    print('1. get_transaction_history')
-    print('2. get_transaction_for_the_period')
-    n = int(input())
+    for transaction in month_history_dict.values():
+        if transaction['Type'] == 'Expenses':
+            if transaction['To'] in categories_month_data_dict:
+                categories_month_data_dict[transaction['To']]['SUM'] += \
+                    float(transaction['ToSUM'])
 
-    if n == 1:
-        import datetime
+            else:
+                categories_month_data_dict[transaction['To']] = {
+                    'Currency': transaction['ToCurrency'],
+                    'SUM': float(transaction['ToSUM'])
+                }
 
-        start_time = datetime.datetime.now()
-
-        print(*get_transaction_history(
-            history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
-        ).items(), sep='\n')
-        print(f'This worked {datetime.datetime.now() - start_time}')
-    if n == 2:
-        import datetime
-
-        start_time = datetime.datetime.now()
-
-        history_period_dict = get_transaction_for_the_period(
-            from_date='2023-01-01',
-            to_date='2023-01-30',
-            history_dict=get_transaction_history(
-                history_file_path='C:/Users/damer/PycharmProjects/Money-statistics/AppData/data_files/Test_files/transaction-history.csv',
-            )
-        )
-
-        print(*history_period_dict.items(), sep='\n')
-
-        print(f'This worked {datetime.datetime.now() - start_time}')
+    return categories_month_data_dict

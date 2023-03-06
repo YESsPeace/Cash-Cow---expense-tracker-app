@@ -6,8 +6,8 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period
 from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import date_label_for_transaction_history_menu
+from database import get_transaction_for_the_period
 
 
 class Transaction_menu_in(MDScreen):

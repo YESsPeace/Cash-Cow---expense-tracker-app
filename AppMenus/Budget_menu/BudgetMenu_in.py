@@ -1,6 +1,5 @@
 from kivy.clock import Clock
-from kivy.metrics import dp, sp
-from kivy.uix.anchorlayout import AnchorLayout
+from kivy.metrics import dp
 from kivy.uix.progressbar import ProgressBar
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -11,9 +10,8 @@ from kivymd.uix.scrollview import MDScrollView
 
 import config
 from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
-from AppData.data_scripts.GetData.GetCategoriesMonthData import get_categories_month_data
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_transaction_for_the_period
-from database import transaction_db_read
+from database import get_categories_month_data
+from database import transaction_db_read, get_transaction_for_the_period
 
 
 class BudgetMenu_in(MDScreen):

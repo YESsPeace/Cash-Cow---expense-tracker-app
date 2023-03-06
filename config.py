@@ -3,9 +3,8 @@ from calendar import monthrange, month_name
 
 from kivymd.icon_definitions import md_icons
 
-from AppData.data_scripts.GetData.GetHistoryDataForThePeriod import get_all_history_period
-
-from database import categories_db_read, sql_start, accounts_db_read, savings_db_read, transaction_db_read
+from database import categories_db_read, sql_start, accounts_db_read, \
+    savings_db_read, transaction_db_read, month_in_history
 
 # app checking
 start_app_time = datetime.datetime.now()
@@ -58,7 +57,7 @@ history_dict = transaction_db_read()
 Transaction_menu_in_last_date = None
 
 # all menus
-months_loaded_at_startup = get_all_history_period(history_dict) + 1
+months_loaded_at_startup = month_in_history(history_dict) + 1
 
 if months_loaded_at_startup > 6:
     months_loaded_at_startup = 6
