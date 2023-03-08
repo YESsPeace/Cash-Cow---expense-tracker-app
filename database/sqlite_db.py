@@ -39,6 +39,29 @@ def sql_start():
         f'to_SUM TEXT, to_currency TEXT, note TEXT)'
     )
 
+    base.execute('''
+        CREATE TABLE IF NOT EXISTS budget_data_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            category_id INTEGER,
+            YYYYMM TEXT,
+            budgeted REAL,
+            currency TEXT,
+            FOREIGN KEY(category_id) REFERENCES categories_db(id)
+        )
+    ''')
+
+    base.execute('''
+            CREATE TABLE IF NOT EXISTS budget_data_savings (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                savings_id INTEGER,
+                YYYYMM TEXT,
+                budgeted REAL,
+                currency TEXT,
+                FOREIGN KEY(savings_id) REFERENCES savings_db(id)
+            )
+        ''')
+
+
     base.commit()
 
 
@@ -119,14 +142,19 @@ def transaction_db_write(trans_data_dict):
     base.commit()
 
 
-def add_to_transaction_db(data_dict):
-    for data_list in data_dict.values():
-        cur.execute(f'INSERT INTO transaction_db '
-                    f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
-                    f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                    (data_list['Date'], data_list['Type'], data_list['From'], data_list['To'],
-                     data_list['FromSUM'], data_list['FromCurrency'], data_list['ToSUM'],
-                     data_list['ToCurrency'], data_list['Comment'])
-                    )
+def budget_data_categories_read():
+    budget_data_dict = {}
 
-    base.commit()
+    for row in cur.execute(f'SELECT * FROM budget_data_categories').fetchall():
+        year_month = row[2]
+        categories_id = 'Categories_' + str(row[1])
+
+        if not year_month in budget_data_dict:
+            budget_data_dict[year_month] = {}
+
+        budget_data_dict[year_month][categories_id] = {}
+
+        budget_data_dict[year_month][categories_id]['Budgeted'] = row[3]
+        budget_data_dict[year_month][categories_id]['Currency'] = row[4]
+
+    return budget_data_dict

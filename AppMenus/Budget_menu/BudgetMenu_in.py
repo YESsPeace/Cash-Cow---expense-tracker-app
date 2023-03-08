@@ -9,12 +9,12 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
 import config
-from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
-from database import get_categories_month_data
-from database import transaction_db_read, get_transaction_for_the_period
+from database import get_categories_month_data, budget_data_categories_read, \
+    transaction_db_read, get_transaction_for_the_period
 
 
 class BudgetMenu_in(MDScreen):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -30,20 +30,24 @@ class BudgetMenu_in(MDScreen):
 
         print('Categories_month_Budget_data_dict in BudgetMenu', *self.categories_month_data_dict.items(), sep='\n')
 
-        self.categories_budget_data_dict = get_categories_budget_data(
-            'AppData/data_files/Budget_files/' + str(config.current_menu_date)[:-3] + '/caregories-data.csv'
-        )
-        if not self.categories_budget_data_dict is None:
-            print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
+        self.categories_budget_data_dict = budget_data_categories_read()
+
+        self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
+
+        if self.budget_data_date in self.categories_budget_data_dict:
+            print('Categories_Budget_data_dict in BudgetMenu',
+                  *self.categories_budget_data_dict[self.budget_data_date].items(), sep='\n')
+
             Clock.schedule_once(self.set_categories_budget)
 
     def set_categories_budget(self, *args) -> None:
-        for category_id in self.categories_budget_data_dict:
+
+        for category_id in self.categories_budget_data_dict[self.budget_data_date]:
             if category_id in self.categories_month_data_dict:
                 spent = int(self.categories_month_data_dict[category_id]['SUM'])
 
                 self.all_categories_spent += \
-                    (spent / int(self.categories_budget_data_dict[category_id]['SUM']))
+                    (spent / int(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']))
 
             else:
                 spent = 0
@@ -56,14 +60,14 @@ class BudgetMenu_in(MDScreen):
                         halign='left'
                     ),
                     MDLabel(
-                        text=str(self.categories_budget_data_dict[category_id]['Currency']) +
-                             ' ' + str(self.categories_budget_data_dict[category_id]['SUM']),
+                        text=str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Currency']) +
+                             ' ' + str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
                         halign='right'
                     ),
                 ),
                 MDScreen(
                     ProgressBar(
-                        max=int(self.categories_budget_data_dict[category_id]['SUM']),
+                        max=int(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
                         value=spent,
                     ),
                     size_hint_y=1.25
@@ -76,8 +80,8 @@ class BudgetMenu_in(MDScreen):
                     ),
                     MDLabel(
                         text='budgeted: ' +
-                             str(self.categories_budget_data_dict[category_id]['Currency']) +
-                             ' ' + str(self.categories_budget_data_dict[category_id]['SUM']),
+                             str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Currency']) +
+                             ' ' + str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
                         font_style='Caption',
                         halign='right',
                     ),
@@ -97,9 +101,9 @@ class BudgetMenu_in(MDScreen):
 
     def calculate_n_set_categories_spent(self, *args) -> None:
         print('All categories spent:',
-              self.all_categories_spent / len(self.categories_budget_data_dict))
+              self.all_categories_spent / len(self.categories_budget_data_dict[self.budget_data_date]))
         self.ids.all_categories_ProgressBar.value = \
-            (self.all_categories_spent / len(self.categories_budget_data_dict)) * 100
+            (self.all_categories_spent / len(self.categories_budget_data_dict[self.budget_data_date])) * 100
 
     def set_categories_list(self, *args) -> None:
         self.category_grid = MDGridLayout(
@@ -126,7 +130,7 @@ class BudgetMenu_in(MDScreen):
         )
 
         for category_id in config.global_categories_data_dict:
-            if category_id in self.categories_budget_data_dict:
+            if category_id in self.categories_budget_data_dict[self.budget_data_date]:
                 continue
 
             category = config.global_categories_data_dict[category_id]

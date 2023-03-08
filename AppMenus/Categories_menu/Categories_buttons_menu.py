@@ -10,13 +10,12 @@ from kivymd.uix.screen import MDScreen
 from random import choice
 
 import config
-from AppData.data_scripts.GetData.Budget_data_scripts.GetCategoriesData import get_categories_budget_data
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 
 from config import icon_list
 
 from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
-    get_categories_month_data
+    get_categories_month_data, budget_data_categories_read
 
 
 class WaterFill(Widget):
@@ -45,11 +44,18 @@ class Categories_buttons_menu(MDScreen):
 
         print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
-        self.categories_budget_data_dict = get_categories_budget_data(
-            'AppData/data_files/Budget_files/' + str(config.current_menu_date)[:-3] + '/caregories-data.csv'
-        )
-        if not self.categories_budget_data_dict is None:
-            print('Categories_Budget_data_dict in BudgetMenu', *self.categories_budget_data_dict.items(), sep='\n')
+        self.categories_budget_data_dict = budget_data_categories_read()
+
+        print('Categories Budget data',
+              *self.categories_budget_data_dict.items(),
+              sep='\n')
+
+        self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
+
+        if self.budget_data_date in self.categories_budget_data_dict:
+            print(f'Categories_Budget_data_dict in BudgetMenu for {self.budget_data_date}',
+                  *self.categories_budget_data_dict[self.budget_data_date].items(),
+                  sep='\n')
 
         # getting info for a_new_transaction_menu
         self.transfer = accounts_db_read() | savings_db_read()
@@ -60,11 +66,16 @@ class Categories_buttons_menu(MDScreen):
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
 
-            if (button_id in self.categories_month_data_dict) and \
-                    (not self.categories_budget_data_dict is None) and \
-                    (button_id in self.categories_budget_data_dict):
-                config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
-                               int(self.categories_budget_data_dict[button_id]['SUM'])
+            if (self.budget_data_date in self.categories_budget_data_dict) and \
+                    (button_id in self.categories_budget_data_dict[self.budget_data_date]):
+
+                if button_id in self.categories_month_data_dict:
+
+                    config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
+                               int(self.categories_budget_data_dict[self.budget_data_date][button_id]['Budgeted'])
+
+                else:
+                    config.level = 0
 
                 if config.level > 1:
                     config.level = 1
