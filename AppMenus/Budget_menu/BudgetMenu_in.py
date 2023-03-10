@@ -18,6 +18,7 @@ class BudgetMenu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.current_spent = 0
         self.all_categories_spent = 0
 
         self.categories_month_data_dict = \
@@ -41,10 +42,11 @@ class BudgetMenu_in(MDScreen):
             Clock.schedule_once(self.set_categories_budget)
 
     def set_categories_budget(self, *args) -> None:
-
         for category_id in self.categories_budget_data_dict[self.budget_data_date]:
             if category_id in self.categories_month_data_dict:
                 spent = int(self.categories_month_data_dict[category_id]['SUM'])
+
+                self.current_spent += spent
 
                 self.all_categories_spent += \
                     (spent / int(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']))
@@ -61,7 +63,8 @@ class BudgetMenu_in(MDScreen):
                     ),
                     MDLabel(
                         text=str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Currency']) +
-                             ' ' + str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
+                             ' ' + str(
+                            self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
                         halign='right'
                     ),
                 ),
@@ -81,7 +84,8 @@ class BudgetMenu_in(MDScreen):
                     MDLabel(
                         text='budgeted: ' +
                              str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Currency']) +
-                             ' ' + str(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
+                             ' ' + str(
+                            self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted']),
                         font_style='Caption',
                         halign='right',
                     ),
@@ -104,6 +108,17 @@ class BudgetMenu_in(MDScreen):
               self.all_categories_spent / len(self.categories_budget_data_dict[self.budget_data_date]))
         self.ids.all_categories_ProgressBar.value = \
             (self.all_categories_spent / len(self.categories_budget_data_dict[self.budget_data_date])) * 100
+
+        self.ids.spent_label.text = \
+            str(sum([int(self.categories_month_data_dict[category_id]['SUM'])
+                     for category_id in self.categories_month_data_dict
+                     if category_id in self.categories_budget_data_dict[self.budget_data_date]]))
+
+        self.ids.budgeted_label.text = \
+            str(sum(
+                [int(self.categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted'])
+                 for category_id in self.categories_budget_data_dict[self.budget_data_date]]
+            ))
 
     def set_categories_list(self, *args) -> None:
         self.category_grid = MDGridLayout(
