@@ -1,68 +1,27 @@
-# Money-statistic-app
-___
-## Header 2#
-### Header 3#
-#### Header 4#
-##### Header 5#
-###### header 6#
-This is an app for your money stat. In the future, It'll be powered by android, Windows and Linux. If you wanna, you may.
+# Money stat App
 
-**bold**
-*italic*
+This is an application for tracking expenses and income and creating a budget. It is currently being developed as a school project.
 
-***italic***
-_text_\
-__text__\
-~~text~~
+## Features
 
-:white_check_mark:
+The application is still in development, but it is planned to have four main menus:
+- Accounts
+- Categories of expenses and income
+- Transaction history
+- Budget creation
 
->Цитата великих
->> Внутри
->>>Ещё
+## Installation
 
-Нормикс внутри текста `print('Hello World')`
+The application is built using Python 3.10 and the Kivy and KivyMD frameworks. To install the application, simply download the appropriate file from the `download` folder or the link provided in the readme file.
 
-```python
-print('Hello World')
-int(input())
-```
+## Usage
 
-+ Какой-то текст
-  + Вложенный
-+ авыаыв
-+ аыва
+Data about transactions can be entered manually either in the transaction menu or the expense category menu. The application calculates each transaction in the history and generates a detailed report.
 
-1. Какой-то 
-   1. ава
-   2. fdfd
-   3. fdfd
-   4. fdfd
-   5. fdfd
-      1. fsfdsfsd
-      2. fsdfsdfs
-      3. fsdsfd
-         1. fdsfds
-         2. dsf
-2. ауауцац
-3. ауццау
+## Contact
 
-### Task List
+If you have any questions or suggestions, please email damir.ernazarov.yesspeace@gmail.com.
 
-- [ ] Какая-та задача
-- [X] Какая-та выполненная задача задача
-  - [X] Вложенная задача
+## Presentation
 
-[Проект](https://github.com/YESsPeace/Money-statistic-app)
-
-# Slogan
-___
-
-![Slogan](https://kartinkof.club/uploads/posts/2022-03/1648299764_10-kartinkof-club-p-dora-milkis-mem-10.jpg)
-
-
-
-
-___
-# How to download
-pass
+We also recommend checking out our [presentation](https://docs.google.com/presentation/d/1uidXIrrqYoYwO-60CMU89alcnqA_kzORhoNKwwhtAUc/edit?usp=sharing) for more information about the project.
