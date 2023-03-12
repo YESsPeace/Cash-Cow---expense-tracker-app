@@ -196,7 +196,7 @@ def budget_data_incomes_read():
 
     for row in cur.execute(f'SELECT * FROM budget_data_incomes').fetchall():
         year_month = row[2]
-        income_id = 'Incomes_' + str(row[1])
+        income_id = 'Income_' + str(row[1])
 
         if not year_month in budget_data_dict:
             budget_data_dict[year_month] = {}

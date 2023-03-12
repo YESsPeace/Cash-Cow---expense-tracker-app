@@ -9,6 +9,9 @@ from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 import config
+
+from config import icon_list
+
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from AppMenus.Categories_menu.WaterFill import WaterFill
 from database import get_transaction_for_the_period, transaction_db_read, budget_data_incomes_read, \
@@ -56,14 +59,15 @@ class Incomes_buttons_menu(MDScreen):
         for button_id in self.Incomes_menu_button_data_dictionary:
             button = self.Incomes_menu_button_data_dictionary[button_id]
 
-            if (self.budget_data_date in self.Incomes_budget_data_dict) and \
-                    (button_id in self.Incomes_budget_data_dict[self.budget_data_date]):
+            if self.budget_data_date in self.Incomes_budget_data_dict:
 
-                if button_id in self.get_Incomes_month_data_dict:
+                if (button_id in self.get_Incomes_month_data_dict) and \
+                        (button_id in self.Incomes_budget_data_dict[self.budget_data_date]):
 
                     button_level = int(self.get_Incomes_month_data_dict[button_id]['SUM']) / \
-                                   int(self.Incomes_budget_data_dict[self.budget_data_date][button_id][
-                                           'Budgeted'])
+                                   int(self.Incomes_budget_data_dict[self.budget_data_date][button_id]['Budgeted'])
+
+                    print(f'Income level for {button_id}: {button_level}')
 
                 else:
                     button_level = 0
@@ -78,7 +82,7 @@ class Incomes_buttons_menu(MDScreen):
                 b_icon = button['Icon']
 
             else:
-                b_icon = choice(config.icon_list)
+                b_icon = choice(icon_list)
 
             box = MDBoxLayout(
                 orientation='vertical',

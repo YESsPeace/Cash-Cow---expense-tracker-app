@@ -28,6 +28,7 @@ class CategoriesMenu(MDScreen):
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
+        self.ids.incomes_swiper.transition = NoTransition()
 
     def add_pre_loaded_months(self, *args):
         print('CategoriesMenu.add_pre_loaded_months')
@@ -48,6 +49,8 @@ class CategoriesMenu(MDScreen):
         if not self.ids.incomes_swiper.has_screen(name_):
             self.ids.incomes_swiper.add_widget(Incomes_buttons_menu(name=name_))
 
+        self.ids.incomes_swiper.current = name_
+
     def load_next_month(self):
         load_next_month(self, Categories_buttons_menu)
 
@@ -55,3 +58,5 @@ class CategoriesMenu(MDScreen):
 
         if not self.ids.incomes_swiper.has_screen(name_):
             self.ids.incomes_swiper.add_widget(Incomes_buttons_menu(name=name_))
+
+        self.ids.incomes_swiper.current = name_

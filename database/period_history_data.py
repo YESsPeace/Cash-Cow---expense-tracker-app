@@ -103,7 +103,7 @@ def get_incomes_month_data(month_history_dict):
         if transaction['Type'] == 'Income':
             if transaction['From'] in incomes_month_data_dict:
                 incomes_month_data_dict[transaction['From']]['SUM'] += \
-                    float(transaction['ToSUM'])
+                    float(transaction['FromSUM'])
 
             else:
                 incomes_month_data_dict[transaction['From']] = {
