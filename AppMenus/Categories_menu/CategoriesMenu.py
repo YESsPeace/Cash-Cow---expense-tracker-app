@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
 
 import config
+from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
 
 from AppMenus.other_func import load_next_month, load_previous_month
 
@@ -42,5 +43,15 @@ class CategoriesMenu(MDScreen):
     def load_previous_month(self):
         load_previous_month(self, Categories_buttons_menu)
 
+        name_ = str(config.current_menu_date)[:-3]
+
+        if not self.ids.incomes_swiper.has_screen(name_):
+            self.ids.incomes_swiper.add_widget(Incomes_buttons_menu(name=name_))
+
     def load_next_month(self):
         load_next_month(self, Categories_buttons_menu)
+
+        name_ = str(config.current_menu_date)[:-3]
+
+        if not self.ids.incomes_swiper.has_screen(name_):
+            self.ids.incomes_swiper.add_widget(Incomes_buttons_menu(name=name_))

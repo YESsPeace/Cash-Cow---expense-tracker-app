@@ -264,6 +264,9 @@ class MoneyStatApp(MDApp):
         # Categories menu
         Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
         Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
+        Builder.load_file('AppMenus/Categories_menu/Incomes_buttons_menu.kv')
+
+        Builder.load_file('AppMenus/Categories_menu/WaterFill.kv')
 
         # Transaction menu
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')

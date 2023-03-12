@@ -13,7 +13,13 @@ def sql_start():
     base.execute(
         f'CREATE TABLE IF NOT EXISTS categories_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT)'
+        f'name TEXT, color TEXT, icon TEXT)'
+    )
+
+    base.execute(
+        f'CREATE TABLE IF NOT EXISTS incomes_db '
+        f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
+        f'name TEXT, color TEXT, icon TEXT)'
     )
 
     # accounts_db
@@ -51,6 +57,17 @@ def sql_start():
     ''')
 
     base.execute('''
+            CREATE TABLE IF NOT EXISTS budget_data_incomes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                income_id INTEGER,
+                YYYYMM TEXT,
+                budgeted REAL,
+                currency TEXT,
+                FOREIGN KEY(income_id) REFERENCES incomes_db(id)
+            )
+        ''')
+
+    base.execute('''
             CREATE TABLE IF NOT EXISTS budget_data_savings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 savings_id INTEGER,
@@ -60,7 +77,6 @@ def sql_start():
                 FOREIGN KEY(savings_id) REFERENCES savings_db(id)
             )
         ''')
-
 
     base.commit()
 
@@ -104,10 +120,25 @@ def categories_db_read():
         category_id = 'Categories_' + str(row[0])
         categories_data_dict[category_id] = {
             'Name': row[1],
-            'Color': json.loads(row[2])
+            'Color': json.loads(row[2]),
+            'Icon': row[3]
         }
 
     return categories_data_dict
+
+
+def incomes_db_read():
+    incomes_data_dict = {}
+
+    for row in cur.execute(f'SELECT * FROM incomes_db').fetchall():
+        income_id = 'Income_' + str(row[0])
+        incomes_data_dict[income_id] = {
+            'Name': row[1],
+            'Color': json.loads(row[2]),
+            'Icon': row[3]
+        }
+
+    return incomes_data_dict
 
 
 def transaction_db_read():
@@ -156,5 +187,23 @@ def budget_data_categories_read():
 
         budget_data_dict[year_month][categories_id]['Budgeted'] = row[3]
         budget_data_dict[year_month][categories_id]['Currency'] = row[4]
+
+    return budget_data_dict
+
+
+def budget_data_incomes_read():
+    budget_data_dict = {}
+
+    for row in cur.execute(f'SELECT * FROM budget_data_incomes').fetchall():
+        year_month = row[2]
+        income_id = 'Incomes_' + str(row[1])
+
+        if not year_month in budget_data_dict:
+            budget_data_dict[year_month] = {}
+
+        budget_data_dict[year_month][income_id] = {}
+
+        budget_data_dict[year_month][income_id]['Budgeted'] = row[3]
+        budget_data_dict[year_month][income_id]['Currency'] = row[4]
 
     return budget_data_dict

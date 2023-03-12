@@ -1,54 +1,50 @@
-from kivy.clock import Clock
+from random import choice
+
 from kivy.metrics import dp
 from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
-
-from random import choice
+from kivy.clock import Clock
 
 import config
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
-
-from config import icon_list
-
-from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
-    get_categories_month_data, budget_data_categories_read
-
 from AppMenus.Categories_menu.WaterFill import WaterFill
+from database import get_transaction_for_the_period, transaction_db_read, budget_data_incomes_read, \
+    get_incomes_month_data, accounts_db_read, savings_db_read, incomes_db_read
 
 
-class Categories_buttons_menu(MDScreen):
+class Incomes_buttons_menu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # getting data for categories
-        self.categories_menu_button_data_dictionary = config.global_categories_data_dict
-        print("# categories_menu_button_data_dictionary:", *self.categories_menu_button_data_dictionary.items(),
+        # getting data for Incomes
+        self.Incomes_menu_button_data_dictionary = incomes_db_read()
+        print("# Incomes_menu_button_data_dictionary:", *self.Incomes_menu_button_data_dictionary.items(),
               sep='\n')
 
-        self.categories_month_data_dict = \
-            get_categories_month_data(get_transaction_for_the_period(
+        self.get_Incomes_month_data_dict = \
+            get_incomes_month_data(get_transaction_for_the_period(
                 from_date=str(config.current_menu_date.replace(day=1)),
                 to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
                 history_dict=transaction_db_read()
             )
             )
 
-        print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
+        print('Incomes_month_Budget_data_dict', *self.get_Incomes_month_data_dict.items(), sep='\n')
 
-        self.categories_budget_data_dict = budget_data_categories_read()
+        self.Incomes_budget_data_dict = budget_data_incomes_read()
 
-        print('Categories Budget data',
-              *self.categories_budget_data_dict.items(),
+        print('Incomes Budget data',
+              *self.Incomes_budget_data_dict.items(),
               sep='\n')
 
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
-        if self.budget_data_date in self.categories_budget_data_dict:
-            print(f'Categories_Budget_data_dict in BudgetMenu for {self.budget_data_date}',
-                  *self.categories_budget_data_dict[self.budget_data_date].items(),
+        if self.budget_data_date in self.Incomes_budget_data_dict:
+            print(f'Incomes_Budget_data_dict in BudgetMenu for {self.budget_data_date}',
+                  *self.Incomes_budget_data_dict[self.budget_data_date].items(),
                   sep='\n')
 
         # getting info for a_new_transaction_menu
@@ -57,16 +53,17 @@ class Categories_buttons_menu(MDScreen):
         Clock.schedule_once(self.button_data_setter, -1)
 
     def button_data_setter(self, *args):
-        for button_id in self.categories_menu_button_data_dictionary:
-            button = self.categories_menu_button_data_dictionary[button_id]
+        for button_id in self.Incomes_menu_button_data_dictionary:
+            button = self.Incomes_menu_button_data_dictionary[button_id]
 
-            if (self.budget_data_date in self.categories_budget_data_dict) and \
-                    (button_id in self.categories_budget_data_dict[self.budget_data_date]):
+            if (self.budget_data_date in self.Incomes_budget_data_dict) and \
+                    (button_id in self.Incomes_budget_data_dict[self.budget_data_date]):
 
-                if button_id in self.categories_month_data_dict:
+                if button_id in self.get_Incomes_month_data_dict:
 
-                    config.level = int(self.categories_month_data_dict[button_id]['SUM']) / \
-                                   int(self.categories_budget_data_dict[self.budget_data_date][button_id]['Budgeted'])
+                    config.level = int(self.get_Incomes_month_data_dict[button_id]['SUM']) / \
+                                   int(self.Incomes_budget_data_dict[self.budget_data_date][button_id][
+                                           'Budgeted'])
 
                 else:
                     config.level = 0
@@ -81,7 +78,7 @@ class Categories_buttons_menu(MDScreen):
                 b_icon = button['Icon']
 
             else:
-                b_icon = choice(icon_list)
+                b_icon = choice(config.icon_list)
 
             config.color = button['Color']
 
@@ -116,7 +113,7 @@ class Categories_buttons_menu(MDScreen):
                 )
             )
 
-            self.ids.GridCategoriesMenu.add_widget(box)
+            self.ids.GridIncomesMenu.add_widget(box)
 
     def open_menu_for_a_new_transaction(self, widget, *args) -> None:
         # getting info for a new menu
@@ -131,7 +128,7 @@ class Categories_buttons_menu(MDScreen):
 
         # typical selection
         else:
-            # first_item
+            # second item
             config.last_transaction_id = list(config.history_dict)[-1]
 
             last_id = -1
@@ -143,22 +140,23 @@ class Categories_buttons_menu(MDScreen):
 
             last_account = last_transaction['From']
 
-            config.first_transaction_item = {'id': last_account,
+            config.second_transaction_item = {'id': last_account,
                                              'Name':
                                                  config.global_accounts_data_dict[last_account]['Name'],
                                              'Color': config.global_accounts_data_dict[last_account]['Color'],
                                              'Currency': last_transaction['FromCurrency']
                                              }
-            # second item
-            config.second_transaction_item = {'id': widget.id,
-                                              'Name': self.categories_menu_button_data_dictionary[widget.id]['Name'],
-                                              'Color': self.categories_menu_button_data_dictionary[widget.id]
+            # first item
+            config.first_transaction_item = {'id': widget.id,
+                                              'Name': self.Incomes_menu_button_data_dictionary[widget.id][
+                                                  'Name'],
+                                              'Color': self.Incomes_menu_button_data_dictionary[widget.id]
                                                        ['Color'][:-1] + [1]}
 
             if str(widget.id) in self.transfer:
-                config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+                config.first_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
             else:
-                config.second_transaction_item['Currency'] = 'RUB'
+                config.first_transaction_item['Currency'] = 'RUB'
 
         # adding a new menu to the app
         self.parent.parent.parent.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

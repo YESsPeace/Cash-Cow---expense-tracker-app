@@ -94,3 +94,20 @@ def get_categories_month_data(month_history_dict):
                 }
 
     return categories_month_data_dict
+
+
+def get_incomes_month_data(month_history_dict):
+    incomes_month_data_dict = {}
+
+    for transaction in month_history_dict.values():
+        if transaction['Type'] == 'Income':
+            if transaction['From'] in incomes_month_data_dict:
+                incomes_month_data_dict[transaction['From']]['SUM'] += \
+                    float(transaction['ToSUM'])
+
+            else:
+                incomes_month_data_dict[transaction['From']] = {
+                    'Currency': transaction['FromCurrency'],
+                    'SUM': float(transaction['FromSUM'])
+                }
+    return incomes_month_data_dict

@@ -82,8 +82,11 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         self.type_ = None
         if config.second_transaction_item['id'].split('_')[0] == 'Categories':
             self.type_ = 'Expenses'
-        elif config.first_transaction_item['id'].split('_')[0] == config.second_transaction_item['id'].split('_')[0]:
+        elif config.first_transaction_item['id'].split('_')[0] in ['аccount', 'savings'] and \
+                config.second_transaction_item['id'].split('_')[0] in ['аccount', 'savings']:
             self.type_ = 'Transfer'
+        else:
+            self.type_ = 'Income'
 
         # after creating all kivy widgets
         super().__init__(*args, **kwargs)
@@ -270,7 +273,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         if not self.ids.note_input.text == 'notes':
             transaction_['Comment'] = self.ids.note_input.text
-
 
         print('# writing transaction:', transaction_)
 

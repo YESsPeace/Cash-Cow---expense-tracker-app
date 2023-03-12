@@ -2,109 +2,143 @@
     md_bg_color: app.theme_color
 
     MDBoxLayout:
-        id: top_bar
-        pos_hint: {"top": 1}
         orientation: 'vertical'
-        size_hint_y: None
-        height: top_btn_bar.height + month_menu.height
 
         MDBoxLayout:
-            id: top_btn_bar
-            orientation: 'horizontal'
+            id: top_bar
+            pos_hint: {"top": 1}
+            orientation: 'vertical'
             size_hint_y: None
-            height: dp(60)
-            md_bg_color: .6, .1, .2, 1
+            height: top_btn_bar.height + month_menu.height
 
-            MDIconButton:
-                icon: 'menu'
-                size_hint_y: 1
-                width: self.height
+            MDBoxLayout:
+                id: top_btn_bar
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
+                md_bg_color: .6, .1, .2, 1
 
-                on_release:
-                    nav_drawer.set_state("open")
-
-                canvas.before:
-                    Color:
-                        rgba: .6, .1, .2, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-            MDLabel:
-                text: '12904₽'
-                font_size: 26
-                halign: "center"
-                valign: "middle"
-
-
-            MDIconButton:
-                icon: 'pencil'
-                size_hint_y: 1
-                width: self.height
-
-                canvas.before:
-                    Color:
-                        rgba: .6, .1, .2, 1
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-
-        MDBoxLayout:
-            id: month_menu
-            size_hint_y: None
-            height: dp(40)
-
-            md_bg_color: .6, .1, .2, 1
-
-            MDIconButton:
-                icon: 'arrow-left'
-                icon_size: "24sp"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release:
-                    root.load_previous_month()
-                    app.root.ids.main.update_month_menu_group()
-
-            MDLabel:
-
-            MDBoxLayout
-                size_hint_x: 2
-
-                MDIconButton
-                    id: month_icon
-                    icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
-                    size_hint_y: .5
+                MDIconButton:
+                    icon: 'menu'
+                    size_hint_y: 1
                     width: self.height
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-                MDRectangleFlatButton:
-                    id: month_label
-                    text: root.current_menu_month_name
-                    line_color: 0, 0, 0, 0
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    font_size: '18sp'
+                    on_release:
+                        nav_drawer.set_state("open")
+
+                    canvas.before:
+                        Color:
+                            rgba: .6, .1, .2, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                MDLabel:
+                    text: '12904₽'
+                    font_size: 26
+                    halign: "center"
+                    valign: "middle"
 
 
-            MDLabel:
+                MDIconButton:
+                    icon: 'pencil'
+                    size_hint_y: 1
+                    width: self.height
 
-            MDIconButton:
-                icon: 'arrow-right'
-                icon_size: "24sp"
-                pos_hint: {"center_x": .5, "center_y": .5}
-                on_release:
-                    root.load_next_month()
-                    app.root.ids.main.update_month_menu_group()
+                    canvas.before:
+                        Color:
+                            rgba: .6, .1, .2, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
-    ScreenManager:
-        id: my_swiper
-        size_hint_y: None
-        height: root.height - top_bar.height
-        y: root.height - self.height - top_bar.height
+            MDBoxLayout:
+                id: month_menu
+                size_hint_y: None
+                height: dp(40)
 
-        Categories_buttons_menu:
-            id: buttons_menu
-            name: root.current_menu_date
+                md_bg_color: .6, .1, .2, 1
+
+                MDIconButton:
+                    icon: 'arrow-left'
+                    icon_size: "24sp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    on_release:
+                        root.load_previous_month()
+                        app.root.ids.main.update_month_menu_group()
+
+                MDLabel:
+
+                MDBoxLayout
+                    size_hint_x: 2
+
+                    MDIconButton
+                        id: month_icon
+                        icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+                        size_hint_y: .5
+                        width: self.height
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                    MDRectangleFlatButton:
+                        id: month_label
+                        text: root.current_menu_month_name
+                        line_color: 0, 0, 0, 0
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        font_size: '18sp'
+
+
+                MDLabel:
+
+                MDIconButton:
+                    icon: 'arrow-right'
+                    icon_size: "24sp"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    on_release:
+                        root.load_next_month()
+                        app.root.ids.main.update_month_menu_group()
+
+        TabbedPanel:
+            id: tab_manager
+            do_default_tab: False
+            tab_pos: 'top_mid'
+            tab_width: self.width/2 - 7
+
+            canvas.before:
+                Color:
+                    rgba: .15, .15, .15, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            TabbedPanelItem:
+                text: 'Расходы'
+
+                ScreenManager:
+                    id: my_swiper
+                    size_hint_y: None
+                    height: root.height - top_bar.height
+                    y: root.height - self.height - top_bar.height
+
+                    Categories_buttons_menu:
+                        id: buttons_menu
+                        name: root.current_menu_date
+
+            TabbedPanelItem:
+                text: 'Доходы'
+
+                ScreenManager:
+                    id: incomes_swiper
+                    size_hint_y: None
+                    height: root.height - top_bar.height
+                    y: root.height - self.height - top_bar.height
+
+                    Incomes_buttons_menu:
+                        id: incomes_buttons_menu
+                        name: root.current_menu_date
+
+
 
     MyNavigationDrawer:
         id: nav_drawer
