@@ -61,26 +61,24 @@ class Incomes_buttons_menu(MDScreen):
 
                 if button_id in self.get_Incomes_month_data_dict:
 
-                    config.level = int(self.get_Incomes_month_data_dict[button_id]['SUM']) / \
+                    button_level = int(self.get_Incomes_month_data_dict[button_id]['SUM']) / \
                                    int(self.Incomes_budget_data_dict[self.budget_data_date][button_id][
                                            'Budgeted'])
 
                 else:
-                    config.level = 0
+                    button_level = 0
 
-                if config.level > 1:
-                    config.level = 1
+                if button_level > 1:
+                    button_level = 1
 
             else:
-                config.level = 1
+                button_level = 1
 
             if 'Icon' in button:
                 b_icon = button['Icon']
 
             else:
                 b_icon = choice(config.icon_list)
-
-            config.color = button['Color']
 
             box = MDBoxLayout(
                 orientation='vertical',
@@ -91,7 +89,9 @@ class Incomes_buttons_menu(MDScreen):
 
             container.add_widget(WaterFill(
                 pos_hint={'center_x': 0.5, 'top': 1},
-                size=(dp(47.85555), dp(47.85555))
+                size=(dp(47.85555), dp(47.85555)),
+                level=button_level,
+                color=button['Color']
             ))
 
             container.add_widget(

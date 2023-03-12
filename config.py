@@ -46,9 +46,6 @@ global_savings_data_dict = savings_db_read()
 # Categories Menu
 global_categories_data_dict = categories_db_read()
 
-level = 0
-color = None
-
 icon_list = list(md_icons.keys())
 
 # transaction menu
