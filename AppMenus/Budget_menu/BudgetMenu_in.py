@@ -1,8 +1,9 @@
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.progressbar import ProgressBar
+from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton
+from kivymd.uix.button import MDIconButton, MDRectangleFlatButton
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
@@ -122,21 +123,14 @@ class BudgetMenu_in(MDScreen):
 
     def set_categories_list(self, *args) -> None:
         self.category_grid = MDGridLayout(
-            MDBoxLayout(
-                MDIconButton(
-                    pos_hint={'center_x': 0.5, 'top': 0.5},
-                    md_bg_color=(.66, .66, .66, 1),
-                    icon_size=dp(15),
-                    on_release=self.open_categories_grid,
-                ),
-                MDLabel(
+            MDAnchorLayout(
+                MDRectangleFlatButton(
                     text='More',
-                    size_hint=(1, .25),
-                    halign='center',
-                ),
-                orientation='vertical',
-                size_hint_y=None,
-                height=dp(60)
+                    size_hint_y=None,
+                    height=dp(60),
+                    md_bg_color=(.66, .66, .66, 1),
+                    on_release=self.open_grid,
+                )
             ),
             md_bg_color=(.3, .5, .4, 1),
             size_hint_y=None,
@@ -178,50 +172,36 @@ class BudgetMenu_in(MDScreen):
 
         self.ids.categories_budget.add_widget(self.category_ScrollView)
 
-    def open_categories_grid(self, *args) -> None:
+    def open_grid(self, widget) -> None:
         print('Open pressed')
 
-        self.category_ScrollView.size = self.category_grid.size
+        widget.parent.parent.parent.height = widget.parent.parent.height
 
-        self.category_grid.children[-1].clear_widgets()
-
-        self.category_grid.children[-1].add_widget(
-            MDIconButton(
-                pos_hint={'center_x': 0.5, 'top': 0.5},
-                md_bg_color=(.66, .66, .66, 1),
-                icon_size=dp(15),
-                on_release=self.close_categories_grid,
-            ),
-        )
-
-        self.category_grid.children[-1].add_widget(
-            MDLabel(
+        widget.parent.add_widget(
+            MDRectangleFlatButton(
                 text='Less',
-                size_hint=(1, .25),
-                halign='center',
-            ),
+                size_hint_y=None,
+                height=dp(60),
+                md_bg_color=(.66, .66, .66, 1),
+                on_release=self.close_grid,
+            )
         )
 
-    def close_categories_grid(self, *args) -> None:
+        widget.parent.remove_widget(widget)
+
+    def close_grid(self, widget) -> None:
         print('Close pressed')
 
-        self.category_ScrollView.height = dp(60)
+        widget.parent.parent.parent.height = dp(60)
 
-        self.category_grid.children[-1].clear_widgets()
-
-        self.category_grid.children[-1].add_widget(
-            MDIconButton(
-                pos_hint={'center_x': 0.5, 'top': 0.5},
-                md_bg_color=(.66, .66, .66, 1),
-                icon_size=dp(15),
-                on_release=self.open_categories_grid,
-            ),
-        )
-
-        self.category_grid.children[-1].add_widget(
-            MDLabel(
+        widget.parent.add_widget(
+            MDRectangleFlatButton(
                 text='More',
-                size_hint=(1, .25),
-                halign='center',
-            ),
+                size_hint_y=None,
+                height=dp(60),
+                md_bg_color=(.66, .66, .66, 1),
+                on_release=self.open_grid,
+            )
         )
+
+        widget.parent.remove_widget(widget)
