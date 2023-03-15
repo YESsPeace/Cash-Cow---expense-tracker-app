@@ -11,7 +11,8 @@ from kivymd.uix.scrollview import MDScrollView
 
 import config
 from database import get_categories_month_data, budget_data_categories_read, \
-    transaction_db_read, get_transaction_for_the_period
+    transaction_db_read, get_transaction_for_the_period, budget_data_incomes_read, get_incomes_month_data, \
+    incomes_db_read, categories_db_read
 
 
 class BudgetMenu_in(MDScreen):
@@ -28,14 +29,44 @@ class BudgetMenu_in(MDScreen):
         # Categories
         self.set_categories(budget_data_date)
 
+        # Incomes
+        self.set_incomes(budget_data_date)
+
+    def set_incomes(self, budget_data_date) -> None:
+        incomes_budget_data_dict = budget_data_incomes_read()
+        type_dict = incomes_db_read()
+
+        if budget_data_date in incomes_budget_data_dict:
+            budget_data_dict = incomes_budget_data_dict[budget_data_date]
+
+            incomes_month_data_dict = \
+                get_incomes_month_data(
+                    get_transaction_for_the_period(
+                        from_date=str(config.current_menu_date.replace(day=1)),
+                        to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+                        history_dict=transaction_db_read()
+                    )
+                )
+
+            self.set_budget_menu(budget_data_dict, incomes_month_data_dict,
+                                 budget_menu_name='incomes_budget',
+                                 global_type_data_dict=type_dict)
+
+            self.calculate_n_set_spent(budget_data_dict, incomes_month_data_dict,
+                                       progress_bar_name='all_incomes_ProgressBar',
+                                       spent_label_id='incomes_label',
+                                       budgeted_label_id='budgeted_incomes_label')
+
+            self.set_budget_list(budget_data_dict, incomes_month_data_dict,
+                                 budget_menu_name='incomes_budget',
+                                 global_type_data_dict=type_dict)
+
     def set_categories(self, budget_data_date) -> None:
         categories_budget_data_dict = budget_data_categories_read()
+        type_dict = categories_db_read()
 
         if budget_data_date in categories_budget_data_dict:
             budget_data_dict = categories_budget_data_dict[budget_data_date]
-
-            print('Categories_Budget_data_dict in BudgetMenu',
-                  *budget_data_dict.items(), sep='\n')
 
             categories_month_data_dict = \
                 get_categories_month_data(
@@ -46,23 +77,18 @@ class BudgetMenu_in(MDScreen):
                     )
                 )
 
-            print('Categories_month_Budget_data_dict in BudgetMenu', *categories_month_data_dict.items(), sep='\n')
-
             self.set_budget_menu(budget_data_dict, categories_month_data_dict,
                                  budget_menu_name='categories_budget',
-                                 global_type_data_dict=config.global_categories_data_dict)
+                                 global_type_data_dict=type_dict)
 
             self.calculate_n_set_spent(budget_data_dict, categories_month_data_dict,
                                        progress_bar_name='all_categories_ProgressBar',
-                                       spent=sum([categories_month_data_dict[item_id]['SUM']
-                                                  for item_id in categories_month_data_dict
-                                                  if item_id in budget_data_dict]),
                                        spent_label_id='spent_label',
                                        budgeted_label_id='budgeted_label')
 
             self.set_budget_list(budget_data_dict, categories_month_data_dict,
                                  budget_menu_name='categories_budget',
-                                 global_type_data_dict=config.global_categories_data_dict)
+                                 global_type_data_dict=type_dict)
 
     def set_budget_menu(self, budget_data_dict, month_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:
@@ -96,7 +122,7 @@ class BudgetMenu_in(MDScreen):
                 ),
                 MDBoxLayout(
                     MDLabel(
-                        text='spent: ' + str(spent),
+                        text=str(spent),
                         font_style='Caption',
                         halign='left',
                     ),
@@ -120,17 +146,25 @@ class BudgetMenu_in(MDScreen):
             getattr(self.ids, budget_menu_name).add_widget(progress)
 
     def calculate_n_set_spent(self, budget_data_dict, month_data_dict, progress_bar_name,
-                              spent, spent_label_id, budgeted_label_id, *args) -> None:
+                              spent_label_id, budgeted_label_id, *args) -> None:
+
+        budgeted = sum([
+            budget_data_dict[item_id]['Budgeted']
+            for item_id in budget_data_dict
+        ])
+
+        spent = sum([
+            month_data_dict[item_id]['SUM']
+            for item_id in month_data_dict
+            if item_id in budget_data_dict
+        ])
+
         getattr(self.ids, progress_bar_name).value = \
-            (spent / len(budget_data_dict))
+            (spent / budgeted) * 100
 
         getattr(self.ids, spent_label_id).text = str(spent)
 
-        getattr(self.ids, budgeted_label_id).text = \
-            str(sum(
-                [int(budget_data_dict[item_id]['Budgeted'])
-                 for item_id in budget_data_dict]
-            ))
+        getattr(self.ids, budgeted_label_id).text = str(budgeted)
 
     def set_budget_list(self, budget_data_dict, month_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:

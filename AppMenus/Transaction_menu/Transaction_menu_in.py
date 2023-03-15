@@ -7,7 +7,7 @@ from kivymd.uix.screen import MDScreen
 
 import config
 from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import date_label_for_transaction_history_menu
-from database import get_transaction_for_the_period
+from database import get_transaction_for_the_period, categories_db_read
 
 
 class Transaction_menu_in(MDScreen):
@@ -47,11 +47,13 @@ class Transaction_menu_in(MDScreen):
                               size_hint=(1, None))
 
             for transaction in history_dict_for_the_period.values():
+                categories_dict = categories_db_read()
+
                 if transaction['Date'] == config.Transaction_menu_in_last_date:
                     try:
                         if transaction['Type'] == 'Expenses':
                             icon_button = MDIconButton(
-                                md_bg_color=(config.global_categories_data_dict[transaction['To']]['Color'][:-1] + [1])
+                                md_bg_color=(categories_dict[transaction['To']]['Color'][:-1] + [1])
                             )
 
                         else:
@@ -113,7 +115,7 @@ class Transaction_menu_in(MDScreen):
                         if transaction['Type'] == 'Expenses':
                             icon_button = MDIconButton(
                                 md_bg_color=(
-                                            config.global_categories_data_dict[transaction['To']]['Color'][:-1] + [1])
+                                            categories_dict[transaction['To']]['Color'][:-1] + [1])
                             )
 
                         else:

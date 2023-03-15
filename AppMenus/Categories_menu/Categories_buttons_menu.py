@@ -14,7 +14,7 @@ from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from config import icon_list
 
 from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
-    get_categories_month_data, budget_data_categories_read
+    get_categories_month_data, budget_data_categories_read, categories_db_read
 
 from AppMenus.Categories_menu.WaterFill import WaterFill
 
@@ -24,7 +24,7 @@ class Categories_buttons_menu(MDScreen):
         super().__init__(*args, **kwargs)
 
         # getting data for categories
-        self.categories_menu_button_data_dictionary = config.global_categories_data_dict
+        self.categories_menu_button_data_dictionary = categories_db_read()
         print("# categories_menu_button_data_dictionary:", *self.categories_menu_button_data_dictionary.items(),
               sep='\n')
 
