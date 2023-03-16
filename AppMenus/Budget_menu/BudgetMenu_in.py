@@ -20,17 +20,20 @@ class BudgetMenu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # date
+        self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
+        self.current_menu_date = config.current_menu_date
+        self.days_in_current_menu_month = config.days_in_current_menu_month
+
         Clock.schedule_once(self.set_budgeted)
 
     def set_budgeted(self, *args):
-        # date
-        budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
         # Categories
-        self.set_categories(budget_data_date)
+        self.set_categories(self.budget_data_date)
 
         # Incomes
-        self.set_incomes(budget_data_date)
+        self.set_incomes(self.budget_data_date)
 
     def set_incomes(self, budget_data_date) -> None:
         incomes_budget_data_dict = budget_data_incomes_read()
@@ -42,8 +45,8 @@ class BudgetMenu_in(MDScreen):
             incomes_month_data_dict = \
                 get_incomes_month_data(
                     get_transaction_for_the_period(
-                        from_date=str(config.current_menu_date.replace(day=1)),
-                        to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
                         history_dict=transaction_db_read()
                     )
                 )
@@ -57,7 +60,7 @@ class BudgetMenu_in(MDScreen):
                                        spent_label_id='incomes_label',
                                        budgeted_label_id='budgeted_incomes_label')
 
-            self.set_budget_list(budget_data_dict, incomes_month_data_dict,
+            self.set_budget_list(budget_data_dict=budget_data_dict,
                                  budget_menu_name='incomes_budget',
                                  global_type_data_dict=type_dict)
 
@@ -71,8 +74,8 @@ class BudgetMenu_in(MDScreen):
             categories_month_data_dict = \
                 get_categories_month_data(
                     get_transaction_for_the_period(
-                        from_date=str(config.current_menu_date.replace(day=1)),
-                        to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
                         history_dict=transaction_db_read()
                     )
                 )
@@ -86,7 +89,7 @@ class BudgetMenu_in(MDScreen):
                                        spent_label_id='spent_label',
                                        budgeted_label_id='budgeted_label')
 
-            self.set_budget_list(budget_data_dict, categories_month_data_dict,
+            self.set_budget_list(budget_data_dict=budget_data_dict,
                                  budget_menu_name='categories_budget',
                                  global_type_data_dict=type_dict)
 
@@ -166,57 +169,58 @@ class BudgetMenu_in(MDScreen):
 
         getattr(self.ids, budgeted_label_id).text = str(budgeted)
 
-    def set_budget_list(self, budget_data_dict, month_data_dict, budget_menu_name,
+    def set_budget_list(self, budget_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:
-        self.Budget_grid = MDGridLayout(
-            MDAnchorLayout(
-                MDRectangleFlatButton(
-                    text='More',
-                    size_hint_y=None,
-                    height=dp(60),
-                    md_bg_color=(.66, .66, .66, 1),
-                    on_release=self.open_grid,
-                )
-            ),
-            md_bg_color=(.3, .5, .4, 1),
-            size_hint_y=None,
-            adaptive_height=True,
-            cols=4,
-        )
-
-        for item_id in global_type_data_dict:
-            if item_id in budget_data_dict:
-                continue
-
-            category = global_type_data_dict[item_id]
-
-            self.Budget_grid.add_widget(
-                MDBoxLayout(
-                    MDIconButton(
-                        pos_hint={'center_x': 0.5, 'top': 0.5},
-                        id=str(item_id),
-                        md_bg_color=category['Color'][:-1] + [1],
-                        icon_size=dp(15),
-                    ),
-                    MDLabel(
-                        text=category['Name'],
-                        size_hint=(1, .25),
-                        halign='center',
-                    ),
-                    orientation='vertical',
-                    size_hint_y=None,
-                    height=dp(60)
+        if not (len(budget_data_dict) == len(global_type_data_dict)):
+            self.Budget_grid = MDGridLayout(
+                MDAnchorLayout(
+                    MDRectangleFlatButton(
+                        text='More',
+                        size_hint_y=None,
+                        height=dp(60),
+                        md_bg_color=(.66, .66, .66, 1),
+                        on_release=self.open_grid,
+                    )
                 ),
+                md_bg_color=(.3, .5, .4, 1),
+                size_hint_y=None,
+                adaptive_height=True,
+                cols=4,
             )
 
-        self.Budget_ScrollView = MDScrollView(
-            self.Budget_grid,
-            adaptive_height=True,
-            size_hint=(1, None),
-            height=dp(60),
-        )
+            for item_id in global_type_data_dict:
+                if item_id in budget_data_dict:
+                    continue
 
-        getattr(self.ids, budget_menu_name).add_widget(self.Budget_ScrollView)
+                category = global_type_data_dict[item_id]
+
+                self.Budget_grid.add_widget(
+                    MDBoxLayout(
+                        MDIconButton(
+                            pos_hint={'center_x': 0.5, 'top': 0.5},
+                            id=str(item_id),
+                            md_bg_color=category['Color'][:-1] + [1],
+                            icon_size=dp(15),
+                        ),
+                        MDLabel(
+                            text=category['Name'],
+                            size_hint=(1, .25),
+                            halign='center',
+                        ),
+                        orientation='vertical',
+                        size_hint_y=None,
+                        height=dp(60)
+                    ),
+                )
+
+            self.Budget_ScrollView = MDScrollView(
+                self.Budget_grid,
+                adaptive_height=True,
+                size_hint=(1, None),
+                height=dp(60),
+            )
+
+            getattr(self.ids, budget_menu_name).add_widget(self.Budget_ScrollView)
 
     def open_grid(self, widget) -> None:
         print('Open pressed')
