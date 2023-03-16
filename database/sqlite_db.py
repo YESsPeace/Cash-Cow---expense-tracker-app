@@ -2,7 +2,7 @@ import json
 import sqlite3 as sq
 
 
-def sql_start():
+def sql_start() -> None:
     global base, cur
     base = sq.connect('AppDataBase.db')
     cur = base.cursor()
@@ -81,7 +81,7 @@ def sql_start():
     base.commit()
 
 
-def accounts_db_read():
+def accounts_db_read() -> dict:
     accounts_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM accounts_db').fetchall():
@@ -96,7 +96,7 @@ def accounts_db_read():
     return accounts_data_dict
 
 
-def savings_db_read():
+def savings_db_read() -> dict:
     savings_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM savings_db').fetchall():
@@ -113,7 +113,7 @@ def savings_db_read():
     return savings_data_dict
 
 
-def categories_db_read():
+def categories_db_read() -> dict:
     categories_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM categories_db').fetchall():
@@ -127,7 +127,7 @@ def categories_db_read():
     return categories_data_dict
 
 
-def incomes_db_read():
+def incomes_db_read() -> dict:
     incomes_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM incomes_db').fetchall():
@@ -141,7 +141,7 @@ def incomes_db_read():
     return incomes_data_dict
 
 
-def transaction_db_read():
+def transaction_db_read() -> dict:
     transaction_dict = {}
 
     for row in cur.execute(f'SELECT * FROM transaction_db').fetchall():
@@ -161,7 +161,6 @@ def transaction_db_read():
 
     return transaction_dict
 
-
 def transaction_db_write(trans_data_dict):
     cur.execute(f'INSERT INTO transaction_db '
                 f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
@@ -172,13 +171,16 @@ def transaction_db_write(trans_data_dict):
                 )
     base.commit()
 
-
-def budget_data_categories_read():
+"""
+for incomes:
+    budget_data_read(id='Incomes_', db_name='budget_data_incomes')
+"""
+def budget_data_read(id='Categories_', db_name='budget_data_categories') -> dict:
     budget_data_dict = {}
 
-    for row in cur.execute(f'SELECT * FROM budget_data_categories').fetchall():
+    for row in cur.execute(f'SELECT * FROM {db_name}').fetchall():
         year_month = row[2]
-        categories_id = 'Categories_' + str(row[1])
+        categories_id = str(id) + str(row[1])
 
         if not year_month in budget_data_dict:
             budget_data_dict[year_month] = {}
@@ -187,23 +189,5 @@ def budget_data_categories_read():
 
         budget_data_dict[year_month][categories_id]['Budgeted'] = row[3]
         budget_data_dict[year_month][categories_id]['Currency'] = row[4]
-
-    return budget_data_dict
-
-
-def budget_data_incomes_read():
-    budget_data_dict = {}
-
-    for row in cur.execute(f'SELECT * FROM budget_data_incomes').fetchall():
-        year_month = row[2]
-        income_id = 'Income_' + str(row[1])
-
-        if not year_month in budget_data_dict:
-            budget_data_dict[year_month] = {}
-
-        budget_data_dict[year_month][income_id] = {}
-
-        budget_data_dict[year_month][income_id]['Budgeted'] = row[3]
-        budget_data_dict[year_month][income_id]['Currency'] = row[4]
 
     return budget_data_dict

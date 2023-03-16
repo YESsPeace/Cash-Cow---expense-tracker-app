@@ -14,7 +14,7 @@ from config import icon_list
 
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from AppMenus.Categories_menu.WaterFill import WaterFill
-from database import get_transaction_for_the_period, transaction_db_read, budget_data_incomes_read, \
+from database import get_transaction_for_the_period, transaction_db_read, budget_data_read, \
     get_incomes_month_data, accounts_db_read, savings_db_read, incomes_db_read
 
 
@@ -37,7 +37,7 @@ class Incomes_buttons_menu(MDScreen):
 
         print('Incomes_month_Budget_data_dict', *self.get_Incomes_month_data_dict.items(), sep='\n')
 
-        self.Incomes_budget_data_dict = budget_data_incomes_read()
+        self.Incomes_budget_data_dict = budget_data_read(id='Income_', db_name='budget_data_incomes')
 
         print('Incomes Budget data',
               *self.Incomes_budget_data_dict.items(),

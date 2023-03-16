@@ -14,7 +14,7 @@ from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from config import icon_list
 
 from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
-    get_categories_month_data, budget_data_categories_read, categories_db_read
+    get_categories_month_data, budget_data_read, categories_db_read
 
 from AppMenus.Categories_menu.WaterFill import WaterFill
 
@@ -38,7 +38,7 @@ class Categories_buttons_menu(MDScreen):
 
         print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
-        self.categories_budget_data_dict = budget_data_categories_read()
+        self.categories_budget_data_dict = budget_data_read(id='Categories_', db_name='budget_data_categories')
 
         print('Categories Budget data',
               *self.categories_budget_data_dict.items(),

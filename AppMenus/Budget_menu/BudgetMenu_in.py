@@ -10,8 +10,8 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
 import config
-from database import get_categories_month_data, budget_data_categories_read, \
-    transaction_db_read, get_transaction_for_the_period, budget_data_incomes_read, get_incomes_month_data, \
+from database import get_categories_month_data, budget_data_read, \
+    transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
     incomes_db_read, categories_db_read
 
 
@@ -36,7 +36,7 @@ class BudgetMenu_in(MDScreen):
         self.set_incomes(self.budget_data_date)
 
     def set_incomes(self, budget_data_date) -> None:
-        incomes_budget_data_dict = budget_data_incomes_read()
+        incomes_budget_data_dict = budget_data_read(id='Income_', db_name='budget_data_incomes')
         type_dict = incomes_db_read()
 
         if budget_data_date in incomes_budget_data_dict:
@@ -65,7 +65,7 @@ class BudgetMenu_in(MDScreen):
                                  global_type_data_dict=type_dict)
 
     def set_categories(self, budget_data_date) -> None:
-        categories_budget_data_dict = budget_data_categories_read()
+        categories_budget_data_dict = budget_data_read(id='Categories_', db_name='budget_data_categories')
         type_dict = categories_db_read()
 
         if budget_data_date in categories_budget_data_dict:
