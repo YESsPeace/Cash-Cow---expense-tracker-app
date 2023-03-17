@@ -157,9 +157,10 @@ def transaction_db_read() -> dict:
         transaction_dict[trans_id]['FromCurrency'] = row[6]
         transaction_dict[trans_id]['ToSUM'] = row[7]
         transaction_dict[trans_id]['ToCurrency'] = row[8]
-        transaction_dict[trans_id]['Сomment'] = row[9]
+        transaction_dict[trans_id]['Comment'] = row[9]
 
     return transaction_dict
+
 
 def transaction_db_write(trans_data_dict):
     cur.execute(f'INSERT INTO transaction_db '
@@ -171,10 +172,13 @@ def transaction_db_write(trans_data_dict):
                 )
     base.commit()
 
+
 """
-for incomes:
+def budget_data_read for incomes:
     budget_data_read(id='Incomes_', db_name='budget_data_incomes')
 """
+
+
 def budget_data_read(id='Categories_', db_name='budget_data_categories') -> dict:
     budget_data_dict = {}
 

@@ -203,6 +203,12 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         else:
             # first_item
             config.last_transaction_id = list(config.history_dict)[-1]
+
+            last_id = -1
+            while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
+                last_id -= 1
+                config.last_transaction_id = list(config.history_dict)[last_id]
+
             last_transaction = config.history_dict[config.last_transaction_id]
 
             last_account = last_transaction['From']
@@ -216,10 +222,13 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             # second item
             config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
 
+            print(*config.second_transaction_item.items(), sep='\n')
+
             if str(widget.id) in self.transfer:
                 config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+
             else:
-                config.second_transaction_item['Currency'] = None
+                config.second_transaction_item['Currency'] = 'RUB'
 
         # checking
         # print('# first_transaction_item', config.first_transaction_item)

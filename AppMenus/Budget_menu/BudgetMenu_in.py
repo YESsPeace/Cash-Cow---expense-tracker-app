@@ -12,7 +12,7 @@ from kivymd.uix.scrollview import MDScrollView
 import config
 from database import get_categories_month_data, budget_data_read, \
     transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
-    incomes_db_read, categories_db_read
+    incomes_db_read, categories_db_read, savings_db_read, get_savings_month_data
 
 
 class BudgetMenu_in(MDScreen):
@@ -34,6 +34,42 @@ class BudgetMenu_in(MDScreen):
 
         # Incomes
         self.set_incomes(self.budget_data_date)
+
+        # Savings
+        self.set_savings(self.budget_data_date)
+
+    def set_savings(self, budget_data_date):
+        savings_budget_data_dict = budget_data_read(id='savings_', db_name='budget_data_savings')
+        type_dict = savings_db_read()
+
+        print(f'savings_budget_data', *savings_budget_data_dict.items(), sep='\n')
+
+        if budget_data_date in savings_budget_data_dict:
+            budget_data_dict = savings_budget_data_dict[budget_data_date]
+
+            savings_month_data_dict = \
+                get_savings_month_data(
+                    get_transaction_for_the_period(
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                        history_dict=transaction_db_read()
+                    )
+                )
+
+            print(f'savings_month_data for {budget_data_date}', *savings_month_data_dict.items(), sep='\n')
+
+            self.set_budget_menu(budget_data_dict, savings_month_data_dict,
+                                 budget_menu_name='savings_budget',
+                                 global_type_data_dict=type_dict)
+
+            self.calculate_n_set_spent(budget_data_dict, savings_month_data_dict,
+                                       progress_bar_name='all_savings_ProgressBar',
+                                       spent_label_id='savings_label',
+                                       budgeted_label_id='budgeted_savings_label')
+
+            self.set_budget_list(budget_data_dict=budget_data_dict,
+                                 budget_menu_name='savings_budget',
+                                 global_type_data_dict=type_dict)
 
     def set_incomes(self, budget_data_date) -> None:
         incomes_budget_data_dict = budget_data_read(id='Income_', db_name='budget_data_incomes')

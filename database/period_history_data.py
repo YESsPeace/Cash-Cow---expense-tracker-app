@@ -111,3 +111,33 @@ def get_incomes_month_data(month_history_dict):
                     'SUM': float(transaction['FromSUM'])
                 }
     return incomes_month_data_dict
+
+
+def get_savings_month_data(month_history_dict):
+    savings_month_data_dict = {}
+
+    for transaction in month_history_dict.values():
+        if transaction['Type'] == 'Transfer':
+            if 'savings_' in transaction['To']:
+                if transaction['To'] in savings_month_data_dict:
+                    savings_month_data_dict[transaction['To']]['SUM'] += \
+                        float(transaction['ToSUM'])
+
+                else:
+                    savings_month_data_dict[transaction['To']] = {
+                        'Currency': transaction['ToCurrency'],
+                        'SUM': float(transaction['ToSUM'])
+                    }
+
+            elif 'savings_' in transaction['From']:
+                if transaction['From'] in savings_month_data_dict:
+                    savings_month_data_dict[transaction['From']]['SUM'] -= \
+                        float(transaction['FromSUM'])
+
+                else:
+                    savings_month_data_dict[transaction['From']] = {
+                        'Currency': transaction['FromCurrency'],
+                        'SUM': -float(transaction['FromSUM'])
+                    }
+
+    return savings_month_data_dict

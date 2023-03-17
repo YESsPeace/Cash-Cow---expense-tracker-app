@@ -82,8 +82,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         self.type_ = None
         if config.second_transaction_item['id'].split('_')[0] == 'Categories':
             self.type_ = 'Expenses'
-        elif config.first_transaction_item['id'].split('_')[0] in ['аccount', 'savings'] and \
-                config.second_transaction_item['id'].split('_')[0] in ['аccount', 'savings']:
+        elif (config.first_transaction_item['id'].split('_')[0] in ['account', 'savings']) and \
+                (config.second_transaction_item['id'].split('_')[0] in ['account', 'savings']):
             self.type_ = 'Transfer'
         else:
             self.type_ = 'Income'
