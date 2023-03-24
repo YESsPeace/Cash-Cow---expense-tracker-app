@@ -289,6 +289,7 @@ class MoneyStatApp(MDApp):
 
         # CashMenus
         Builder.load_file('AppMenus/CashMenus/menu_for_a_new_transaction.kv')
+        Builder.load_file('AppMenus/CashMenus/MenuForAnewBudget.kv')
 
         # main
         Builder.load_file('main_screen.kv')

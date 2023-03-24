@@ -11,6 +11,7 @@ import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from database import transaction_db_write, transaction_db_read
 
+from AppMenus.other_func import calculate
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
@@ -159,48 +160,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         print(f'Date: type - {type(value)}, {value}; date - {self.date_}')
 
     def calculate_btn_pressed(self):
-        self.ids.sum_label.text = f'{self.currency_first} {self.calculate_it(self.ids.sum_label.text)}'
-
-    def calculate_it(self, expression):
-        if '+' in expression:
-            num_1, num_2 = expression.split('+')
-            answer = float(num_1[2:]) + float(num_2)
-            answer = float("{:.2f}".format(answer))
-            if answer % 1 == 0:
-                answer = int(answer)
-
-            return str(answer)
-
-        elif '-' in expression:
-            num_1, num_2 = expression.split('-')
-            answer = float(num_1[2:]) - float(num_2)
-            answer = float("{:.2f}".format(answer))
-            if answer % 1 == 0:
-                answer = int(answer)
-
-            return str(answer)
-
-        elif '÷' in expression:
-            num_1, num_2 = expression.split('÷')
-            answer = float(num_1[2:]) / float(num_2)
-            answer = float("{:.2f}".format(answer))
-            if answer % 1 == 0:
-                answer = int(answer)
-
-            return str(answer)
-
-        elif 'x' in expression:
-            num_1, num_2 = expression.split('x')
-            answer = float(num_1[2:]) * float(num_2)
-            answer = float("{:.2f}".format(answer))
-            if answer % 1 == 0:
-                answer = int(answer)
-
-            return str(answer)
-
-        else:
-            return False
-
+        self.ids.sum_label.text = f'{self.currency_first} {calculate(self.ids.sum_label.text)}'
     def update_Transaction_menu(self) -> None:
         name_ = self.date_.split('.')
         name_ = str(name_[-1]) + '-' + str(name_[-2])

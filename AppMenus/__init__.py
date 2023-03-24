@@ -15,3 +15,4 @@ from AppMenus.Budget_menu.BudgetMenu import BudgetMenu
 from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
 
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
+from AppMenus.CashMenus.MenuForAnewBudget import menu_for_a_new_budget

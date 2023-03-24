@@ -117,7 +117,7 @@ def categories_db_read() -> dict:
     categories_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM categories_db').fetchall():
-        category_id = 'Categories_' + str(row[0])
+        category_id = 'categories_' + str(row[0])
         categories_data_dict[category_id] = {
             'Name': row[1],
             'Color': json.loads(row[2]),
@@ -131,7 +131,7 @@ def incomes_db_read() -> dict:
     incomes_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM incomes_db').fetchall():
-        income_id = 'Income_' + str(row[0])
+        income_id = 'income_' + str(row[0])
         incomes_data_dict[income_id] = {
             'Name': row[1],
             'Color': json.loads(row[2]),

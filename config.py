@@ -67,3 +67,7 @@ currency_symbol_dict = {
 first_transaction_item = None
 second_transaction_item = None
 choosing_first_transaction = False
+
+# menu for a new budget
+item = ''
+
