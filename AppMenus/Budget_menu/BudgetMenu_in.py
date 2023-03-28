@@ -250,7 +250,7 @@ class BudgetMenu_in(MDScreen):
                             id=str(item_id),
                             md_bg_color=category['Color'][:-1] + [1],
                             icon_size=dp(15),
-                            on_release=self.open_menu_for_a_new_budget,
+                            on_release=self.on_release_callback(item_id),
                         ),
                         MDLabel(
                             text=category['Name'],
@@ -279,28 +279,55 @@ class BudgetMenu_in(MDScreen):
             budget_data_dict = budget_data_read(id='savings_', db_name='budget_data_savings')
             type_dict = savings_db_read()
 
+            month_data_dict = \
+                get_savings_month_data(
+                    get_transaction_for_the_period(
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                        history_dict=transaction_db_read()
+                    )
+                )
+
         elif widget_type == 'categories':
             budget_data_dict = budget_data_read(id='categories_', db_name='budget_data_categories')
             type_dict = categories_db_read()
+
+            month_data_dict = \
+                get_categories_month_data(
+                    get_transaction_for_the_period(
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                        history_dict=transaction_db_read()
+                    )
+                )
 
         elif widget_type == 'income':
             budget_data_dict = budget_data_read(id='income_', db_name='budget_data_incomes')
             type_dict = incomes_db_read()
 
-        if widget_id in budget_data_dict:
-            sum = budget_data_dict.get(widget_id).get('SUM')
-            budgeted = budget_data_dict.get(widget_id).get('Budgeted')
+            month_data_dict = \
+                get_incomes_month_data(
+                    get_transaction_for_the_period(
+                        from_date=str(self.current_menu_date.replace(day=1)),
+                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                        history_dict=transaction_db_read()
+                    )
+                )
 
-        else:
-            sum = 0
-            budgeted = 0
+        date = str(self.budget_data_date).replace('-', '')
+
+        if date in budget_data_dict:
+            budget_data_dict = budget_data_dict[date]
+
+        budgeted = budget_data_dict.get(widget_id, {}).get('Budgeted')
+        sum = month_data_dict.get(widget_id, {}).get('SUM')
 
         config.item = {
             'Name': type_dict[widget_id]['Name'],
             'Color': type_dict[widget_id]['Color'],
             'id': widget_id,
-            'SUM': sum,
-            'Budgeted': budgeted,
+            'SUM': sum if not sum is None else 0,
+            'Budgeted': budgeted if not budgeted is None else 0,
         }
 
         self.parent.parent.parent.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_budget())

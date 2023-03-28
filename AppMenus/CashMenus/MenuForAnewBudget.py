@@ -1,5 +1,7 @@
 from kivy.properties import BooleanProperty, OptionProperty
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
+from kivy.clock import Clock
+
 
 import config
 from AppMenus.other_func import calculate
@@ -31,6 +33,13 @@ class menu_for_a_new_budget(MDNavigationDrawer):
         print(*self.item.items(), sep='\n')
 
         super().__init__(*args, **kwargs)
+
+        Clock.schedule_once(self.set_widgets_prop)
+
+    def set_widgets_prop(self, *args):
+        self.set_progressbar_value(self, *args)
+        self.set_button_color(self, *args)
+
 
     def update_status(self, *_) -> None:
         status = self.status
@@ -77,3 +86,21 @@ class menu_for_a_new_budget(MDNavigationDrawer):
 
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency} {calculate(self.ids.sum_label.text)}'
+
+    def set_progressbar_value(self, *args):
+
+        sum, budgeted = self.item['SUM'], self.item['Budgeted']
+
+        if budgeted != 0:
+            value_ = (sum / budgeted) * 100
+
+        else:
+            value_ = 0
+
+        self.ids.progress_bar.value = value_
+
+    def set_button_color(self, *args):
+
+        color = self.item['Color'][:-1] + [1]
+
+        self.ids.budget_item_icon_button.md_bg_color = color
