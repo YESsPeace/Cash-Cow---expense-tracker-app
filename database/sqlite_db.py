@@ -179,7 +179,7 @@ def budget_data_read for incomes:
 """
 
 
-def budget_data_read(id='Categories_', db_name='budget_data_categories') -> dict:
+def budget_data_read(id='categories_', db_name='budget_data_categories') -> dict:
     budget_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM {db_name}').fetchall():
@@ -195,3 +195,14 @@ def budget_data_read(id='Categories_', db_name='budget_data_categories') -> dict
         budget_data_dict[year_month][categories_id]['Currency'] = row[4]
 
     return budget_data_dict
+
+def budget_data_write(db_name, data_dict) -> None:
+    cur.execute(f"PRAGMA table_info({db_name})")
+    columns = [row[1] for row in cur.fetchall()]
+
+    cur.execute(f'INSERT INTO {db_name} '
+                f"({', '.join(columns)}) "
+                f'VALUES (NULL, ?, ?, ?, ?)',
+                (data_dict['id'], data_dict['date'], data_dict['Budgeted'], data_dict['currency'])
+                )
+    base.commit()

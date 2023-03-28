@@ -2,9 +2,9 @@ from kivy.properties import BooleanProperty, OptionProperty
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.clock import Clock
 
-
 import config
 from AppMenus.other_func import calculate
+from database import budget_data_write
 
 
 class menu_for_a_new_budget(MDNavigationDrawer):
@@ -39,7 +39,6 @@ class menu_for_a_new_budget(MDNavigationDrawer):
     def set_widgets_prop(self, *args):
         self.set_progressbar_value(self, *args)
         self.set_button_color(self, *args)
-
 
     def update_status(self, *_) -> None:
         status = self.status
@@ -86,6 +85,39 @@ class menu_for_a_new_budget(MDNavigationDrawer):
 
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency} {calculate(self.ids.sum_label.text)}'
+
+    def write_budget_into_db(self, budgeted_sum, *args):
+        # menu
+        self.status = 'closed'
+
+        # getting sum for budget
+        budgeted_sum = budgeted_sum[2:]  # del currency
+
+        if budgeted_sum[-1] == '.':
+            budgeted_sum = budgeted_sum[:-1]
+
+        try:
+            budgeted_sum = int(budgeted_sum)
+
+        except ValueError:
+            budgeted_sum = float(budgeted_sum)
+
+        # the values were got in the __init__
+        budget_data_to_write = {
+            'id': int(str(self.item['id']).split('_')[-1]),
+            'date': str(self.current_menu_date).replace('-', '')[:-2],
+            'Budgeted': budgeted_sum,
+            'currency': 'RUB',
+        }
+
+        # writing into the database
+        item_type = str(self.item['id']).split('_')[0].lower()
+
+        budget_data_write(
+            db_name=f'budget_data_{item_type}',
+            data_dict=budget_data_to_write
+        )
+
 
     def set_progressbar_value(self, *args):
 
