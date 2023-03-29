@@ -43,6 +43,7 @@
 
                         MDLabel:
                             id: budgeted_label
+                            halign: 'right'
                             text: f'₽ {root.item["Budgeted"]}'
 
                     MDBoxLayout:
@@ -62,6 +63,7 @@
                             text: f'₽ {root.item["SUM"]}'
 
                         MDLabel:
+                            halign: 'right'
                             text: budgeted_label.text
 
         MDBoxLayout:
@@ -72,7 +74,7 @@
 
             MDLabel:
                 id: sum_label
-                text: root.default_sum_label_text
+                text: '0'
                 text_color: 1, 1, 1, 1
                 halign: 'center'
                 size_hint_y: .65

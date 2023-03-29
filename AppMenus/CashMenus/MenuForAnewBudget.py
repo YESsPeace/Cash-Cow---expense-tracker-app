@@ -4,7 +4,7 @@ from kivy.clock import Clock
 
 import config
 from AppMenus.other_func import calculate
-from database import budget_data_write
+from database import budget_data_write, budget_data_cut, budget_data_edit
 
 
 class menu_for_a_new_budget(MDNavigationDrawer):
@@ -26,6 +26,7 @@ class menu_for_a_new_budget(MDNavigationDrawer):
         self.currency = '₽'
 
         self.default_sum_label_text = f'{self.currency} 0'
+
         self.current_menu_date = config.current_menu_date
 
         self.item = config.item
@@ -39,6 +40,7 @@ class menu_for_a_new_budget(MDNavigationDrawer):
     def set_widgets_prop(self, *args):
         self.set_progressbar_value(self, *args)
         self.set_button_color(self, *args)
+        self.set_current_budgeted(self, *args)
 
     def update_status(self, *_) -> None:
         status = self.status
@@ -93,6 +95,8 @@ class menu_for_a_new_budget(MDNavigationDrawer):
         # getting sum for budget
         budgeted_sum = budgeted_sum[2:]  # del currency
 
+        item_type = str(self.item['id']).split('_')[0].lower()
+
         if budgeted_sum[-1] == '.':
             budgeted_sum = budgeted_sum[:-1]
 
@@ -103,20 +107,31 @@ class menu_for_a_new_budget(MDNavigationDrawer):
             budgeted_sum = float(budgeted_sum)
 
         # the values were got in the __init__
-        budget_data_to_write = {
+        budget_data = {
             'id': int(str(self.item['id']).split('_')[-1]),
             'date': str(self.current_menu_date).replace('-', '')[:-2],
             'Budgeted': budgeted_sum,
             'currency': 'RUB',
         }
+        if budgeted_sum > 0:
+            if self.item['Budgeted'] == 0:
+                # writing into the database
+                budget_data_write(
+                    db_name=f'budget_data_{item_type}',
+                    data_dict=budget_data
+                )
 
-        # writing into the database
-        item_type = str(self.item['id']).split('_')[0].lower()
+            else:
+                budget_data_edit(
+                    db_name=f'budget_data_{item_type}',
+                    data_dict=budget_data
+                )
 
-        budget_data_write(
-            db_name=f'budget_data_{item_type}',
-            data_dict=budget_data_to_write
-        )
+        else:
+            budget_data_cut(
+                db_name=f'budget_data_{item_type}',
+                data_dict=budget_data
+            )
 
 
     def set_progressbar_value(self, *args):
@@ -136,3 +151,7 @@ class menu_for_a_new_budget(MDNavigationDrawer):
         color = self.item['Color'][:-1] + [1]
 
         self.ids.budget_item_icon_button.md_bg_color = color
+
+    def set_current_budgeted(self, *args):
+        current_budgeted = self.item['Budgeted']
+        self.ids.sum_label.text = f'{self.currency} {current_budgeted}'

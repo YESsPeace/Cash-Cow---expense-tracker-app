@@ -196,6 +196,7 @@ def budget_data_read(id='categories_', db_name='budget_data_categories') -> dict
 
     return budget_data_dict
 
+
 def budget_data_write(db_name, data_dict) -> None:
     cur.execute(f"PRAGMA table_info({db_name})")
     columns = [row[1] for row in cur.fetchall()]
@@ -206,3 +207,28 @@ def budget_data_write(db_name, data_dict) -> None:
                 (data_dict['id'], data_dict['date'], data_dict['Budgeted'], data_dict['currency'])
                 )
     base.commit()
+
+
+def budget_data_cut(db_name, data_dict) -> None:
+    cur.execute(f"PRAGMA table_info({db_name})")
+    columns = [row[1] for row in cur.fetchall()]
+
+    cur.execute(f"DELETE FROM {db_name} WHERE  {columns[1]} = ? AND  {columns[2]} = ? AND {columns[4]} = ? ",
+                (data_dict['id'], data_dict['date'], data_dict['currency']))
+    base.commit()
+
+
+def budget_data_edit(db_name, data_dict) -> None:
+    cur.execute(f"PRAGMA table_info({db_name})")
+    columns = [row[1] for row in cur.fetchall()]
+
+    cur.execute(f"SELECT * FROM {db_name} WHERE  {columns[1]} = ? AND  {columns[2]} = ? AND {columns[4]} = ?",
+                (data_dict['id'], data_dict['date'], data_dict['currency']))
+    row = cur.fetchone()
+    if row:
+        row_id = row[0]
+        cur.execute(f"UPDATE {db_name} SET {columns[3]} = ? WHERE id = ?",
+                    (data_dict['Budgeted'], row_id))
+        base.commit()
+    else:
+        print("No matching row found")
