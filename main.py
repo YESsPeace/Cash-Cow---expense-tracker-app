@@ -18,6 +18,7 @@ from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
 
 # configuration file
 import config
+from AppMenus.CashMenus.MenuForAnewBudget import menu_for_a_new_budget
 
 # for reading and writing data
 from database import accounts_db_read, categories_db_read
@@ -40,6 +41,9 @@ class MainSrceen(MDScreen):
 
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())
+
+    def add_menu_for_a_new_budget(self):
+        self.add_widget(menu_for_a_new_budget())
 
     def update_month_menu_group(self):
         month_screen_name = str(config.current_menu_date)[:-3]

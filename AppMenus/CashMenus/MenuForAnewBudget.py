@@ -3,7 +3,8 @@ from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.clock import Clock
 
 import config
-from AppMenus.other_func import calculate
+from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
+from AppMenus.other_func import calculate, update_month_menu_by_date
 from database import budget_data_write, budget_data_cut, budget_data_edit
 
 
@@ -133,6 +134,14 @@ class menu_for_a_new_budget(MDNavigationDrawer):
                 data_dict=budget_data
             )
 
+        print(self.parent)
+
+        update_month_menu_by_date(
+            self,
+            date_of_changes=str(self.current_menu_date),
+            main_menu_id='BudgetMenu',
+            month_menu_name=BudgetMenu_in
+        )
 
     def set_progressbar_value(self, *args):
 

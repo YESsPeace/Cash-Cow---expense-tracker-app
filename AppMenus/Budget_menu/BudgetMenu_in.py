@@ -11,9 +11,9 @@ from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
+from kivy.app import App
 
 import config
-from AppMenus.CashMenus.MenuForAnewBudget import menu_for_a_new_budget
 from database import get_categories_month_data, budget_data_read, \
     transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
     incomes_db_read, categories_db_read, savings_db_read, get_savings_month_data
@@ -330,7 +330,9 @@ class BudgetMenu_in(MDScreen):
             'Budgeted': budgeted if not budgeted is None else 0,
         }
 
-        self.parent.parent.parent.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_budget())
+        app = App.get_running_app()
+
+        app.root.ids.main.add_menu_for_a_new_budget()
 
     def open_grid(self, widget) -> None:
         print('Open pressed')

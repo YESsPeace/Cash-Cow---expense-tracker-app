@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.anchorlayout import AnchorLayout
@@ -162,4 +163,6 @@ class Categories_buttons_menu(MDScreen):
                 config.second_transaction_item['Currency'] = 'RUB'
 
         # adding a new menu to the app
-        self.parent.parent.parent.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())
+        app = App.get_running_app()
+
+        app.root.ids.main.add_widget(menu_for_a_new_transaction())

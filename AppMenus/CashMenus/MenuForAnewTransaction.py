@@ -11,7 +11,8 @@ import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from database import transaction_db_write, transaction_db_read
 
-from AppMenus.other_func import calculate
+from AppMenus.other_func import calculate, update_month_menu_by_date
+
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
     # the menu opening, when we know what exactly will be in transaction
@@ -161,46 +162,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency_first} {calculate(self.ids.sum_label.text)}'
-    def update_Transaction_menu(self) -> None:
-        name_ = self.date_.split('.')
-        name_ = str(name_[-1]) + '-' + str(name_[-2])
-
-        if self.parent.ids.Transaction_menu.ids.my_swiper.has_screen(name_):
-            self.parent.ids.Transaction_menu.ids.my_swiper.remove_widget(
-                self.parent.ids.Transaction_menu.ids.my_swiper.get_screen(name_)
-            )
-
-            # new temp_date values
-            temp_date = config.current_menu_date
-            temp_menu_month_name = config.current_menu_month_name
-            temp_days_in_current_menu_month = config.days_in_current_menu_month
-
-            print('Вот как было:', temp_date)
-
-            # replace date_value for create a new screen of Transaction_menu
-            config.current_menu_date = config.current_menu_date.replace(
-                day=int(self.date_.split('.')[0]),
-                month=int(self.date_.split('.')[1]),
-                year=int(self.date_.split('.')[2])
-            )
-
-            print('HERHE', config.current_menu_date)
-
-            config.current_menu_month_name = month_name[config.current_menu_date.month]
-            config.days_in_current_menu_month = monthrange(config.current_menu_date.year,
-                                                           config.current_menu_date.month)[1]
-
-            # add a new screen of Transaction_menu
-            self.parent.ids.Transaction_menu.ids.my_swiper.add_widget(
-                Transaction_menu_in(name=name_)
-            )
-
-            # restore old date values
-            config.current_menu_date = temp_date
-            config.current_menu_month_name = temp_menu_month_name
-            config.days_in_current_menu_month = temp_days_in_current_menu_month
-
-            print('Вот как стало:', config.current_menu_date)
 
     def write_transaction(self, sum):
         # menu
@@ -242,4 +203,9 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         # updating history_dict
         config.history_dict = transaction_db_read()
 
-        self.update_Transaction_menu()
+        update_month_menu_by_date(
+            self,
+            date_of_changes=str(self.date_),
+            main_menu_id='Transaction_menu',
+            month_menu=Transaction_menu_in
+        )
