@@ -115,10 +115,27 @@ class Categories_buttons_menu(MDScreen):
                     text=button['Name'],
                     size_hint=(1, .25),
                     halign='center',
+                    id=f'box_{button_id}'
                 )
             )
 
             self.ids.GridCategoriesMenu.add_widget(box)
+
+        self.add_plus_button()
+
+    def add_plus_button(self, *args):
+
+        # add plus button, which opening menu for adding a new categories
+        app = App.get_running_app()
+
+        self.ids.GridCategoriesMenu.add_widget(
+            MDIconButton(
+                pos_hint={'center_x': 0.5, 'top': 0.5},
+                id='plus_button',
+                icon="plus",
+                on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
+            )
+        )
 
     def open_menu_for_a_new_transaction(self, widget, *args) -> None:
         # getting info for a new menu

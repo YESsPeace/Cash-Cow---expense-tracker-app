@@ -1,5 +1,13 @@
+from copy import copy
+
 from kivy.clock import Clock
+from kivy.lang import Builder
+from kivy.metrics import dp
 from kivy.uix.screenmanager import NoTransition
+from kivy.uix.widget import Widget
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDIconButton
+from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
@@ -8,6 +16,7 @@ from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
 from AppMenus.other_func import load_next_month, load_previous_month
 
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
+from database import categories_db_read
 
 
 class CategoriesMenu(MDScreen):
@@ -38,7 +47,6 @@ class CategoriesMenu(MDScreen):
         for _ in range(self.months_loaded_at_startup):
             self.load_next_month()
 
-
         print("CategoriesMenu's Screens", self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
@@ -60,3 +68,84 @@ class CategoriesMenu(MDScreen):
             self.ids.incomes_swiper.add_widget(Incomes_buttons_menu(name=name_))
 
         self.ids.incomes_swiper.current = name_
+
+    def start_edit_mode(self, *args):
+        print('# start edit mode')
+
+        # switch top_bar to edit mode
+        self.top_btn_bar = self.ids.top_btn_bar
+        self.month_menu = self.ids.month_menu
+
+        self.ids.top_bar.clear_widgets()
+        self.ids.top_bar.height = dp(48)
+
+        edit_mode_top_bar = \
+            MDBoxLayout(
+                MDBoxLayout(
+                    MDIconButton(
+                        icon='arrow-left',
+                        on_release=self.quit_from_edit_mode
+                    ),
+                    MDLabel(
+                        text='Редактирование',
+                        halign='left',
+                    ),
+                    orientation='horizontal',
+                    md_bg_color=(.2, .4, .85, 1),
+                ),
+                orientation='vertical',
+            )
+
+        self.ids.top_bar.add_widget(
+            edit_mode_top_bar
+        )
+
+        # rebind buttons functions
+        for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
+            for container in box.children:
+                for button in container.children:
+                    try:
+                        print(button.id)
+
+                        button.unbind(on_release=self.ids.my_swiper.get_screen(
+                            self.current_menu_date).open_menu_for_a_new_transaction)
+
+                        button.bind(on_release=self.open_menu_for_edit_categories)
+
+                    except AttributeError:
+                        continue
+
+    def quit_from_edit_mode(self, *args):
+        print('# quit from edit mode')
+        self.ids.top_bar.height = dp(100)
+        self.ids.top_bar.add_widget(self.top_btn_bar)
+        self.ids.top_bar.add_widget(self.month_menu)
+
+        # rebind buttons functions
+        for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
+            for container in box.children:
+                for button in container.children:
+                    try:
+                        print(button.id)
+
+                        if button.id == 'plus_button':
+                            continue
+
+                        button.bind(on_release=self.ids.my_swiper.get_screen(
+                            self.current_menu_date).open_menu_for_a_new_transaction)
+
+                        button.unbind(on_release=self.open_menu_for_edit_categories)
+
+                    except AttributeError:
+                        continue
+
+    def open_menu_for_edit_categories(self, button, *args):
+        print(f'# Clicked - {button.id}')
+
+        if button.id == 'plus_button':
+            return
+
+        item = categories_db_read()[button.id]
+
+        print(*item.items(), sep='\n')
+

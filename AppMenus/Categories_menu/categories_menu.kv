@@ -45,6 +45,8 @@
                     size_hint_y: 1
                     width: self.height
 
+                    on_release: root.start_edit_mode()
+
                     canvas.before:
                         Color:
                             rgba: .6, .1, .2, 1
