@@ -1,0 +1,44 @@
+<menu_for_new_or_edit_category>:
+    MDBoxLayout:
+        id: top_bar
+        orientation: 'horizontal'
+        pos_hint: {'top': 1}
+        size_hint_y: None
+        height: dp(60)
+        md_bg_color: .6, .1, .2, 1
+
+        MDIconButton:
+            icon: 'arrow-left'
+            size_hint_y: 1
+            width: self.height
+
+            on_release:
+                root.quit_from_menu()
+
+            canvas.before:
+                Color:
+                    rgba: .6, .1, .2, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        MDLabel:
+            text: 'category Name'
+            font_size: 18
+            halign: "left"
+            valign: "middle"
+
+
+        MDIconButton:
+            icon: 'dots-vertical'
+            size_hint_y: 1
+            width: self.height
+
+            on_release:
+
+            canvas.before:
+                Color:
+                    rgba: .6, .1, .2, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size

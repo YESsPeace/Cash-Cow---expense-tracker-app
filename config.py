@@ -68,6 +68,8 @@ first_transaction_item = None
 second_transaction_item = None
 choosing_first_transaction = False
 
-# menu for a new budget
-item = ''
+# menu for adding or edition a budget
+item = dict()
 
+# menu for adding or edition a category
+category_item = dict()

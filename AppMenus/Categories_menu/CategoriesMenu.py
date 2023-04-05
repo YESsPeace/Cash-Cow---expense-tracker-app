@@ -1,5 +1,6 @@
 from copy import copy
 
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.metrics import dp
@@ -145,7 +146,9 @@ class CategoriesMenu(MDScreen):
         if button.id == 'plus_button':
             return
 
-        item = categories_db_read()[button.id]
+        config.category_item = categories_db_read()[button.id]
 
-        print(*item.items(), sep='\n')
+        app = App.get_running_app()
+
+        app.root.ids.main.add_menu_for_new_or_edit_category()
 
