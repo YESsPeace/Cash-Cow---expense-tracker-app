@@ -1,11 +1,12 @@
 from kivy.clock import Clock
+from kivy.lang import Builder
 from kivymd.uix.screen import MDScreen
 
 import config
+from database import db_data_delete, db_data_edit
 
 
 class menu_for_new_or_edit_category(MDScreen):
-
     def __init__(self, *args, **kwargs):
         self.currency = '₽'
 
@@ -21,7 +22,19 @@ class menu_for_new_or_edit_category(MDScreen):
 
         Clock.schedule_once(self.set_widgets_prop)
 
-    def quit_from_menu(self):
+    def delete_category(self, *args):
+        print('# deleting category started')
+        db_data_delete(db_name='categories_db', item_id=self.category_item['ID'])
+
+    def edit_category_name(self, *args):
+        print('# editing category started')
+        db_data_edit(
+            db_name='categories_db',
+            item_id=self.category_item['ID'],
+            name=self.ids.category_name_text_field.text,
+        )
+
+    def quit_from_menu(self, *args):
         self.parent.current = 'main'
         self.del_myself()
 

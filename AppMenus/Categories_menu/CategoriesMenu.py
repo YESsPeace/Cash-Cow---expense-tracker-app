@@ -106,8 +106,6 @@ class CategoriesMenu(MDScreen):
             for container in box.children:
                 for button in container.children:
                     try:
-                        print(button.id)
-
                         button.unbind(on_release=self.ids.my_swiper.get_screen(
                             self.current_menu_date).open_menu_for_a_new_transaction)
 
@@ -147,6 +145,7 @@ class CategoriesMenu(MDScreen):
             return
 
         config.category_item = categories_db_read()[button.id]
+        config.category_item['ID'] = button.id
 
         app = App.get_running_app()
 

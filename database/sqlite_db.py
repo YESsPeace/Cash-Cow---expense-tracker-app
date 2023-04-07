@@ -118,10 +118,11 @@ def categories_db_read() -> dict:
 
     for row in cur.execute(f'SELECT * FROM categories_db').fetchall():
         category_id = 'categories_' + str(row[0])
+
         categories_data_dict[category_id] = {
-            'Name': row[1],
-            'Color': json.loads(row[2]),
-            'Icon': row[3]
+            'Name': str(row[1]),
+            'Color': json.loads(row[2]) if not row[2] is None else [0, 0, 0, 1],
+            'Icon': str(row[3])
         }
 
     return categories_data_dict
@@ -232,3 +233,46 @@ def budget_data_edit(db_name, data_dict) -> None:
         base.commit()
     else:
         print("No matching row found")
+
+
+def db_data_delete(db_name, item_id):
+    type, id = item_id.split('_')
+
+    cur.execute(f"DELETE FROM {db_name} WHERE id = ?", (id,))
+
+    base.commit()
+
+    print(f'# delete complete: db_name - {db_name}, id - {item_id}')
+
+def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None, color: list = None):
+    query = f"UPDATE {db_name} SET "
+    params = []
+
+    if name is not None:
+        query += "name = ?, "
+        params.append(name)
+
+    if icon is not None:
+        query += "icon = ?, "
+        params.append(icon)
+
+    if color is not None:
+        query += "color = ?, "
+        params.append(json.dumps(color))
+
+    if not params:
+        print("# there is nothing to edit")
+        return
+
+    type, id = item_id.split('_')
+
+    query = query[:-2]  # remove last ", "
+    query += f" WHERE id = ?"
+    params.append(id)
+
+    cur.execute(query, params)
+
+    print(f'# data updated: id={item_id}, params={params}')
+
+    base.commit()
+
