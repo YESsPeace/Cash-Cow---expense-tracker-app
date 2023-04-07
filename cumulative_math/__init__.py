@@ -1,0 +1,1 @@
+from cumulative_math.cum_average import CumulativeMovingStandardDeviation
