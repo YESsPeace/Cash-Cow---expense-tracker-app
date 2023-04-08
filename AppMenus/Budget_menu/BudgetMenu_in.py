@@ -142,6 +142,9 @@ class BudgetMenu_in(MDScreen):
             else:
                 spent = 0
 
+            if item_id not in global_type_data_dict:
+                continue
+
             progress = MDAnchorLayout(
                 MDBoxLayout(
                     MDBoxLayout(

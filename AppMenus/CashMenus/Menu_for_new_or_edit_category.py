@@ -1,10 +1,17 @@
 from kivy.clock import Clock
-from kivy.lang import Builder
+from kivy.metrics import dp
+from kivy.uix.boxlayout import BoxLayout
+from kivymd.uix.button import  MDRectangleFlatButton
+from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.snackbar import Snackbar
 
 import config
 from database import db_data_delete, db_data_edit
 
+
+class BoxLayoutButton(MDCard, BoxLayout):
+    pass
 
 class menu_for_new_or_edit_category(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -33,6 +40,10 @@ class menu_for_new_or_edit_category(MDScreen):
             item_id=self.category_item['ID'],
             name=self.ids.category_name_text_field.text,
         )
+
+    def currency_pressed(self, *args):
+        print('# currency button pressed')
+        Snackbar(text="only in future.").open()
 
     def quit_from_menu(self, *args):
         self.parent.current = 'main'
