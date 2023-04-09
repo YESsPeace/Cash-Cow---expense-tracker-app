@@ -231,11 +231,16 @@ def budget_data_edit(db_name, data_dict) -> None:
         cur.execute(f"UPDATE {db_name} SET {columns[3]} = ? WHERE id = ?",
                     (data_dict['Budgeted'], row_id))
         base.commit()
+
     else:
         print("No matching row found")
 
 
 def db_data_delete(db_name, item_id):
+    if item_id is None:
+        print(f"# There's nothing to delete: db_name={db_name}, item_id={item_id}")
+        return
+
     type, id = item_id.split('_')
 
     cur.execute(f"DELETE FROM {db_name} WHERE id = ?", (id,))
@@ -264,6 +269,10 @@ def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None,
         print("# there is nothing to edit")
         return
 
+    if item_id is None:
+        print("# Edit doesn't complete: there's no item_id")
+        return
+
     type, id = item_id.split('_')
 
     query = query[:-2]  # remove last ", "
@@ -276,3 +285,17 @@ def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None,
 
     base.commit()
 
+def db_data_add(db_name: str, params: dict):
+    if not params['Color'] is list:
+        params['Color'] = [0, 0, 0, 1]
+        print('# Color is not a list, so now color=[0, 0, 0, 1]')
+
+    params['Color'] = json.dumps(params['Color'])
+
+    cur.execute(
+        f'INSERT INTO {db_name} (name, color, icon) VALUES (?, ?, ?)',
+        (params.get('Name'), params.get('Color'), params.get('Icon'))
+    )
+    base.commit()
+
+    print(f"# Category created: Name={params.get('Name')}, Color={params.get('Color')}, Icon={params.get('Icon')}")

@@ -142,12 +142,18 @@ class CategoriesMenu(MDScreen):
         print(f'# Clicked - {button.id}')
 
         if button.id == 'plus_button':
-            return
+            config.category_item = {
+                'ID': None,
+                'Name': '',
+                'Color': [0.71, 0.72, 0.69, 0.5],
+                'Icon': 'basket-outline',
+                'new': True,
+            }
 
-        config.category_item = categories_db_read()[button.id]
-        config.category_item['ID'] = button.id
+        else:
+            config.category_item = categories_db_read()[button.id]
+            config.category_item['ID'] = button.id
 
         app = App.get_running_app()
 
         app.root.ids.main.add_menu_for_new_or_edit_category()
-
