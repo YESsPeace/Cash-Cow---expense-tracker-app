@@ -296,6 +296,11 @@ class MoneyStatApp(MDApp):
 
         Builder.load_file('AppMenus/Categories_menu/WaterFill.kv')
 
+        # Menu_For_new_category
+        Builder.load_file('AppMenus/CashMenus/MenuForAnewBudget.kv')
+        Builder.load_file('AppMenus/Categories_menu/Menu_For_new_category/Menu_for_new_or_edit_category.kv')
+        Builder.load_file('AppMenus/Categories_menu/Menu_For_new_category/icon_choice_menu.kv')
+
         # Transaction menu
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
@@ -308,8 +313,6 @@ class MoneyStatApp(MDApp):
 
         # CashMenus
         Builder.load_file('AppMenus/CashMenus/menu_for_a_new_transaction.kv')
-        Builder.load_file('AppMenus/CashMenus/MenuForAnewBudget.kv')
-        Builder.load_file('AppMenus/CashMenus/Menu_for_new_or_edit_category.kv')
 
         # main
         Builder.load_file('main_screen.kv')

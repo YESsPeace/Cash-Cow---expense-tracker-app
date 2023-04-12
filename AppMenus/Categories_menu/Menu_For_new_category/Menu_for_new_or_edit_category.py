@@ -1,4 +1,3 @@
-from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDRectangleFlatButton
@@ -7,6 +6,7 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
 import config
+from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
 from database import db_data_delete, db_data_edit, db_data_add
 
 
@@ -54,11 +54,15 @@ class menu_for_new_or_edit_category(MDScreen):
             db_name='categories_db',
             item_id=self.category_item['ID'],
             name=self.ids.category_name_text_field.text,
+            icon=self.ids.category_button.icon
         )
 
-    def currency_pressed(self, *args):
+    def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
         Snackbar(text="only in future.").open()
+
+    def open_icon_choice_menu(self, *args):
+        self.add_widget(icon_choice_menu())
 
     def quit_from_menu(self, *args):
         self.parent.current = 'main'

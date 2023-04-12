@@ -1,0 +1,54 @@
+<icon_choice_menu>:
+    size_hint: None, None
+    size: dp(310), dp(630)
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+    MDScreen:
+        MDBoxLayout:
+            orientation: 'vertical'
+            md_bg_color: (0.7, 0.5, 0.2, 1)
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(70)
+
+                MDIconButton:
+                    id: icon_preview
+                    icon: 'android'
+                    pos_hint: {'center_y': 0.5}
+
+                MDLabel:
+                    text: 'Category item'
+
+                MDIconButton:
+                    icon: 'check'
+                    size_hint_y: 1
+                    width: self.height
+
+                    on_release:
+                        root.complete_pressed()
+
+            TabbedPanel:
+                do_default_tab: False
+                tab_pos: 'top_mid'
+                tab_width: self.width/2 - 7
+
+                TabbedPanelItem:
+                    text: 'ICON'
+
+                    MDScreen:
+                        RecycleView:
+                            id: rv
+                            key_viewclass: 'viewclass'
+                            key_size: 'height'
+
+                            RecycleGridLayout:
+                                default_size: None, dp(56)
+                                default_size_hint: 1, None
+                                size_hint_y: None
+                                height: self.minimum_height
+                                cols: 4
+
+                TabbedPanelItem:
+                    text: 'COLOR'

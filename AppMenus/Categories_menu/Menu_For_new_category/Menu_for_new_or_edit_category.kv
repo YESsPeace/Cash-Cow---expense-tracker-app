@@ -143,3 +143,6 @@
 
         icon: root.category_item.get('Icon', 'android')
         md_bg_color: root.category_item.get('Color', [0, 0, 0, 1])[:-1] + [1]
+
+        on_release:
+            root.open_icon_choice_menu()
