@@ -1,7 +1,10 @@
+from typing import Union
+
 from kivy.metrics import dp
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.button import MDRectangleFlatButton
 from kivymd.uix.card import MDCard
+from kivymd.uix.pickers import MDColorPicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
@@ -31,13 +34,20 @@ class menu_for_new_or_edit_category(MDScreen):
     def delete_category(self, *args):
         print('# deleting category started')
         db_data_delete(db_name='categories_db', item_id=self.category_item['ID'])
+        self.del_myself()
+        Snackbar(text="Category deleted").open()
+
 
     def complete_pressed(self, *args):
         if self.category_item.get('new') is True:
             self.create_category()
 
+        elif (self.category_item != config.category_item) or \
+                (self.ids.category_name_text_field.text != self.category_item['Name']):
+            self.edit_category()
+
         else:
-            self.edit_category_name()
+            self.del_myself()
 
     def create_category(self, *args):
         print('# creating category started')
@@ -48,18 +58,45 @@ class menu_for_new_or_edit_category(MDScreen):
             params=self.category_item
         )
 
-    def edit_category_name(self, *args):
+        self.del_myself()
+        Snackbar(text="Category created").open()
+
+    def edit_category(self, *args):
         print('# editing category started')
         db_data_edit(
             db_name='categories_db',
             item_id=self.category_item['ID'],
             name=self.ids.category_name_text_field.text,
-            icon=self.ids.category_button.icon
+            icon=self.category_item['Icon'],
+            color=self.category_item['Color']
         )
+
+        self.del_myself()
+        Snackbar(text="Category edited").open()
 
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
         Snackbar(text="only in future.").open()
+
+    def open_color_picker(self):
+        self.color_picker = MDColorPicker(size_hint=(0.5, 0.85))
+        self.color_picker.open()
+        self.color_picker.bind(
+            on_release=self.set_selected_color,
+        )
+
+    def set_selected_color(
+            self,
+            instance_color_picker: MDColorPicker,
+            type_color: str,
+            selected_color: Union[list, str],
+    ):
+        self.color_picker._real_remove_widget()
+        print(f"Selected color is {selected_color}")
+        print(type(selected_color))
+
+        self.ids.category_button.md_bg_color = selected_color[:-1] + [1]
+        self.category_item['Color'] = selected_color[:-1] + [0.5]
 
     def open_icon_choice_menu(self, *args):
         self.add_widget(icon_choice_menu())

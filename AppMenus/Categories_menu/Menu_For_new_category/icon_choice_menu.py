@@ -61,7 +61,9 @@ class icon_choice_menu(MDNavigationDrawer):
     def complete_pressed(self, *args):
         self.parent.ids.category_button.icon = self.ids.icon_preview.icon
         print('# icon selected:', self.ids.icon_preview.icon)
+        self.parent.category_item['Icon'] = self.ids.icon_preview.icon
         self.del_myself()
+
 
     def update_status(self, *_) -> None:
         status = self.status

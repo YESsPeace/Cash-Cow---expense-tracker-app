@@ -29,26 +29,16 @@
                     on_release:
                         root.complete_pressed()
 
-            TabbedPanel:
-                do_default_tab: False
-                tab_pos: 'top_mid'
-                tab_width: self.width/2 - 7
+            MDScreen:
+                md_bg_color: 0, 0, 0, 1
+                RecycleView:
+                    id: rv
+                    key_viewclass: 'viewclass'
+                    key_size: 'height'
 
-                TabbedPanelItem:
-                    text: 'ICON'
-
-                    MDScreen:
-                        RecycleView:
-                            id: rv
-                            key_viewclass: 'viewclass'
-                            key_size: 'height'
-
-                            RecycleGridLayout:
-                                default_size: None, dp(56)
-                                default_size_hint: 1, None
-                                size_hint_y: None
-                                height: self.minimum_height
-                                cols: 4
-
-                TabbedPanelItem:
-                    text: 'COLOR'
+                    RecycleGridLayout:
+                        default_size: None, dp(56)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        cols: 4

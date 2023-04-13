@@ -286,7 +286,7 @@ def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None,
     base.commit()
 
 def db_data_add(db_name: str, params: dict):
-    if not params['Color'] is list:
+    if params.get('Color') is None:
         params['Color'] = [0, 0, 0, 1]
         print('# Color is not a list, so now color=[0, 0, 0, 1]')
 

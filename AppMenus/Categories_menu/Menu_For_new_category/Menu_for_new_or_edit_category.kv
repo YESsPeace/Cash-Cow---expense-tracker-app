@@ -91,19 +91,17 @@
                 padding: dp(10)
                 spacing: dp(5)
 
-                md_bg_color: (.45, .32, .87, 1)
-
                 on_release:
                     root.currency_pressed()
 
                 MDScreen:
-                    md_bg_color: (.89, .89, .89, 1)
+                    md_bg_color: (.33, .33, .33, 1)
                     MDLabel:
                         text: 'Settings'
 
 
                 MDScreen:
-                    md_bg_color: (.69, .69, .69, 1)
+                    md_bg_color: (.33, .33, .33, 1)
                     MDBoxLayout:
                         orientation: 'vertical'
                         MDLabel:
@@ -111,6 +109,31 @@
 
                         MDLabel:
                             text: 'Russian ruble ₽'
+
+            BoxLayoutButton:
+                id: change_color
+
+                ripple_behavior: True
+                size_hint_y: None
+                height: dp(75)
+
+                on_release:
+                    root.open_color_picker()
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+
+                    MDIconButton:
+                        icon: 'format-color-fill'
+                        pos_hint: {'center_y': 0.5}
+
+                    MDLabel:
+                        size_hint: 1, 1
+
+                        text: 'Change category color'
+
+                        theme_text_color: "Custom"
+                        text_color: .6, .4, .4, 1
 
             BoxLayoutButton:
                 id: remove_btn
@@ -136,6 +159,7 @@
 
                         theme_text_color: "Custom"
                         text_color: .89, .11, .11, 1
+
 
     MDIconButton:
         id: category_button
