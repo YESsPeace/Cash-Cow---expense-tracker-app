@@ -130,10 +130,10 @@ class CategoriesMenu(MDScreen):
                         if button.id == 'plus_button':
                             continue
 
+                        button.unbind(on_release=self.open_menu_for_edit_categories)
+
                         button.bind(on_release=self.ids.my_swiper.get_screen(
                             self.current_menu_date).open_menu_for_a_new_transaction)
-
-                        button.unbind(on_release=self.open_menu_for_edit_categories)
 
                     except AttributeError:
                         continue
