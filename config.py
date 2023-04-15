@@ -73,3 +73,6 @@ item = dict()
 
 # menu for adding or edition a category
 category_item = dict()
+
+# menu for new account
+account_info = dict()

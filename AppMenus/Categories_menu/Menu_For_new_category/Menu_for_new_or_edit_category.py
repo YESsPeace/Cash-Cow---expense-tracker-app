@@ -19,12 +19,6 @@ class BoxLayoutButton(MDCard, BoxLayout):
 
 class menu_for_new_or_edit_category(MDScreen):
     def __init__(self, *args, **kwargs):
-        self.currency = '₽'
-
-        self.default_sum_label_text = f'{self.currency} 0'
-
-        self.current_menu_date = config.current_menu_date
-
         self.category_item = config.category_item
 
         print(*self.category_item.items(), sep='\n')

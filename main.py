@@ -1,9 +1,12 @@
 # Kivy and kivymd
+import os
+import sys
+
 from kivy.app import App
-from kivy.core.window import Window
+from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
-from kivy.clock import Clock
+from kivy.resources import resource_add_path
 from kivy.uix.screenmanager import ScreenManager, NoTransition
 from kivymd.app import MDApp
 from kivymd.uix.anchorlayout import MDAnchorLayout
@@ -13,12 +16,14 @@ from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
-import AppMenus
-from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
-    Transaction_menu_in, BudgetMenu_in, menu_for_a_new_budget, menu_for_new_or_edit_category
-
 # configuration file
 import config
+
+# AppMenus
+import AppMenus
+from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
+    Transaction_menu_in, BudgetMenu_in, menu_for_a_new_budget, menu_for_new_or_edit_category, \
+    menu_for_choice_new_account_type, menu_for_new_account
 
 # for reading and writing data
 from database import accounts_db_read, categories_db_read
@@ -56,6 +61,19 @@ class MainSrceen(MDScreen):
 
         app.root.current = 'menu_for_new_or_edit_category'
 
+    def add_menu_for_choice_account_type(self):
+        self.add_widget(menu_for_choice_new_account_type())
+
+    def add_menu_for_new_account(self):
+        app = App.get_running_app()
+
+        app.root.add_widget(
+            menu_for_new_account(
+                name='menu_for_new_account'
+            ),
+        )
+
+        app.root.current = 'menu_for_new_account'
 
     def update_month_menu_group(self):
         month_screen_name = str(config.current_menu_date)[:-3]
@@ -260,7 +278,6 @@ class Manager(ScreenManager):
         self.transition = NoTransition()
 
 
-
 class MyNavigationDrawer(MDNavigationDrawer):
 
     def open_main(self):
@@ -288,6 +305,10 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
+
+        # MenuForNewAccount
+        Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/menu_for_choice_new_account_type.kv')
+        Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/menu_for_new_account.kv')
 
         # Categories menu
         Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
@@ -323,8 +344,11 @@ class MoneyStatApp(MDApp):
 
 
 if __name__ == '__main__':
+    if hasattr(sys, '_MEIPASS'):
+        resource_add_path(os.path.join(sys._MEIPASS))
+
     # smartphone screen
-    Window.size = (0.6 * 640, 0.6 * 1136)
+    # Window.size = (0.6 * 640, 0.6 * 1136)
 
     # start the app
     MoneyStatApp().run()

@@ -1,0 +1,63 @@
+<menu_for_choice_new_account_type>:
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    size_hint: .75, .5
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+
+        MDScreen:
+            padding: dp(5)
+            MDLabel:
+                text: 'New account'
+                theme_text_color: 'Primary'
+                font_style: 'H5'
+
+        BoxLayoutButton:
+            orientation: 'horizontal'
+            ripple_behavior: True
+            size_hint: 1, 1
+            radius: [dp(0), dp(0), dp(0), dp(0)]
+            md_bg_color: .33, .33, .33, 1
+
+            on_release:
+                root.account_info['type'] = 'regular'
+                root.open_menu_for_new_account()
+
+            MDBoxLayout:
+                orientation: 'vertical'
+
+                MDLabel:
+                    text: 'Regular'
+
+                MDLabel:
+                    text: 'Cash, card, ...'
+
+            MDIconButton:
+                icon: 'cash'
+                pos_hint: {'center_y': 0.5}
+
+
+        BoxLayoutButton:
+            orientation: 'horizontal'
+            ripple_behavior: True
+            size_hint: 1, 1
+            radius: [dp(0), dp(0), dp(0), dp(0)]
+            md_bg_color: .33, .33, .33, 1
+
+            on_release:
+                root.account_info['type'] = 'savings'
+                root.open_menu_for_new_account()
+
+            MDBoxLayout:
+                orientation: 'vertical'
+
+                MDLabel:
+                    text: 'Savings'
+
+                MDLabel:
+                    text: 'Savings, goal, ...'
+
+            MDIconButton:
+                icon: 'piggy-bank-outline'
+                pos_hint: {'center_y': 0.5}

@@ -1,4 +1,4 @@
-from kivy.properties import BooleanProperty, OptionProperty
+from kivy.properties import BooleanProperty, OptionProperty, StringProperty
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.icon_definitions import md_icons
@@ -30,6 +30,10 @@ class icon_choice_menu(MDNavigationDrawer):
     )
     enable_swiping = BooleanProperty(False)
 
+    title_text = StringProperty('Category item')
+    button_id = StringProperty('category_button')
+    info_dict_name = StringProperty('category_item')
+
     def __init__(self, *args, **kwargs):
         self.category_item = config.category_item
 
@@ -59,9 +63,9 @@ class icon_choice_menu(MDNavigationDrawer):
         self.ids.icon_preview.icon = icon_name
 
     def complete_pressed(self, *args):
-        self.parent.ids.category_button.icon = self.ids.icon_preview.icon
+        getattr(self.parent.ids, self.button_id).icon = self.ids.icon_preview.icon
         print('# icon selected:', self.ids.icon_preview.icon)
-        self.parent.category_item['Icon'] = self.ids.icon_preview.icon
+        getattr(self.parent, self.info_dict_name)['Icon'] = self.ids.icon_preview.icon
         self.del_myself()
 
 
