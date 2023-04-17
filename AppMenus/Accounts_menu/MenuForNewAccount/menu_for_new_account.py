@@ -16,7 +16,7 @@ import config
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
-from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit
+from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
 
 
 class BoxLayoutButton(MDCard):
@@ -76,6 +76,11 @@ class menu_for_new_account(MDScreen):
 
     def delete_account(self, *args):
         print('# deleting category started')
+
+        db_data_delete(
+            db_name='savings_db' if self.account_info['ID'].split('_')[0] == 'savings' else 'accounts_db',
+            item_id=self.account_info['ID'],
+        )
 
         self.quit_from_menu()
         Snackbar(text="Account deleted").open()

@@ -400,4 +400,3 @@ def savings_db_edit(params: dict):
     base.commit()
 
     print(f'# {params["ID"]} edited: ', *params.items(), sep='\n')
-
