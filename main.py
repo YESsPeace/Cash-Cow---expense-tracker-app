@@ -4,6 +4,7 @@ import sys
 
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, BooleanProperty, OptionProperty
 from kivy.resources import resource_add_path
@@ -23,7 +24,7 @@ import config
 import AppMenus
 from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
     Transaction_menu_in, BudgetMenu_in, menu_for_a_new_budget, menu_for_new_or_edit_category, \
-    menu_for_choice_new_account_type, menu_for_new_account
+    menu_for_choice_new_account_type, menu_for_new_account, balance_writer
 
 # for reading and writing data
 from database import accounts_db_read, categories_db_read
@@ -61,14 +62,19 @@ class MainSrceen(MDScreen):
 
         app.root.current = 'menu_for_new_or_edit_category'
 
-    def add_menu_for_choice_account_type(self):
-        self.add_widget(menu_for_choice_new_account_type())
+    def add_menu_for_choice_account_type(self, new_account=True):
+        self.add_widget(
+            menu_for_choice_new_account_type(
+                new_account=new_account
+            )
+        )
 
     def add_menu_for_new_account(self):
         app = App.get_running_app()
 
         app.root.add_widget(
             menu_for_new_account(
+                id='menu_for_new_account',
                 name='menu_for_new_account'
             ),
         )
@@ -309,6 +315,7 @@ class MoneyStatApp(MDApp):
         # MenuForNewAccount
         Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/menu_for_choice_new_account_type.kv')
         Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/menu_for_new_account.kv')
+        Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/balance_writer.kv')
 
         # Categories menu
         Builder.load_file('AppMenus/Categories_menu/categories_menu.kv')
@@ -348,7 +355,7 @@ if __name__ == '__main__':
         resource_add_path(os.path.join(sys._MEIPASS))
 
     # smartphone screen
-    # Window.size = (0.6 * 640, 0.6 * 1136)
+    Window.size = (0.6 * 640, 0.6 * 1136)
 
     # start the app
     MoneyStatApp().run()

@@ -1,0 +1,197 @@
+<balance_writer>:
+    pos_hint: {'center_x': .5}
+    size_hint: 1, .75
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            md_bg_color: .6, .1, .2, 1
+            size_hint_y: None
+            height: dp(115)
+
+            MDLabel:
+                id: sum_label
+                text: '0'
+                text_color: 1, 1, 1, 1
+                halign: 'center'
+                size_hint_y: .65
+
+            TextInput:
+                id: note_input
+                text: 'notes'
+                halign: 'center'
+                multiline: False
+                size_hint_y: .35
+                cursor_color: 1, 1, 1, 1
+                foreground_color: 1, 1, 1, 1
+                background_color: .59, .09, .19, 1
+
+        MDGridLayout:
+            md_bg_color: .5, 0, .2, 1
+            spacing: dp(1)
+            cols: 5
+            rows: 4
+
+            Button:
+                text: '÷'
+                font_size: '19sp'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release: root.sign_btn_pressed(self)
+
+
+            Button:
+                text: '7'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '8'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '9'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: 'AC'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release:
+                    sum_label.text = root.default_sum_label_text
+
+            Button:
+                text: 'x'
+                font_size: '18sp'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release: root.sign_btn_pressed(self)
+
+
+            Button:
+                text: '4'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '5'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '6'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: 'del'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release:
+                    sum_label.text = sum_label.text[:-1]
+
+            Button:
+                text: '-'
+                font_size: '28sp'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release: root.sign_btn_pressed(self)
+
+
+            Button:
+                text: '1'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '2'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '3'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            MDIconButton:
+                icon: 'magic-staff'
+                size_hint: 1, 1
+
+                canvas.before:
+                    Color:
+                        rgba: .25, 0, .1, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                on_release: root.show_date_picker()
+
+            Button:
+                text: '+'
+                font_size: '18sp'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release: root.sign_btn_pressed(self)
+
+            Button:
+                text: 'currency'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+
+            Button:
+                text: '0'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    else: sum_label.text = sum_label.text + self.text
+
+            Button:
+                text: '.'
+                background_normal: ''
+                background_color: 1, 1, 1, .25
+                on_release:
+                    sign = set(sum_label.text).intersection(['+', '-', '÷', 'x'])
+                    if len(sign): num_1, num_2 = sum_label.text.split(list(sign)[0])
+                    else: num_2 = sum_label.text
+                    if not '.' in num_2: sum_label.text = sum_label.text + self.text
+
+            Button:
+                id: done_btn
+                text: 'done'
+                background_normal: ''
+                background_color: .25, 0, .1, 1
+                on_release:
+                    if self.text == '=': root.calculate_btn_pressed()
+                    elif self.text == 'done': root.done_pressed()
+                    self.text = 'done'

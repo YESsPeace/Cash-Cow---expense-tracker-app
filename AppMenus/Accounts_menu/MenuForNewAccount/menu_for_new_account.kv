@@ -1,3 +1,9 @@
+<BoxLayoutButton>:
+    radius: [0, 0, 0, 0]
+    padding: [dp(5), dp(5), dp(5), dp(5)]
+    size_hint_y: None
+    height: dp(50)
+
 <menu_for_new_account>:
     md_bg_color: (0.85, 0.85, 0.85, 1)
 
@@ -74,91 +80,172 @@
         size_hint_y: None
         height: root.height - top_bar.height - dp(24)
 
-
-        MDBoxLayout:
-            orientation: 'vertical'
-            pos_hint: {'top': 1}
-            size_hint_y: None
+        MDScrollView:
+            size_hint: 1, None
+            size: self.parent.size
             adaptive_height: True
 
-            spacing: dp(15)
+            MDBoxLayout:
+                id: buttons_box
 
-            BoxLayoutButton:
-                ripple_behavior: True
                 orientation: 'vertical'
-                size_hint: 1, None
-                height: dp(150)
-                padding: dp(10)
-                spacing: dp(5)
+                pos_hint: {'top': 1}
+                size_hint_y: None
+                adaptive_height: True
 
-                on_release:
-                    root.currency_pressed()
+                spacing: dp(10)
 
                 MDScreen:
-                    md_bg_color: (.33, .33, .33, 1)
+                    size_hint: 1, None
+                    height: dp(25)
                     MDLabel:
-                        text: 'Settings'
+                        text: 'Account'
+                        theme_text_color: "Custom"
+                        text_color: .05, .9, .05, 1
 
+                BoxLayoutButton:
+                    ripple_behavior: True
+                    orientation: 'vertical'
+                    size_hint: 1, None
+                    height: dp(50)
+                    on_release:
+                        root.change_account_type()
+
+                    MDLabel:
+                        text: 'Type'
+
+                    MDLabel:
+                        id: account_type_label
+
+                        text: root.account_info['type']
+
+                BoxLayoutButton:
+                    ripple_behavior: True
+                    orientation: 'vertical'
+                    size_hint: 1, None
+                    height: dp(50)
+                    on_release:
+                        root.currency_pressed()
+
+                    MDLabel:
+                        text: 'account currency'
+
+                    MDLabel:
+                        text: 'Russian ruble ₽'
+
+
+
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    size_hint: 1, None
+                    height: dp(75)
+                    md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+
+                    MDLabel:
+                        text: 'Description'
+
+                    MDScreen:
+                        MDTextField:
+                            id: account_description_text_field
+
+                            text: root.account_info.get('Description', 'None')
+                            theme_text_color: 'Secondary'
+                            font_style: 'H5'
 
                 MDScreen:
-                    md_bg_color: (.33, .33, .33, 1)
+                    size_hint: 1, None
+                    height: dp(25)
+                    MDLabel:
+                        text: 'Balance'
+                        theme_text_color: "Custom"
+                        text_color: .05, .9, .05, 1
+
+                BoxLayoutButton:
+                    ripple_behavior: True
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: dp(50)
+                    on_release:
+                        root.open_balance_writer()
+
+                    MDScreen:
+                        MDLabel:
+                            text: 'Account balance'
+
+                    MDLabel:
+                        id: account_balance
+
+                        halign: "right"
+                        text: str(root.account_info.setdefault('Balance', 0))
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, None
+                    height: dp(50)
+                    md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+
+                    MDScreen:
+                        MDLabel:
+                            text: 'Include in total balance'
+
+                    MDScreen:
+                        size_hint_x: None
+                        width: dp(75)
+                        MDSwitch:
+                            pos_hint: {'center_y': 0.5}
+
+                            on_active:
+                                root.switch_updated(self)
+
+                BoxLayoutButton:
+                    id: change_color
+
+                    ripple_behavior: True
+                    size_hint_y: None
+                    height: dp(50)
+
+                    on_release:
+                        root.open_color_picker()
+
                     MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: 'account currency'
+                        orientation: 'horizontal'
+
+                        MDIconButton:
+                            icon: 'format-color-fill'
+                            pos_hint: {'center_y': 0.5}
 
                         MDLabel:
-                            text: 'Russian ruble ₽'
+                            size_hint: 1, 1
 
-            BoxLayoutButton:
-                id: change_color
+                            text: 'Change account color'
 
-                ripple_behavior: True
-                size_hint_y: None
-                height: dp(75)
+                            theme_text_color: "Custom"
+                            text_color: .6, .4, .4, 1
 
-                on_release:
-                    root.open_color_picker()
+                BoxLayoutButton:
+                    id: remove_btn
 
-                MDBoxLayout:
-                    orientation: 'horizontal'
+                    ripple_behavior: True
+                    size_hint_y: None
+                    height: dp(50)
 
-                    MDIconButton:
-                        icon: 'format-color-fill'
-                        pos_hint: {'center_y': 0.5}
+                    on_release:
+                        root.delete_account()
 
-                    MDLabel:
-                        size_hint: 1, 1
+                    MDBoxLayout:
+                        orientation: 'horizontal'
 
-                        text: 'Change account color'
+                        MDIconButton:
+                            icon: 'basket'
+                            pos_hint: {'center_y': 0.5}
 
-                        theme_text_color: "Custom"
-                        text_color: .6, .4, .4, 1
+                        MDLabel:
+                            size_hint: 1, 1
 
-            BoxLayoutButton:
-                id: remove_btn
+                            text: 'remove account'
 
-                ripple_behavior: True
-                size_hint_y: None
-                height: dp(75)
-
-                on_release:
-                    root.delete_account()
-
-                MDBoxLayout:
-                    orientation: 'horizontal'
-
-                    MDIconButton:
-                        icon: 'basket'
-                        pos_hint: {'center_y': 0.5}
-
-                    MDLabel:
-                        size_hint: 1, 1
-
-                        text: 'remove account'
-
-                        theme_text_color: "Custom"
-                        text_color: .89, .11, .11, 1
+                            theme_text_color: "Custom"
+                            text_color: .89, .11, .11, 1
 
 
     MDIconButton:

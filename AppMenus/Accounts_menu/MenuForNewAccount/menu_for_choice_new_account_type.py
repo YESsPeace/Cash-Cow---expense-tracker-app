@@ -26,11 +26,16 @@ class menu_for_choice_new_account_type(MDNavigationDrawer):
     )
     enable_swiping = BooleanProperty(False)
 
+    new_account = BooleanProperty(True)
+
     def __init__(self, *args, **kwargs):
         self.account_info = {
                 'ID': None,
                 'Name': '',
                 'Color': [0.71, 0.72, 0.69, 0.5],
+                'Balance': 0,
+                'currency': 'RUB',
+                'IncludeInTheTotalBalance': 0,
                 'Icon': 'card',
                 'new': True,
                 'type': None
@@ -66,6 +71,15 @@ class menu_for_choice_new_account_type(MDNavigationDrawer):
 
     def del_myself(self) -> None:
         self.parent.remove_widget(self)
+
+    def change_type(self, *args):
+        print('# account type changed')
+
+        app = App.get_running_app()
+
+        app.root.get_screen('menu_for_new_account').ids.account_type_label.text = self.account_info['type']
+
+        self.del_myself()
 
     def open_menu_for_new_account(self, *args):
         config.account_info = self.account_info

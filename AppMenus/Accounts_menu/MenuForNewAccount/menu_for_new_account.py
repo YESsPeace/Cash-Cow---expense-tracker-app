@@ -1,17 +1,28 @@
 from typing import Union
 
+from kivy.weakproxy import WeakProxy
+
+from kivy.app import App
+from kivy.metrics import dp
+from kivy.properties import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
 from kivymd.uix.pickers import MDColorPicker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
 import config
+from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
+from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
+from database import account_db_add, savings_db_add
 
 
-class BoxLayoutButton(MDCard, BoxLayout):
-    pass
+class BoxLayoutButton(MDCard):
+    radius = [0, 0, 0, 0]
+    padding = [dp(5), dp(5), dp(5), dp(5)]
+    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
 
 
 class menu_for_new_account(MDScreen):
@@ -22,12 +33,19 @@ class menu_for_new_account(MDScreen):
 
         super().__init__(*args, **kwargs)
 
+        Clock.schedule_once(self.set_menu_widgets)
+
     def complete_pressed(self, *args):
+        self.account_info['Name'] = self.ids.account_name_text_field.text
+
+        self.account_info['Description'] = self.ids.account_description_text_field.text
+
+        print('# account info dict:', *self.account_info.items(), sep='\n')
+
         if self.account_info.get('new') is True:
             self.create_account()
 
-        elif (self.account_info != config.account_info) or \
-                (self.ids.category_name_text_field.text != self.account_info['Name']):
+        elif (self.account_info != config.account_info):
             self.edit_account()
 
         else:
@@ -35,6 +53,12 @@ class menu_for_new_account(MDScreen):
 
     def create_account(self, *args):
         print('# creation account started')
+
+        if self.account_info['type'] == 'regular':
+            account_db_add(self.account_info)
+
+        elif self.account_info['type'] == 'savings':
+            savings_db_add(self.account_info)
 
         self.quit_from_menu()
         Snackbar(text="Account created").open()
@@ -83,6 +107,61 @@ class menu_for_new_account(MDScreen):
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
         Snackbar(text="only in future.").open()
+
+    def set_menu_widgets(self, *args):
+        if self.account_info['type'] == 'savings':
+            self.add_goal_button()
+
+    def add_goal_button(self, *args):
+        Goal_box = BoxLayoutButton(
+            ripple_behavior=True,
+            orientation='horizontal',
+            size_hint=(1, None),
+            height=dp(50),
+            on_release=lambda x: self.add_widget(
+                balance_writer(
+                    text_widget_id='goal_balance',
+                    item_dict_parameter='goal'
+                )
+            )
+        )
+
+        Goal_box.add_widget(
+            MDScreen(
+                MDLabel(
+                    text='Goal'
+                )
+            ),
+        )
+
+        goal_balance_label = MDLabel(
+            halign="right",
+            text=str(self.account_info.setdefault('Balance', 0)),
+            id='goal_balance'
+        )
+
+        Goal_box.add_widget(goal_balance_label)
+
+        self.ids.buttons_box.add_widget(Goal_box, index=3)
+
+        self.ids['goal_balance'] = WeakProxy(goal_balance_label)
+
+    def change_account_type(self, *args):
+        self.add_widget(
+            menu_for_choice_new_account_type(
+                new_account=False
+            )
+        )
+
+    def switch_updated(self, switch, *args):
+        if switch.active is True:
+            self.account_info['IncludeInTheTotalBalance'] = 1
+
+        else:
+            self.account_info['IncludeInTheTotalBalance'] = 0
+
+    def open_balance_writer(self, *args):
+        self.add_widget(balance_writer(text_widget_id='account_balance'))
 
     def quit_from_menu(self, *args):
         self.parent.current = 'main'

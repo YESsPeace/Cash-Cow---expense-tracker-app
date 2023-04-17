@@ -26,14 +26,16 @@ def sql_start() -> None:
     base.execute(
         f'CREATE TABLE IF NOT EXISTS accounts_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance TEXT, currency TEXT)'
+        f'name TEXT, color TEXT, balance TEXT, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'Description TEXT, icon TEXT)'
     )
 
     # savings_db
     base.execute(
         f'CREATE TABLE IF NOT EXISTS savings_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance TEXT, goal TEXT, currency TEXT)'
+        f'name TEXT, color TEXT, balance TEXT, goal TEXT, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'Description TEXT, icon TEXT)'
     )
 
     # transaction_db
@@ -249,6 +251,7 @@ def db_data_delete(db_name, item_id):
 
     print(f'# delete complete: db_name - {db_name}, id - {item_id}')
 
+
 def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None, color: list = None):
     query = f"UPDATE {db_name} SET "
     params = []
@@ -285,6 +288,7 @@ def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None,
 
     base.commit()
 
+
 def db_data_add(db_name: str, params: dict):
     if params.get('Color') is None:
         params['Color'] = [0, 0, 0, 1]
@@ -299,3 +303,46 @@ def db_data_add(db_name: str, params: dict):
     base.commit()
 
     print(f"# Category created: Name={params.get('Name')}, Color={params.get('Color')}, Icon={params.get('Icon')}")
+
+
+def account_db_add(params: dict):
+    cur.execute(f"PRAGMA table_info(accounts_db)")
+    columns = [row[1] for row in cur.fetchall()]
+
+    if params.get('Color') is None:
+        params['Color'] = [0, 0, 0, 1]
+        print('# Color is not a list, so now color=[0, 0, 0, 1]')
+
+    params['Color'] = json.dumps(params['Color'])
+
+    cur.execute(f'INSERT INTO accounts_db '
+                f"({', '.join(columns)}) "
+                f"VALUES (NULL, {', '.join(['?' for _ in range(len(columns) - 1)])})",
+                (params.get('Name'), params.get('Color'),
+                 params.get('Balance'), params.get('currency'),
+                 params.get('IncludeInTheTotalBalance'),
+                 params.get('Description'), params.get('Icon'))
+                )
+    base.commit()
+
+
+def savings_db_add(params: dict):
+    cur.execute(f"PRAGMA table_info(savings_db)")
+    columns = [row[1] for row in cur.fetchall()]
+
+    if params.get('Color') is None:
+        params['Color'] = [0, 0, 0, 1]
+        print('# Color is not a list, so now color=[0, 0, 0, 1]')
+
+    params['Color'] = json.dumps(params['Color'])
+
+    cur.execute(f'INSERT INTO savings_db '
+                f"({', '.join(columns)}) "
+                f"VALUES (NULL, {', '.join(['?' for _ in range(len(columns) - 1)])})",
+                (params.get('Name'), params.get('Color'),
+                 params.get('Balance'), params.get('goal'),
+                 params.get('currency'),
+                 params.get('IncludeInTheTotalBalance'),
+                 params.get('Description'), params.get('Icon'))
+                )
+    base.commit()

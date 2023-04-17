@@ -22,7 +22,8 @@
 
             on_release:
                 root.account_info['type'] = 'regular'
-                root.open_menu_for_new_account()
+                if root.new_account is True: root.open_menu_for_new_account()
+                else: root.change_type()
 
             MDBoxLayout:
                 orientation: 'vertical'
@@ -47,7 +48,9 @@
 
             on_release:
                 root.account_info['type'] = 'savings'
-                root.open_menu_for_new_account()
+                root.account_info['goal'] = 0
+                if root.new_account is True: root.open_menu_for_new_account()
+                else: root.change_type()
 
             MDBoxLayout:
                 orientation: 'vertical'
