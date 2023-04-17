@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivymd.uix.button import MDRaisedButton
@@ -5,6 +6,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
+from database import accounts_db_read, savings_db_read
 
 
 class AccountsMenu_main(MDScreen):
@@ -31,7 +33,8 @@ class AccountsMenu_main(MDScreen):
                 text_color='white',
                 height=dp(75),
                 md_bg_color=self.accounts_data_dict[account_id]['Color'],
-                size_hint=(1, 1), halign='left'
+                size_hint=(1, 1), halign='left',
+                on_release=self.open_menu_for_new_account
             )
 
             my_widget.add_widget(
@@ -55,12 +58,13 @@ class AccountsMenu_main(MDScreen):
                 text=self.savings_data_dict[savings_id]['Name'],
                 text_color='white',
                 md_bg_color=self.savings_data_dict[savings_id]['Color'],
-                size_hint=(1, 1), halign='left'
+                size_hint=(1, 1), halign='left',
+                on_release=self.open_menu_for_new_account
             )
 
             my_widget.add_widget(
                 MDLabel(
-                    text=self.savings_data_dict[savings_id]['Balance'] + ' ' +
+                    text=str(self.savings_data_dict[savings_id]['Balance']) + ' ' +
                          self.savings_data_dict[savings_id]['Currency'],
                     halign='right'
                 )
@@ -72,3 +76,18 @@ class AccountsMenu_main(MDScreen):
                 savings_amount += float(self.savings_data_dict[savings_id]['Balance'])
 
         self.ids.savings_amount.text = str(savings_amount)
+
+    def open_menu_for_new_account(self, button, *args):
+        print(button.id)
+
+        self.account_info = (accounts_db_read() | savings_db_read())[button.id]
+
+        self.account_info['ID'] = button.id
+        self.account_info['new'] = False
+        self.account_info['type'] = 'savings' if button.id.split('_')[0] == 'savings' else 'regular'
+
+        config.account_info = self.account_info
+
+        app = App.get_running_app()
+
+        app.root.ids.main.add_menu_for_new_account()

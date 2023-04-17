@@ -34,7 +34,7 @@ class menu_for_choice_new_account_type(MDNavigationDrawer):
                 'Name': '',
                 'Color': [0.71, 0.72, 0.69, 0.5],
                 'Balance': 0,
-                'currency': 'RUB',
+                'Currency': 'RUB',
                 'IncludeInTheTotalBalance': 0,
                 'Icon': 'card',
                 'new': True,

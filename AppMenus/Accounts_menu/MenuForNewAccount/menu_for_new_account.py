@@ -121,7 +121,7 @@ class menu_for_new_account(MDScreen):
             on_release=lambda x: self.add_widget(
                 balance_writer(
                     text_widget_id='goal_balance',
-                    item_dict_parameter='goal'
+                    item_dict_parameter='Goal'
                 )
             )
         )
@@ -136,7 +136,7 @@ class menu_for_new_account(MDScreen):
 
         goal_balance_label = MDLabel(
             halign="right",
-            text=str(self.account_info.setdefault('Balance', 0)),
+            text=str(self.account_info.setdefault('Goal', 0)),
             id='goal_balance'
         )
 

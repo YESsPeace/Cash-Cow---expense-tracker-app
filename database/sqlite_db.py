@@ -26,7 +26,7 @@ def sql_start() -> None:
     base.execute(
         f'CREATE TABLE IF NOT EXISTS accounts_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance TEXT, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'name TEXT, color TEXT, balance REAL, currency TEXT, IncludeInTheTotalBalance INTEGER '
         f'Description TEXT, icon TEXT)'
     )
 
@@ -34,7 +34,7 @@ def sql_start() -> None:
     base.execute(
         f'CREATE TABLE IF NOT EXISTS savings_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance TEXT, goal TEXT, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'name TEXT, color TEXT, balance REAL, goal REAL, currency TEXT, IncludeInTheTotalBalance INTEGER '
         f'Description TEXT, icon TEXT)'
     )
 
@@ -88,11 +88,15 @@ def accounts_db_read() -> dict:
 
     for row in cur.execute(f'SELECT * FROM accounts_db').fetchall():
         account_id = 'account_' + str(row[0])
+
         accounts_data_dict[account_id] = {
             'Name': row[1],
             'Color': json.loads(row[2]),
             'Balance': float(row[3]),
-            'Currency': row[4]
+            'Currency': row[4],
+            'IncludeInTheTotalBalance': row[5],
+            'Description': row[6],
+            'Icon': row[7]
         }
 
     return accounts_data_dict
@@ -109,7 +113,10 @@ def savings_db_read() -> dict:
             'Color': json.loads(row[2]),
             'Balance': row[3],
             'Goal': row[4],
-            'Currency': row[5]
+            'Currency': row[5],
+            'IncludeInTheTotalBalance': row[6],
+            'Description': row[7],
+            'Icon': row[8]
         }
 
     return savings_data_dict
@@ -319,7 +326,7 @@ def account_db_add(params: dict):
                 f"({', '.join(columns)}) "
                 f"VALUES (NULL, {', '.join(['?' for _ in range(len(columns) - 1)])})",
                 (params.get('Name'), params.get('Color'),
-                 params.get('Balance'), params.get('currency'),
+                 params.get('Balance'), params.get('Currency'),
                  params.get('IncludeInTheTotalBalance'),
                  params.get('Description'), params.get('Icon'))
                 )
@@ -340,8 +347,8 @@ def savings_db_add(params: dict):
                 f"({', '.join(columns)}) "
                 f"VALUES (NULL, {', '.join(['?' for _ in range(len(columns) - 1)])})",
                 (params.get('Name'), params.get('Color'),
-                 params.get('Balance'), params.get('goal'),
-                 params.get('currency'),
+                 params.get('Balance'), params.get('Goal'),
+                 params.get('Currency'),
                  params.get('IncludeInTheTotalBalance'),
                  params.get('Description'), params.get('Icon'))
                 )
