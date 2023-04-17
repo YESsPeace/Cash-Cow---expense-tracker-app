@@ -16,7 +16,7 @@ import config
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
-from database import account_db_add, savings_db_add
+from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit
 
 
 class BoxLayoutButton(MDCard):
@@ -27,7 +27,7 @@ class BoxLayoutButton(MDCard):
 
 class menu_for_new_account(MDScreen):
     def __init__(self, *args, **kwargs):
-        self.account_info = config.account_info
+        self.account_info = config.account_info.copy()
 
         print(*self.account_info.items(), sep='\n')
 
@@ -40,16 +40,15 @@ class menu_for_new_account(MDScreen):
 
         self.account_info['Description'] = self.ids.account_description_text_field.text
 
-        print('# account info dict:', *self.account_info.items(), sep='\n')
-
         if self.account_info.get('new') is True:
             self.create_account()
 
-        elif (self.account_info != config.account_info):
+        elif self.account_info != config.account_info:
             self.edit_account()
 
         else:
             self.quit_from_menu()
+            Snackbar(text="There's nothing to change").open()
 
     def create_account(self, *args):
         print('# creation account started')
@@ -65,6 +64,12 @@ class menu_for_new_account(MDScreen):
 
     def edit_account(self, *args):
         print('# editing account started')
+
+        if self.account_info['type'] == 'regular':
+            accounts_db_edit(self.account_info)
+
+        elif self.account_info['type'] == 'savings':
+            savings_db_edit(self.account_info)
 
         self.quit_from_menu()
         Snackbar(text="Account edited").open()

@@ -353,3 +353,51 @@ def savings_db_add(params: dict):
                  params.get('Description'), params.get('Icon'))
                 )
     base.commit()
+
+
+def accounts_db_edit(params: dict):
+    if params.get('Color') is None:
+        params['Color'] = [0, 0, 0, 1]
+        print('# Color is not a list, so now color=[0, 0, 0, 1]')
+
+    params['Color'] = json.dumps(params['Color'])
+
+    type, id = params['ID'].split('_')
+
+    cur.execute(f"UPDATE accounts_db SET "
+                f"name=?, color=?, balance=?, currency=?, IncludeInTheTotalBalance=?, Description=?, icon=? "
+                f"WHERE id=?",
+                (params.get('Name'), params.get('Color'),
+                 params.get('Balance'), params.get('Currency'),
+                 params.get('IncludeInTheTotalBalance'),
+                 params.get('Description'), params.get('Icon'),
+                 id)
+                )
+    base.commit()
+
+    print(f'# {params["ID"]} edited: ', *params.items(), sep='\n')
+
+
+def savings_db_edit(params: dict):
+    if params.get('Color') is None:
+        params['Color'] = [0, 0, 0, 1]
+        print('# Color is not a list, so now color=[0, 0, 0, 1]')
+
+    params['Color'] = json.dumps(params['Color'])
+
+    type, id = params['ID'].split('_')
+
+    cur.execute(f"UPDATE savings_db SET "
+                f"name=?, color=?, balance=?, goal=?, currency=?, IncludeInTheTotalBalance=?, Description=?, icon=? "
+                f"WHERE id=?",
+                (params.get('Name'), params.get('Color'),
+                 params.get('Balance'), params.get('Goal'),
+                 params.get('Currency'),
+                 params.get('IncludeInTheTotalBalance'),
+                 params.get('Description'), params.get('Icon'),
+                 id)
+                )
+    base.commit()
+
+    print(f'# {params["ID"]} edited: ', *params.items(), sep='\n')
+
