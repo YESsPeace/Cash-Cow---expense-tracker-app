@@ -182,6 +182,15 @@ def transaction_db_write(trans_data_dict):
                 )
     base.commit()
 
+    for account in {trans_data_dict['From']: -trans_data_dict['FromSUM'],
+                    trans_data_dict['To']: trans_data_dict['ToSUM']}.items():
+        accounts_and_savings_db_edit_balance(
+            db_name='savings_db' if account[0].split('_')[0] == 'savings' else 'accounts_db',
+            item_id=account[0],
+            balance_difference=account[1]
+
+        )
+
 
 """
 def budget_data_read for incomes:
@@ -400,3 +409,25 @@ def savings_db_edit(params: dict):
     base.commit()
 
     print(f'# {params["ID"]} edited: ', *params.items(), sep='\n')
+
+
+def accounts_and_savings_db_edit_balance(db_name: str, item_id: str, balance_difference: int = 0):
+    type, id = item_id.split('_')
+
+    db_data = accounts_db_read() | savings_db_read()
+
+    if item_id not in db_data:
+        print(f'# {item_id} is not found in {db_name}')
+        return
+
+    balance = db_data[item_id]['Balance']
+    balance += balance_difference
+
+    cur.execute(f"UPDATE {db_name} SET "
+                f"balance=? "
+                f"WHERE id=?",
+                (balance, id)
+                )
+    base.commit()
+
+    print(f'# {item_id} balance updated:', balance)

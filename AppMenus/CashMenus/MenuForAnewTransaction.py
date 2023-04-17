@@ -9,7 +9,7 @@ from kivymd.uix.pickers import MDDatePicker
 
 import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
-from database import transaction_db_write, transaction_db_read
+from database import transaction_db_write, transaction_db_read, accounts_and_savings_db_edit_balance
 
 from AppMenus.other_func import calculate, update_month_menu_by_date, update_total_balance_in_UI
 
