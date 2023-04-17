@@ -4,6 +4,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.metrics import dp
+from kivy.properties import NumericProperty
 from kivy.uix.screenmanager import NoTransition
 from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -14,13 +15,14 @@ from kivymd.uix.screen import MDScreen
 import config
 from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
 
-from AppMenus.other_func import load_next_month, load_previous_month
+from AppMenus.other_func import load_next_month, load_previous_month, get_total_accounts_balance
 
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
 from database import categories_db_read
 
 
 class CategoriesMenu(MDScreen):
+    total_accounts_balance = NumericProperty(get_total_accounts_balance())
     def __init__(self, *args, **kwargs):
 
         # just for first creating widgets
@@ -35,6 +37,9 @@ class CategoriesMenu(MDScreen):
 
         Clock.schedule_once(self.set_transition)
         Clock.schedule_once(self.add_pre_loaded_months)
+
+    def update_total_accounts_balance(self, *args):
+        self.ids.total_balance_label.text = str(get_total_accounts_balance())
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()

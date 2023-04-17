@@ -1,16 +1,18 @@
 import datetime
 from calendar import monthrange, month_name
 
+from kivy.properties import NumericProperty
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
-from AppMenus.other_func import load_previous_month, load_next_month
+from AppMenus.other_func import load_previous_month, load_next_month, get_total_accounts_balance
 
 
 class Transaction_menu(MDScreen):
+    total_accounts_balance = NumericProperty(get_total_accounts_balance())
     def __init__(self, *args, **kwargs):
         # getting history data
         print(*config.history_dict.items(), sep='\n')
@@ -32,6 +34,9 @@ class Transaction_menu(MDScreen):
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
+
+    def update_total_accounts_balance(self, *args):
+        self.ids.total_balance_label.text = str(get_total_accounts_balance())
 
     def add_pre_loaded_months(self, *args):
         print('TransactionMenu.add_pre_loaded_months')

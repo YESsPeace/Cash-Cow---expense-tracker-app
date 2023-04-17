@@ -1,3 +1,6 @@
+from database import accounts_db_read, savings_db_read
+
+
 def calculate(expression):
     if '+' in expression:
         num_1, num_2 = expression.split('+')
@@ -37,3 +40,6 @@ def calculate(expression):
 
     else:
         return False
+
+def get_total_accounts_balance():
+    return sum([value_dict['Balance'] for value_dict in (accounts_db_read() | savings_db_read()).values()])

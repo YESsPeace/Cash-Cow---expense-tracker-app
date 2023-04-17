@@ -34,7 +34,9 @@
                             size: self.size
 
                 MDLabel:
-                    text: '12904₽'
+                    id: total_balance_label
+
+                    text: str(root.total_accounts_balance)
                     font_size: 26
                     halign: "center"
                     valign: "middle"

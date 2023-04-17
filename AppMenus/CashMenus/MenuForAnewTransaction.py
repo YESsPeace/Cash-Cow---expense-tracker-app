@@ -11,7 +11,7 @@ import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from database import transaction_db_write, transaction_db_read
 
-from AppMenus.other_func import calculate, update_month_menu_by_date
+from AppMenus.other_func import calculate, update_month_menu_by_date, update_total_balance_in_UI
 
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -82,11 +82,14 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         # getting type of transaction
         self.type_ = None
-        if config.second_transaction_item['id'].split('_')[0] == 'Categories':
+
+        if config.second_transaction_item['id'].split('_')[0] == 'categories':
             self.type_ = 'Expenses'
+
         elif (config.first_transaction_item['id'].split('_')[0] in ['account', 'savings']) and \
                 (config.second_transaction_item['id'].split('_')[0] in ['account', 'savings']):
             self.type_ = 'Transfer'
+
         else:
             self.type_ = 'Income'
 
@@ -207,5 +210,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             self,
             date_of_changes=str(self.date_),
             main_menu_id='Transaction_menu',
-            month_menu=Transaction_menu_in
+            month_menu_name=Transaction_menu_in
         )
+
+        update_total_balance_in_UI()

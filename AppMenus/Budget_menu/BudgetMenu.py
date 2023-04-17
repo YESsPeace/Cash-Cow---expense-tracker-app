@@ -1,13 +1,15 @@
 from kivy.clock import Clock
+from kivy.properties import NumericProperty
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
 
 import config
 from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
-from AppMenus.other_func import load_next_month, load_previous_month
+from AppMenus.other_func import load_next_month, load_previous_month, get_total_accounts_balance
 
 
 class BudgetMenu(MDScreen):
+    total_accounts_balance = NumericProperty(get_total_accounts_balance())
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -21,6 +23,9 @@ class BudgetMenu(MDScreen):
 
         Clock.schedule_once(self.set_transition)
         Clock.schedule_once(self.add_pre_loaded_months)
+
+    def update_total_accounts_balance(self, *args):
+        self.ids.total_balance_label.text = str(get_total_accounts_balance())
 
     def add_pre_loaded_months(self, *args):
         print('BudgetMenu.add_pre_loaded_months')

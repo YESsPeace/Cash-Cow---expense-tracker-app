@@ -1,7 +1,10 @@
 import datetime
 from calendar import monthrange, month_name
 
+from kivy.app import App
+
 import config
+from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
 
 
 def load_previous_month(self, menu):
@@ -81,3 +84,10 @@ def update_month_menu_by_date(self, date_of_changes: str, main_menu_id: str, mon
         # config.current_menu_date = temp_date
         # config.current_menu_month_name = temp_menu_month_name
         # config.days_in_current_menu_month = temp_days_in_current_menu_month
+
+
+def update_total_balance_in_UI():
+    app = App.get_running_app()
+
+    for menu_id in ['AccountsMenu_id', 'CategoriesMenu', 'Transaction_menu', 'BudgetMenu']:
+        getattr(app.root.ids.main.ids, menu_id).update_total_accounts_balance()
