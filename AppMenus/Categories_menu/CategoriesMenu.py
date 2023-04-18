@@ -119,11 +119,14 @@ class CategoriesMenu(MDScreen):
                     except AttributeError:
                         continue
 
+        self.ids.my_swiper.get_screen(self.current_menu_date).add_plus_button()
+
     def quit_from_edit_mode(self, *args):
         print('# quit from edit mode')
         self.ids.top_bar.height = dp(100)
         self.ids.top_bar.add_widget(self.top_btn_bar)
         self.ids.top_bar.add_widget(self.month_menu)
+        self.ids.my_swiper.get_screen(self.current_menu_date).del_plus_button()
 
         # rebind buttons functions
         for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
