@@ -37,7 +37,7 @@ class Incomes_buttons_menu(MDScreen):
 
         print('Incomes_month_Budget_data_dict', *self.get_Incomes_month_data_dict.items(), sep='\n')
 
-        self.Incomes_budget_data_dict = budget_data_read(id='Income_', db_name='budget_data_incomes')
+        self.Incomes_budget_data_dict = budget_data_read(id='income_', db_name='budget_data_incomes')
 
         print('Incomes Budget data',
               *self.Incomes_budget_data_dict.items(),

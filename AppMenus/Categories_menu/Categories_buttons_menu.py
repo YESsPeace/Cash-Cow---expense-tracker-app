@@ -40,7 +40,7 @@ class Categories_buttons_menu(MDScreen):
 
         print('Categories_month_Budget_data_dict', *self.categories_month_data_dict.items(), sep='\n')
 
-        self.categories_budget_data_dict = budget_data_read(id='Categories_', db_name='budget_data_categories')
+        self.categories_budget_data_dict = budget_data_read(id='categories_', db_name='budget_data_categories')
 
         print('Categories Budget data',
               *self.categories_budget_data_dict.items(),
@@ -62,13 +62,15 @@ class Categories_buttons_menu(MDScreen):
         for button_id in self.categories_menu_button_data_dictionary:
             button = self.categories_menu_button_data_dictionary[button_id]
 
-            if (self.budget_data_date in self.categories_budget_data_dict) and \
-                    (button_id in self.categories_budget_data_dict[self.budget_data_date]):
+            if self.budget_data_date in self.categories_budget_data_dict:
 
-                if button_id in self.categories_month_data_dict:
+                if (button_id in self.categories_month_data_dict) and \
+                        (button_id in self.categories_budget_data_dict[self.budget_data_date]):
 
                     button_level = int(self.categories_month_data_dict[button_id]['SUM']) / \
                                    int(self.categories_budget_data_dict[self.budget_data_date][button_id]['Budgeted'])
+
+                    print(f'Category level for {button_id}: {button_level}')
 
                 else:
                     button_level = 0
