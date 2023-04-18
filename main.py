@@ -18,6 +18,7 @@ import AppMenus
 from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
     Transaction_menu_in, BudgetMenu_in, menu_for_a_new_budget, menu_for_new_or_edit_category, \
     menu_for_choice_new_account_type, menu_for_new_account
+from AppMenus.Transaction_menu.menu_for_transaction_adding import MenuForTransactionAdding
 
 
 class MainSrceen(MDScreen):
@@ -28,11 +29,7 @@ class MainSrceen(MDScreen):
         config.main_screen_size = self.size
 
     def open_menu_for_transaction_adding(self):
-        self.ids.menu_for_transaction_adding.pos_hint = {'center_x': .5}
-        self.ids.menu_for_transaction_adding.status = 'opened'
-
-        self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].pos = self.pos
-        self.ids.menu_for_transaction_adding.canvas.before.get_group('a')[0].size = self.size
+        self.add_widget(MenuForTransactionAdding())
 
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())

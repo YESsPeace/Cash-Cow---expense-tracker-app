@@ -17,7 +17,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
     state = OptionProperty("open", options=("close", "open"))
     status = OptionProperty(
-        "closed",
+        "opened",
         options=(
             "closed",
             "opening_with_swipe",
@@ -69,7 +69,7 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         Clock.schedule_once(self.adding_buttons_to_expense_tab)
 
     def adding_buttons_to_expense_tab(self, *args):
-        Clock.schedule_once(self.get_new_func_to_transfer_buttons)
+        Clock.schedule_once(self.set_new_func_to_transfer_buttons)
 
         for button_id in self.expense_dict:
             box = MDScreen(
@@ -125,12 +125,14 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
             self.ids.transfer_layout.add_widget(box)
 
-    def get_new_func_to_transfer_buttons(self, *args):
-        for button in self.ids.AccountsMenu_main.ids.accounts_Boxlines.children:
-            button.bind(on_press=self.put)
+    def set_new_func_to_transfer_buttons(self, *args):
+        for box_id in ['accounts_Boxlines', 'savings_Boxlines']:
+            for button in getattr(self.ids.AccountsMenu_main.ids, box_id).children:
+                button.unbind(on_release=self.ids.AccountsMenu_main.open_menu_for_new_account)
+                button.bind(on_release=self.put)
 
-        for button in self.ids.AccountsMenu_main.ids.savings_Boxlines.children:
-            button.bind(on_press=self.put)
+    def del_myself(self, *args):
+        self.parent.remove_widget(self)
 
     def put(self, widget, **kwargs):
         # closing the old menu
@@ -183,3 +185,4 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
         # adding a new menu to the app
         self.parent.add_widget(menu_for_a_new_transaction())
+        self.del_myself()
