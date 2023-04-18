@@ -26,7 +26,7 @@ def sql_start() -> None:
     base.execute(
         f'CREATE TABLE IF NOT EXISTS accounts_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance REAL, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'name TEXT, color TEXT, balance REAL, currency TEXT, IncludeInTheTotalBalance INTEGER, '
         f'Description TEXT, icon TEXT)'
     )
 
@@ -34,7 +34,7 @@ def sql_start() -> None:
     base.execute(
         f'CREATE TABLE IF NOT EXISTS savings_db '
         f'(id INTEGER PRIMARY KEY AUTOINCREMENT, '
-        f'name TEXT, color TEXT, balance REAL, goal REAL, currency TEXT, IncludeInTheTotalBalance INTEGER '
+        f'name TEXT, color TEXT, balance REAL, goal REAL, currency TEXT, IncludeInTheTotalBalance INTEGER, '
         f'Description TEXT, icon TEXT)'
     )
 
