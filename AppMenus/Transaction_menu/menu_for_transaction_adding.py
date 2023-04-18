@@ -150,23 +150,27 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
         # typical selection
         else:
-            # first_item
-            config.last_transaction_id = list(config.history_dict)[-1]
+            if len(config.history_dict) > 0:
+                # first_item
+                config.last_transaction_id = list(config.history_dict)[-1]
 
-            last_id = -1
-            while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
-                last_id -= 1
-                config.last_transaction_id = list(config.history_dict)[last_id]
+                last_id = -1
+                while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
+                    last_id -= 1
+                    config.last_transaction_id = list(config.history_dict)[last_id]
 
-            last_transaction = config.history_dict[config.last_transaction_id]
+                last_transaction = config.history_dict[config.last_transaction_id]
 
-            last_account = last_transaction['From']
+                last_account = last_transaction['From']
+
+            else:
+                last_account = 'account_1'
 
             config.first_transaction_item = {'id': last_account,
                                              'Name':
                                                  config.global_accounts_data_dict[last_account]['Name'],
                                              'Color': config.global_accounts_data_dict[last_account]['Color'],
-                                             'Currency': last_transaction['FromCurrency']
+                                             'Currency': 'RUB' # last_transaction['FromCurrency']
                                              }
             # second item
             config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
