@@ -62,7 +62,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         # getting currency code name like 'USD'
         # the first item is from last transaction account in class transaction menu
-        self.code_name_of_first_currency = config.first_transaction_item['Currency']
+        self.code_name_of_first_currency = config.first_transaction_item.setdefault('Currency', 'RUB')
         # the second is from the pressed button in class MenuForTransactionAdding
         self.code_name_of_second_currency = config.second_transaction_item['Currency']
         print(f'from: {self.code_name_of_first_currency}; to: {self.code_name_of_second_currency}')
@@ -113,12 +113,7 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
     def first_trans_item_pressed(self, *args):
         print('FIRST')
-        config.first_transaction_item = None
-
         self.parent.open_menu_for_transaction_adding()
-
-        self.parent.ids.menu_for_transaction_adding.ids.tab_manager.switch_to(
-            self.parent.ids.menu_for_transaction_adding.ids.transfer_tab, do_scroll=False)
 
         config.choosing_first_transaction = True
 
@@ -128,9 +123,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         print('SECOND')
 
         self.parent.open_menu_for_transaction_adding()
-
-        self.parent.ids.menu_for_transaction_adding.ids.tab_manager.switch_to(
-            self.parent.ids.menu_for_transaction_adding.ids.expense_tab, do_scroll=False)
 
         self.del_myself()
 

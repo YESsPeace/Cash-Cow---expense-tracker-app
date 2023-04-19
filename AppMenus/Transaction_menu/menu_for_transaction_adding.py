@@ -4,6 +4,7 @@ from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
@@ -142,11 +143,15 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
         # reselection the first item
         if config.choosing_first_transaction:
+            config.choosing_first_transaction = False
             if str(widget.id) in self.transfer:
+                config.first_transaction_item = None
                 config.first_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color,
                                                  'Currency': self.transfer[str(widget.id)]['Currency']}
+            else:
+                Snackbar(text="You can't spend money from the category").open()
 
-            config.choosing_first_transaction = False
+
 
         # typical selection
         else:
