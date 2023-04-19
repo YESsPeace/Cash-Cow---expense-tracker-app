@@ -2,11 +2,9 @@ from copy import copy
 
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import NumericProperty
 from kivy.uix.screenmanager import NoTransition
-from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
@@ -23,6 +21,7 @@ from database import categories_db_read
 
 class CategoriesMenu(MDScreen):
     total_accounts_balance = NumericProperty(get_total_accounts_balance())
+
     def __init__(self, *args, **kwargs):
 
         # just for first creating widgets
@@ -79,8 +78,8 @@ class CategoriesMenu(MDScreen):
         print('# start edit mode')
 
         # switch top_bar to edit mode
-        self.top_btn_bar = self.ids.top_btn_bar
-        self.month_menu = self.ids.month_menu
+        self.top_btn_bar = copy(self.ids.top_btn_bar)
+        self.month_menu = copy(self.ids.month_menu)
 
         self.ids.top_bar.clear_widgets()
         self.ids.top_bar.height = dp(48)
@@ -124,16 +123,22 @@ class CategoriesMenu(MDScreen):
     def quit_from_edit_mode(self, *args):
         print('# quit from edit mode')
         self.ids.top_bar.height = dp(100)
+
+        self.ids.top_bar.clear_widgets()
+
         self.ids.top_bar.add_widget(self.top_btn_bar)
         self.ids.top_bar.add_widget(self.month_menu)
+
         self.ids.my_swiper.get_screen(self.current_menu_date).del_plus_button()
 
+        print('second')
         # rebind buttons functions
         for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
             for container in box.children:
                 for button in container.children:
                     try:
                         print(button.id)
+                        print('third')
 
                         if button.id == 'plus_button':
                             continue
@@ -148,6 +153,8 @@ class CategoriesMenu(MDScreen):
 
     def open_menu_for_edit_categories(self, button, *args):
         print(f'# Clicked - {button.id}')
+
+        self.quit_from_edit_mode()
 
         if button.id == 'plus_button':
             config.category_item = {

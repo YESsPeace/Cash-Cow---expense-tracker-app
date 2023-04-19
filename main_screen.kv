@@ -1,19 +1,23 @@
 <MainSrceen>:
     md_bg_color: app.theme_color
 
-    MDBottomNavigation:
+    My_BottomNavigation:
         id: bottom_navigation
+
         selected_color_background: .6, .1, .2, 1
         text_color_normal: .55, .55, .55, 1
         text_color_active: .99, .99, .99, 1
         panel_color: .15, .15, .15, 1
         md_bg_color: app.theme_color
 
+
         MDBottomNavigationItem:
             id: screen1
             name: 'screen1'
             text: 'Accounts'
             icon: 'Icons/Btn_icon/Accounts-icon-white.png'
+            on_tab_press:
+                print('MainSrceen:', root.ids.bottom_navigation.ids, sep='\n')
 
             AccountsMenu:
                 id: AccountsMenu_id

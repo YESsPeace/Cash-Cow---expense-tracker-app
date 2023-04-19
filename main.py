@@ -4,21 +4,18 @@ import sys
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, Clock
 from kivy.resources import resource_add_path
 from kivy.uix.screenmanager import ScreenManager, NoTransition
 from kivymd.app import MDApp
+from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
 
 import config
 
-import AppMenus
-from AppMenus import menu_for_a_new_transaction, Categories_buttons_menu, \
-    Transaction_menu_in, BudgetMenu_in, menu_for_a_new_budget, menu_for_new_or_edit_category, \
-    menu_for_choice_new_account_type, menu_for_new_account
-from AppMenus.Transaction_menu.menu_for_transaction_adding import MenuForTransactionAdding
+from AppMenus import *
 
 
 class MainSrceen(MDScreen):
@@ -89,10 +86,20 @@ class MainSrceen(MDScreen):
                     )
 
 
+class My_BottomNavigation(MDBottomNavigation):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        Clock.schedule_once(self.set_widget_props)
+
+    def set_widget_props(self, *args):
+        Clock.schedule_once(self.set_transition)
+
+    def set_transition(self, *args):
+        self.ids.tab_manager.transition = NoTransition()
+
+
 class Manager(ScreenManager):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.transition = NoTransition()
+    pass
 
 
 class MyNavigationDrawer(MDNavigationDrawer):
