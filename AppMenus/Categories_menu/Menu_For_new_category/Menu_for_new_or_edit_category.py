@@ -25,13 +25,6 @@ class menu_for_new_or_edit_category(MDScreen):
 
         super().__init__(*args, **kwargs)
 
-    def delete_category(self, *args):
-        print('# deleting category started')
-        db_data_delete(db_name='categories_db', item_id=self.category_item['ID'])
-        self.del_myself()
-        Snackbar(text="Category deleted").open()
-
-
     def complete_pressed(self, *args):
         if self.category_item.get('new') is True:
             self.create_category()
@@ -48,7 +41,7 @@ class menu_for_new_or_edit_category(MDScreen):
         self.category_item['Name'] = self.ids.category_name_text_field.text
 
         db_data_add(
-            db_name='categories_db',
+            db_name=self.category_item['db_name'],
             params=self.category_item
         )
 
@@ -58,7 +51,7 @@ class menu_for_new_or_edit_category(MDScreen):
     def edit_category(self, *args):
         print('# editing category started')
         db_data_edit(
-            db_name='categories_db',
+            db_name=self.category_item['db_name'],
             item_id=self.category_item['ID'],
             name=self.ids.category_name_text_field.text,
             icon=self.category_item['Icon'],
@@ -67,6 +60,15 @@ class menu_for_new_or_edit_category(MDScreen):
 
         self.del_myself()
         Snackbar(text="Category edited").open()
+
+    def delete_category(self, *args):
+        print('# deleting category started')
+        db_data_delete(
+            db_name=self.category_item['db_name'],
+            item_id=self.category_item['ID']
+        )
+        self.del_myself()
+        Snackbar(text="Category deleted").open()
 
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')

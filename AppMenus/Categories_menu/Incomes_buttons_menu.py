@@ -1,7 +1,9 @@
 from random import choice
 
+from kivy.app import App
 from kivy.metrics import dp
 from kivy.uix.anchorlayout import AnchorLayout
+from kivy.weakproxy import WeakProxy
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.label import MDLabel
@@ -118,6 +120,23 @@ class Incomes_buttons_menu(MDScreen):
             )
 
             self.ids.GridIncomesMenu.add_widget(box)
+
+    def add_plus_button(self, *args):
+        # add plus button, which opening menu for adding a new categories
+        app = App.get_running_app()
+
+        plus_button = MDIconButton(
+                pos_hint={'center_x': 0.5, 'top': 0.5},
+                id='plus_button_incomes',
+                icon="plus",
+                on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
+            )
+
+        self.ids.GridIncomesMenu.add_widget(plus_button)
+        self.ids['plus_button_incomes'] = WeakProxy(plus_button)
+
+    def del_plus_button(self, *args):
+        self.ids.GridIncomesMenu.remove_widget(self.ids.plus_button_incomes)
 
     def open_menu_for_a_new_transaction(self, widget, *args) -> None:
         # getting info for a new menu

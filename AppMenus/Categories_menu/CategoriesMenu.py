@@ -16,7 +16,7 @@ from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
 from AppMenus.other_func import load_next_month, load_previous_month, get_total_accounts_balance
 
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
-from database import categories_db_read
+from database import categories_db_read, incomes_db_read
 
 
 class CategoriesMenu(MDScreen):
@@ -106,19 +106,20 @@ class CategoriesMenu(MDScreen):
         )
 
         # rebind buttons functions
-        for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
-            for container in box.children:
-                for button in container.children:
-                    try:
-                        button.unbind(on_release=self.ids.my_swiper.get_screen(
-                            self.current_menu_date).open_menu_for_a_new_transaction)
+        for swiper_id, menu_id in [('my_swiper', 'GridCategoriesMenu'), ('incomes_swiper', 'GridIncomesMenu')]:
+            for box in getattr(getattr(self.ids, swiper_id).get_screen(self.current_menu_date).ids, menu_id).children:
+                for container in box.children:
+                    for button in container.children:
+                        try:
+                            button.unbind(on_release=getattr(self.ids, swiper_id).get_screen(
+                                self.current_menu_date).open_menu_for_a_new_transaction)
 
-                        button.bind(on_release=self.open_menu_for_edit_categories)
+                            button.bind(on_release=self.open_menu_for_edit_categories)
 
-                    except AttributeError:
-                        continue
+                        except AttributeError:
+                            continue
 
-        self.ids.my_swiper.get_screen(self.current_menu_date).add_plus_button()
+            getattr(self.ids, swiper_id).get_screen(self.current_menu_date).add_plus_button()
 
     def quit_from_edit_mode(self, *args):
         print('# quit from edit mode')
@@ -129,45 +130,51 @@ class CategoriesMenu(MDScreen):
         self.ids.top_bar.add_widget(self.top_btn_bar)
         self.ids.top_bar.add_widget(self.month_menu)
 
-        self.ids.my_swiper.get_screen(self.current_menu_date).del_plus_button()
+        for swiper_id in ['my_swiper', 'incomes_swiper']:
+            getattr(self.ids, swiper_id).get_screen(self.current_menu_date).del_plus_button()
 
-        print('second')
         # rebind buttons functions
-        for box in self.ids.my_swiper.get_screen(self.current_menu_date).ids.GridCategoriesMenu.children:
-            for container in box.children:
-                for button in container.children:
-                    try:
-                        print(button.id)
-                        print('third')
+        for swiper_id, menu_id, plus_button_id in \
+                [('my_swiper', 'GridCategoriesMenu', 'plus_button_categories'),
+                 ('incomes_swiper', 'GridIncomesMenu', 'plus_button_incomes')]:
+            for box in getattr(getattr(self.ids, swiper_id).get_screen(self.current_menu_date).ids, menu_id).children:
+                for container in box.children:
+                    for button in container.children:
+                        try:
+                            print(button.id)
 
-                        if button.id == 'plus_button':
+                            if button.id == plus_button_id:
+                                continue
+
+                            button.unbind(on_release=self.open_menu_for_edit_categories)
+
+                            button.bind(on_release= \
+                                            getattr(self.ids, swiper_id).get_screen(
+                                                self.current_menu_date).open_menu_for_a_new_transaction)
+
+                        except AttributeError:
                             continue
-
-                        button.unbind(on_release=self.open_menu_for_edit_categories)
-
-                        button.bind(on_release=self.ids.my_swiper.get_screen(
-                            self.current_menu_date).open_menu_for_a_new_transaction)
-
-                    except AttributeError:
-                        continue
 
     def open_menu_for_edit_categories(self, button, *args):
         print(f'# Clicked - {button.id}')
 
         self.quit_from_edit_mode()
 
-        if button.id == 'plus_button':
+        if button.id in ['plus_button_categories', 'plus_button_incomes']:
             config.category_item = {
                 'ID': None,
                 'Name': '',
                 'Color': [0.71, 0.72, 0.69, 0.5],
                 'Icon': 'basket-outline',
                 'new': True,
+                'db_name': button.id.split('_')[-1] + '_db'
             }
 
         else:
-            config.category_item = categories_db_read()[button.id]
+            config.category_item = (categories_db_read() | incomes_db_read()).get(button.id)
             config.category_item['ID'] = button.id
+            config.category_item['db_name'] = 'categories_db' \
+                if button.id.split('_')[0] == 'categories' else 'incomes_db'
 
         app = App.get_running_app()
 

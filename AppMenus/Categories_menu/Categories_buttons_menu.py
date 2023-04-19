@@ -130,16 +130,16 @@ class Categories_buttons_menu(MDScreen):
 
         plus_button = MDIconButton(
                 pos_hint={'center_x': 0.5, 'top': 0.5},
-                id='plus_button',
+                id='plus_button_categories',
                 icon="plus",
                 on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
             )
 
         self.ids.GridCategoriesMenu.add_widget(plus_button)
-        self.ids['plus_button'] = WeakProxy(plus_button)
+        self.ids['plus_button_categories'] = WeakProxy(plus_button)
 
     def del_plus_button(self, *args):
-        self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button)
+        self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)
 
     def open_menu_for_a_new_transaction(self, widget, *args) -> None:
         # getting info for a new menu
