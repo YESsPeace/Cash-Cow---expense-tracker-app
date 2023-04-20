@@ -17,22 +17,12 @@
         tab_pos: 'top_mid'
         tab_width: self.width/3 - 7
 
-        canvas.before:
-            Color:
-                rgba: 1, 0, .5, 1
-            Rectangle:
-                size: self.size
-                pos: self.pos
-
         TabbedPanelItem:
             id: expense_tab
             text: 'Expense'
 
-            MDGridLayout:
-                id: expense_layout
-                md_bg_color: .9, .9, .9, 1
-                spacing: dp(7)
-                cols: 4
+            Categories_buttons_menu:
+                id: Categories_buttons_menu
 
         TabbedPanelItem:
             id: transfer_tab
@@ -42,5 +32,8 @@
                 id: AccountsMenu_main
 
         TabbedPanelItem:
+            id: incomes_tab
             text: 'Income'
 
+            Incomes_buttons_menu:
+                id: Incomes_buttons_menu

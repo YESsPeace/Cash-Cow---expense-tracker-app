@@ -126,11 +126,11 @@ class Incomes_buttons_menu(MDScreen):
         app = App.get_running_app()
 
         plus_button = MDIconButton(
-                pos_hint={'center_x': 0.5, 'top': 0.5},
-                id='plus_button_incomes',
-                icon="plus",
-                on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
-            )
+            pos_hint={'center_x': 0.5, 'top': 0.5},
+            id='plus_button_incomes',
+            icon="plus",
+            on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
+        )
 
         self.ids.GridIncomesMenu.add_widget(plus_button)
         self.ids['plus_button_incomes'] = WeakProxy(plus_button)
@@ -152,29 +152,30 @@ class Incomes_buttons_menu(MDScreen):
         # typical selection
         else:
             # second item
-            config.last_transaction_id = list(config.history_dict)[-1]
+            if len(config.history_dict) > 0:
+                config.last_transaction_id = list(config.history_dict)[-1]
+                last_transaction = config.history_dict[config.last_transaction_id]
 
-            last_id = -1
-            while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
-                last_id -= 1
-                config.last_transaction_id = list(config.history_dict)[last_id]
+                if last_transaction['Type'] in ['Transfer', 'Expenses']:
+                    last_account = last_transaction['From']
+                else:
+                    last_account = last_transaction['To']
 
-            last_transaction = config.history_dict[config.last_transaction_id]
-
-            last_account = last_transaction['From']
+            else:
+                last_account = 'account_1'
 
             config.second_transaction_item = {'id': last_account,
-                                             'Name':
-                                                 config.global_accounts_data_dict[last_account]['Name'],
-                                             'Color': config.global_accounts_data_dict[last_account]['Color'],
-                                             'Currency': last_transaction['FromCurrency']
-                                             }
+                                              'Name':
+                                                  config.global_accounts_data_dict[last_account]['Name'],
+                                              'Color': config.global_accounts_data_dict[last_account]['Color'],
+                                              'Currency': 'RUB'  # last_transaction['FromCurrency']
+                                              }
             # first item
             config.first_transaction_item = {'id': widget.id,
-                                              'Name': self.Incomes_menu_button_data_dictionary[widget.id][
-                                                  'Name'],
-                                              'Color': self.Incomes_menu_button_data_dictionary[widget.id]
-                                                       ['Color'][:-1] + [1]}
+                                             'Name': self.Incomes_menu_button_data_dictionary[widget.id][
+                                                 'Name'],
+                                             'Color': self.Incomes_menu_button_data_dictionary[widget.id]
+                                                      ['Color'][:-1] + [1]}
 
             if str(widget.id) in self.transfer:
                 config.first_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']

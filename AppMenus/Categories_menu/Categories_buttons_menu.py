@@ -129,11 +129,11 @@ class Categories_buttons_menu(MDScreen):
         app = App.get_running_app()
 
         plus_button = MDIconButton(
-                pos_hint={'center_x': 0.5, 'top': 0.5},
-                id='plus_button_categories',
-                icon="plus",
-                on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
-            )
+            pos_hint={'center_x': 0.5, 'top': 0.5},
+            id='plus_button_categories',
+            icon="plus",
+            on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
+        )
 
         self.ids.GridCategoriesMenu.add_widget(plus_button)
         self.ids['plus_button_categories'] = WeakProxy(plus_button)
@@ -154,18 +154,16 @@ class Categories_buttons_menu(MDScreen):
 
         # typical selection
         else:
+            # first_item
             if len(config.history_dict) > 0:
-                # first_item
                 config.last_transaction_id = list(config.history_dict)[-1]
-
-                last_id = -1
-                while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
-                    last_id -= 1
-                    config.last_transaction_id = list(config.history_dict)[last_id]
-
                 last_transaction = config.history_dict[config.last_transaction_id]
 
-                last_account = last_transaction['From']
+                if last_transaction['Type'] in ['Transfer', 'Expenses']:
+                    last_account = last_transaction['From']
+                else:
+                    last_account = last_transaction['To']
+
 
             else:
                 last_account = 'account_1'

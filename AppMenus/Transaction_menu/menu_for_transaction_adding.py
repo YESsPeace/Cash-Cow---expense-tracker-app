@@ -8,7 +8,7 @@ from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
-from database import categories_db_read, accounts_db_read, savings_db_read
+from database import categories_db_read, accounts_db_read, savings_db_read, incomes_db_read
 
 
 class MenuForTransactionAdding(MDNavigationDrawer):
@@ -60,71 +60,35 @@ class MenuForTransactionAdding(MDNavigationDrawer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # getting data for expense
-        self.expense_dict = categories_db_read()
 
+        # getting data for expense
+        self.expense_dict = categories_db_read() | incomes_db_read()
         # getting data for transfer
         self.transfer = accounts_db_read() | savings_db_read()
 
-        # adding button to expense tab
-        Clock.schedule_once(self.adding_buttons_to_expense_tab)
+        Clock.schedule_once(self.set_widgets_props)
 
-    def adding_buttons_to_expense_tab(self, *args):
-        Clock.schedule_once(self.set_new_func_to_transfer_buttons)
+    def set_widgets_props(self, *args):
+        if len(self.expense_dict) > 0 and len(self.transfer) > 0:
+            Clock.schedule_once(self.set_new_func_to_expense_and_incomes_buttons)
+            Clock.schedule_once(self.set_new_func_to_transfer_buttons)
+        else:
+            self.del_myself()
+            Snackbar(text="Firstly create an account and an expense category").open()
 
-        for button_id in self.expense_dict:
-            box = MDScreen(
-                md_bg_color=(.8, .3, .4, 1)
-            )
+    def set_new_func_to_expense_and_incomes_buttons(self, *args):
+        for menu_id, grid_id in [('Categories_buttons_menu', 'GridCategoriesMenu'),
+                                 ('Incomes_buttons_menu', 'GridIncomesMenu')]:
+            for box in getattr(getattr(self.ids, menu_id).ids, grid_id).children:
+                for container in box.children:
+                    for button in container.children:
+                        try:
+                            button.unbind(on_release=getattr(self.ids, menu_id).open_menu_for_a_new_transaction)
 
-            anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
-            anchor_btn.add_widget(
-                MDIconButton(
-                    id=str(button_id),
-                    text=self.expense_dict[button_id]['Name'],
-                    md_bg_color=list(self.expense_dict[button_id]['Color'][:-1]) + [1],
-                    icon_size="32sp",
-                    on_release=self.put
-                )
-            )
-            box.add_widget(anchor_btn)
+                            button.bind(on_release=self.put)
 
-            box.add_widget(
-                MDLabel(
-                    text=self.expense_dict[button_id]['Name'],
-                    pos_hint={'center_x': .5, 'top': 1},
-                    size_hint=(1, .25),
-                    halign='center',
-                )
-            )
-
-            self.ids.expense_layout.add_widget(box)
-
-    def adding_buttons_to_transfer_tab(self, *args):
-        for account in self.transfer.values():
-            box = MDScreen(
-                md_bg_color=(.8, .3, .4, 1)
-            )
-
-            anchor_btn = MDAnchorLayout(md_bg_color=(.3, .6, .4, 1))
-            anchor_btn.add_widget(
-                MDIconButton(
-                    md_bg_color=account['Color'],
-                    icon_size="32sp"
-                )
-            )
-            box.add_widget(anchor_btn)
-
-            box.add_widget(
-                MDLabel(
-                    text=account['Name'],
-                    pos_hint={'center_x': .5, 'top': 1},
-                    size_hint=(1, .25),
-                    halign='center',
-                )
-            )
-
-            self.ids.transfer_layout.add_widget(box)
+                        except AttributeError:
+                            continue
 
     def set_new_func_to_transfer_buttons(self, *args):
         for box_id in ['accounts_Boxlines', 'savings_Boxlines']:
@@ -146,7 +110,8 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             config.choosing_first_transaction = False
             if str(widget.id) in self.transfer:
                 config.first_transaction_item = None
-                config.first_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color,
+                config.first_transaction_item = {'id': widget.id, 'Name': widget.text,
+                                                 'Color': widget.md_bg_color[:-1] + [1],
                                                  'Currency': self.transfer[str(widget.id)]['Currency']}
             else:
                 Snackbar(text="You can't spend money from the category").open()
@@ -174,11 +139,17 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             config.first_transaction_item = {'id': last_account,
                                              'Name':
                                                  config.global_accounts_data_dict[last_account]['Name'],
-                                             'Color': config.global_accounts_data_dict[last_account]['Color'],
-                                             'Currency': 'RUB' # last_transaction['FromCurrency']
+                                             'Color': config.global_accounts_data_dict[last_account]['Color'][:-1] + [
+                                                 1],
+                                             'Currency': 'RUB'  # last_transaction['FromCurrency']
                                              }
             # second item
-            config.second_transaction_item = {'id': widget.id, 'Name': widget.text, 'Color': widget.md_bg_color}
+            config.second_transaction_item = (self.expense_dict | self.transfer)[widget.id]
+            config.second_transaction_item['Color'] = config.second_transaction_item['Color'][:-1] + [1]
+            config.second_transaction_item['id'] = widget.id
+
+            if widget.id.split('_')[0] == 'income':
+                config.first_transaction_item, config.second_transaction_item = config.second_transaction_item, config.first_transaction_item
 
             print(*config.second_transaction_item.items(), sep='\n')
 
