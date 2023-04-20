@@ -72,7 +72,7 @@ class Incomes_buttons_menu(MDScreen):
                     print(f'Income level for {button_id}: {button_level}')
 
                 else:
-                    button_level = 0
+                    button_level = 1
 
                 if button_level > 1:
                     button_level = 1
