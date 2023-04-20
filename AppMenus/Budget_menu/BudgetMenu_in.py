@@ -50,6 +50,8 @@ class BudgetMenu_in(MDScreen):
         savings_budget_data_dict = budget_data_read(id='savings_', db_name='budget_data_savings')
         type_dict = savings_db_read()
 
+        budget_data_dict = {}
+
         if budget_data_date in savings_budget_data_dict:
             budget_data_dict = savings_budget_data_dict[budget_data_date]
 
@@ -71,13 +73,15 @@ class BudgetMenu_in(MDScreen):
                                        spent_label_id='savings_label',
                                        budgeted_label_id='budgeted_savings_label')
 
-            self.set_budget_list(budget_data_dict=budget_data_dict,
-                                 budget_menu_name='savings_budget',
-                                 global_type_data_dict=type_dict)
+        self.set_budget_list(budget_data_dict=budget_data_dict,
+                             budget_menu_name='savings_budget',
+                             global_type_data_dict=type_dict)
 
     def set_incomes(self, budget_data_date) -> None:
         incomes_budget_data_dict = budget_data_read(id='income_', db_name='budget_data_incomes')
         type_dict = incomes_db_read()
+
+        budget_data_dict = {}
 
         if budget_data_date in incomes_budget_data_dict:
             budget_data_dict = incomes_budget_data_dict[budget_data_date]
@@ -100,13 +104,15 @@ class BudgetMenu_in(MDScreen):
                                        spent_label_id='incomes_label',
                                        budgeted_label_id='budgeted_incomes_label')
 
-            self.set_budget_list(budget_data_dict=budget_data_dict,
-                                 budget_menu_name='incomes_budget',
-                                 global_type_data_dict=type_dict)
+        self.set_budget_list(budget_data_dict=budget_data_dict,
+                             budget_menu_name='incomes_budget',
+                             global_type_data_dict=type_dict)
 
     def set_categories(self, budget_data_date) -> None:
         categories_budget_data_dict = budget_data_read(id='categories_', db_name='budget_data_categories')
         type_dict = categories_db_read()
+
+        budget_data_dict = {}
 
         if budget_data_date in categories_budget_data_dict:
             budget_data_dict = categories_budget_data_dict[budget_data_date]
@@ -129,9 +135,9 @@ class BudgetMenu_in(MDScreen):
                                        spent_label_id='spent_label',
                                        budgeted_label_id='budgeted_label')
 
-            self.set_budget_list(budget_data_dict=budget_data_dict,
-                                 budget_menu_name='categories_budget',
-                                 global_type_data_dict=type_dict)
+        self.set_budget_list(budget_data_dict=budget_data_dict,
+                             budget_menu_name='categories_budget',
+                             global_type_data_dict=type_dict)
 
     def set_budget_menu(self, budget_data_dict, month_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:
@@ -223,27 +229,29 @@ class BudgetMenu_in(MDScreen):
 
     def set_budget_list(self, budget_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:
-        if not (len(budget_data_dict) == len(global_type_data_dict)):
+        # if not (len(budget_data_dict) == len(global_type_data_dict)):
+        if len(global_type_data_dict) > len(budget_data_dict):
             self.Budget_grid = MDGridLayout(
-                MDAnchorLayout(
-                    MDRectangleFlatButton(
-                        text='More',
-                        size_hint_y=None,
-                        height=dp(60),
-                        md_bg_color=(.66, .66, .66, 1),
-                        on_release=self.open_grid,
-                    )
-                ),
                 md_bg_color=(.3, .5, .4, 1),
                 size_hint_y=None,
                 adaptive_height=True,
                 cols=4,
             )
 
-            for item_id in global_type_data_dict:
-                if item_id in budget_data_dict:
-                    continue
+            if len(global_type_data_dict) > 3:
+                self.Budget_grid.add_widget(
+                    MDAnchorLayout(
+                        MDRectangleFlatButton(
+                            text='More',
+                            size_hint_y=None,
+                            height=dp(60),
+                            md_bg_color=(.66, .66, .66, 1),
+                            on_release=self.open_grid,
+                        )
+                    ),
+                )
 
+            for item_id in set(global_type_data_dict) - set(budget_data_dict):
                 category = global_type_data_dict[item_id]
 
                 self.Budget_grid.add_widget(
