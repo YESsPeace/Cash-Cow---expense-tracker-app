@@ -56,33 +56,8 @@
                             size: self.size
 
         MDScreen:
-            TabbedPanel:
-                id: tab_manager
-                do_default_tab: False
-                tab_pos: 'top_mid'
-                tab_width: self.width/3 - 7
-
-                canvas.before:
-                    Color:
-                        rgba: 1, 0, .5, 1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-
-                TabbedPanelItem:
-                    text: 'main'
-                    AccountsMenu_main:
-                        id: AccountsMenu_main_id
-
-                TabbedPanelItem:
-                    text: 'debts'
-                    AccountsMenu_stat:
-                        id: AccountsMenu_stat_id
-
-                TabbedPanelItem:
-                    text: 'stat'
-                    AccountsMenu_debts:
-                        id: AccountsMenu_debts_id
+            AccountsMenu_main:
+                id: AccountsMenu_main_id
 
     MyNavigationDrawer:
         id: nav_drawer
