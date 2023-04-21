@@ -43,13 +43,9 @@ class icon_choice_menu(MDNavigationDrawer):
     def set_widget_props(self, *args):
         self.set_icons_grid()
 
-    def set_icons_grid(self, *args):
-        for icon_name in md_icons:
-            color = [.55, .55, .55, 1]
+    def set_icons_grid(self, text="", search=False, *args):
 
-            if icon_name == self.category_item.get('Icon'):
-                color = [.9, .1, .1, 1]
-
+        def add_icon_item(icon_name):
             self.ids.rv.data.append(
                 {
                     "viewclass": "MDIconButton",
@@ -59,6 +55,22 @@ class icon_choice_menu(MDNavigationDrawer):
                 }
             )
 
+        current_item_icon = self.category_item.get('Icon')
+
+        self.ids.rv.data = []
+
+        for icon_name in md_icons.keys():
+            color = [.55, .55, .55, 1]
+
+            if icon_name == current_item_icon:
+                color = [.9, .1, .1, 1]
+
+            if search:
+                if text in icon_name:
+                    add_icon_item(icon_name)
+            else:
+                add_icon_item(icon_name)
+
     def set_icon(self, icon_name, *args):
         self.ids.icon_preview.icon = icon_name
 
@@ -67,7 +79,6 @@ class icon_choice_menu(MDNavigationDrawer):
         print('# icon selected:', self.ids.icon_preview.icon)
         getattr(self.parent, self.info_dict_name)['Icon'] = self.ids.icon_preview.icon
         self.del_myself()
-
 
     def update_status(self, *_) -> None:
         status = self.status

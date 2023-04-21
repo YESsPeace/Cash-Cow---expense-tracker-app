@@ -29,6 +29,17 @@
                     on_release:
                         root.complete_pressed()
 
+            MDBoxLayout:
+                adaptive_height: True
+
+                MDIconButton:
+                    icon: 'magnify'
+
+                MDTextField:
+                    id: search_field
+                    hint_text: 'Search icon'
+                    on_text: root.set_icons_grid(self.text, True)
+
             MDScreen:
                 md_bg_color: 0, 0, 0, 1
                 RecycleView:
