@@ -150,7 +150,6 @@ class MoneyStatApp(MDApp):
         # Transaction menu
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
-        Builder.load_file('AppMenus/Transaction_menu/date_label_for_transaction_history_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/menu_for_transaction_adding.kv')
 
         # BudgeMenu

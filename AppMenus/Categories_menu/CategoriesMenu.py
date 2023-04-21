@@ -35,7 +35,7 @@ class CategoriesMenu(MDScreen):
         self.months_loaded_at_startup = config.months_loaded_at_startup
 
         Clock.schedule_once(self.set_transition)
-        Clock.schedule_once(self.add_pre_loaded_months)
+        # Clock.schedule_once(self.add_pre_loaded_months)
 
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())

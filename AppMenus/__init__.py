@@ -13,7 +13,6 @@ from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
 
 from AppMenus.Transaction_menu.TransactionMenu import Transaction_menu
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
-from AppMenus.Transaction_menu.date_label_for_transaction_history_menu import date_label_for_transaction_history_menu
 
 from AppMenus.Budget_menu.BudgetMenu import BudgetMenu
 from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in

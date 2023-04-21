@@ -1,39 +1,47 @@
 <Transaction_menu_in>:
     md_bg_color: 0, 0, 0, 0
-    MDScrollView:
-        size_hint: 1, None
-        size: self.parent.size
-        adaptive_height: True
+    MDBoxLayout:
+        orientation: 'vertical'
 
-        MDGridLayout:
-            id: GridLayout_in_ScrollView
+        MDBoxLayout:
+            id: transaction_title
+            orientation: 'horizontal'
             size_hint: 1, None
-            adaptive_height: True
-            cols: 1
+            height: dp(40)
+            padding: dp(12), 0
+            md_bg_color: .3, .1, .5, 1
 
-            MDBoxLayout:
-                id: transaction_title
-                orientation: 'horizontal'
-                size_hint: 1, None
-                height: dp(40)
-                padding: dp(12), 0
-                md_bg_color: .3, .1, .5, 1
+            MDLabel:
+                text: 'Before Balance'
+                font_size: dp(16)
+                halign: 'left'
+                md_bg_color: .3, .6, .5, 1
 
-                MDLabel:
-                    text: 'Before Balance'
-                    font_size: dp(16)
-                    halign: 'left'
-                    md_bg_color: .3, .6, .5, 1
+            Label
+                text: 'After Balance'
+                font_size: dp(16)
+                halign: 'right'
+                size_hint_x: None
+                size: self.texture_size
+                canvas.before:
+                    Color:
+                        rgba: .3, .6, .8, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
 
-                Label
-                    text: 'After Balance'
-                    font_size: dp(16)
-                    halign: 'right'
-                    size_hint_x: None
-                    size: self.texture_size
-                    canvas.before:
-                        Color:
-                            rgba: .3, .6, .8, 1
-                        Rectangle:
-                            pos: self.pos
-                            size: self.size
+        MDScreen:
+            RecycleView:
+                id: Transaction_rv
+                key_viewclass: 'viewclass'
+                key_size: 'height'
+
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+                    spacing: dp(5)
+
+

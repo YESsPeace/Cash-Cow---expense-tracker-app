@@ -30,7 +30,7 @@ class Transaction_menu(MDScreen):
         super().__init__(*args, **kwargs)
 
         Clock.schedule_once(self.set_transition)
-        Clock.schedule_once(self.add_pre_loaded_months)
+        # Clock.schedule_once(self.add_pre_loaded_months)
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
