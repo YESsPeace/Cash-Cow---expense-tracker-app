@@ -1,5 +1,6 @@
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.properties import NumericProperty, StringProperty
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -7,6 +8,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton, MDRectangleFlatButton
+from kivymd.uix.card import MDCard
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
@@ -23,6 +25,28 @@ class InvisibleButton(Button):
     pass
 
 
+class BudgetItem(MDCard):
+    radius = [0, 0, 0, 0]
+    padding = [dp(5), dp(5), dp(5), dp(5)]
+    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+    ripple_behavior = True
+
+    item_id = StringProperty('categories_0')
+    item_name = StringProperty('default_budget')
+    real_sum = NumericProperty(0)
+    budgeted = NumericProperty(1)
+
+
+class BudgetTitle(MDCard):
+    radius = [0, 0, 0, 0]
+    padding = [dp(5), dp(5), dp(5), dp(5)]
+    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+
+    type_name = StringProperty('default_budget_type')
+    real_sum = NumericProperty(0)
+    budgeted = NumericProperty(1)
+
+
 class BudgetMenu_in(MDScreen):
 
     def __init__(self, *args, **kwargs):
@@ -33,199 +57,98 @@ class BudgetMenu_in(MDScreen):
         self.current_menu_date = config.current_menu_date
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        Clock.schedule_once(self.set_budgeted)
+        Clock.schedule_once(self.refresh_rv_data)
 
-    def set_budgeted(self, *args):
+    def get_budget_data(self, *args) -> list:
+        out_list = []
 
-        # Categories
-        self.set_categories(self.budget_data_date)
+        for type_dict, budget_data_dict, month_data_dict, title_text in [
+            (
+                    categories_db_read(),  # type_dict
+                    budget_data_read(id='categories_', db_name='budget_data_categories'),  # budget_data_dict
+                    get_categories_month_data(
+                        get_transaction_for_the_period(
+                            from_date=str(self.current_menu_date.replace(day=1)),
+                            to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                            history_dict=transaction_db_read()
+                        )
+                    ),  # month_data_dict
+                    'Categories'  # title_text
+            ),
+            (
+                    savings_db_read(),  # type_dict
+                    budget_data_read(id='savings_', db_name='budget_data_savings'),  # budget_data_dict
+                    get_savings_month_data(
+                        get_transaction_for_the_period(
+                            from_date=str(self.current_menu_date.replace(day=1)),
+                            to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                            history_dict=transaction_db_read()
+                        )
+                    ),  # month_data_dict
+                    'Savings'  # title_text
+            ),
+            (
+                    incomes_db_read(),  # type_dict
+                    budget_data_read(id='income_', db_name='budget_data_incomes'),  # budget_data_dict
+                    get_incomes_month_data(
+                        get_transaction_for_the_period(
+                            from_date=str(self.current_menu_date.replace(day=1)),
+                            to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
+                            history_dict=transaction_db_read()
+                        )
+                    ),  # month_data_dict
+                    'Incomes'  # title_text
+            ),
+        ]:
 
-        # Incomes
-        self.set_incomes(self.budget_data_date)
+            if self.budget_data_date in budget_data_dict:
+                budget_data_dict = budget_data_dict[self.budget_data_date]
 
-        # Savings
-        self.set_savings(self.budget_data_date)
-
-    def set_savings(self, budget_data_date):
-        savings_budget_data_dict = budget_data_read(id='savings_', db_name='budget_data_savings')
-        type_dict = savings_db_read()
-
-        budget_data_dict = {}
-
-        if budget_data_date in savings_budget_data_dict:
-            budget_data_dict = savings_budget_data_dict[budget_data_date]
-
-            savings_month_data_dict = \
-                get_savings_month_data(
-                    get_transaction_for_the_period(
-                        from_date=str(self.current_menu_date.replace(day=1)),
-                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
-                        history_dict=transaction_db_read()
-                    )
+                out_list.append(
+                    {
+                        "viewclass": "BudgetTitle",
+                        "height": dp(75),
+                        "type_name": title_text,
+                        "real_sum": sum(month_data_dict[item_id]['SUM'] for item_id in month_data_dict),
+                        "budgeted": sum(budget_data_dict[item_id]['Budgeted'] for item_id in budget_data_dict),
+                    }
                 )
 
-            self.set_budget_menu(budget_data_dict, savings_month_data_dict,
-                                 budget_menu_name='savings_budget',
-                                 global_type_data_dict=type_dict)
+                for item_id in budget_data_dict.keys():
+                    if item_id in type_dict.keys():
+                        real_sum = 0
+                        if item_id in month_data_dict:
+                            real_sum = month_data_dict[item_id]['SUM']
 
-            self.calculate_n_set_spent(budget_data_dict, savings_month_data_dict,
-                                       progress_bar_name='all_savings_ProgressBar',
-                                       spent_label_id='savings_label',
-                                       budgeted_label_id='budgeted_savings_label')
-
-        self.set_budget_list(budget_data_dict=budget_data_dict,
-                             budget_menu_name='savings_budget',
-                             global_type_data_dict=type_dict)
-
-    def set_incomes(self, budget_data_date) -> None:
-        incomes_budget_data_dict = budget_data_read(id='income_', db_name='budget_data_incomes')
-        type_dict = incomes_db_read()
-
-        budget_data_dict = {}
-
-        if budget_data_date in incomes_budget_data_dict:
-            budget_data_dict = incomes_budget_data_dict[budget_data_date]
-
-            incomes_month_data_dict = \
-                get_incomes_month_data(
-                    get_transaction_for_the_period(
-                        from_date=str(self.current_menu_date.replace(day=1)),
-                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
-                        history_dict=transaction_db_read()
-                    )
-                )
-
-            self.set_budget_menu(budget_data_dict, incomes_month_data_dict,
-                                 budget_menu_name='incomes_budget',
-                                 global_type_data_dict=type_dict)
-
-            self.calculate_n_set_spent(budget_data_dict, incomes_month_data_dict,
-                                       progress_bar_name='all_incomes_ProgressBar',
-                                       spent_label_id='incomes_label',
-                                       budgeted_label_id='budgeted_incomes_label')
-
-        self.set_budget_list(budget_data_dict=budget_data_dict,
-                             budget_menu_name='incomes_budget',
-                             global_type_data_dict=type_dict)
-
-    def set_categories(self, budget_data_date) -> None:
-        categories_budget_data_dict = budget_data_read(id='categories_', db_name='budget_data_categories')
-        type_dict = categories_db_read()
-
-        budget_data_dict = {}
-
-        if budget_data_date in categories_budget_data_dict:
-            budget_data_dict = categories_budget_data_dict[budget_data_date]
-
-            categories_month_data_dict = \
-                get_categories_month_data(
-                    get_transaction_for_the_period(
-                        from_date=str(self.current_menu_date.replace(day=1)),
-                        to_date=str(self.current_menu_date.replace(day=self.days_in_current_menu_month)),
-                        history_dict=transaction_db_read()
-                    )
-                )
-
-            self.set_budget_menu(budget_data_dict, categories_month_data_dict,
-                                 budget_menu_name='categories_budget',
-                                 global_type_data_dict=type_dict)
-
-            self.calculate_n_set_spent(budget_data_dict, categories_month_data_dict,
-                                       progress_bar_name='all_categories_ProgressBar',
-                                       spent_label_id='spent_label',
-                                       budgeted_label_id='budgeted_label')
-
-        self.set_budget_list(budget_data_dict=budget_data_dict,
-                             budget_menu_name='categories_budget',
-                             global_type_data_dict=type_dict)
-
-    def set_budget_menu(self, budget_data_dict, month_data_dict, budget_menu_name,
-                        global_type_data_dict, *args) -> None:
-        for item_id in budget_data_dict:
-            if item_id in month_data_dict:
-                spent = int(month_data_dict[item_id]['SUM'])
+                        out_list.append(
+                            {
+                                "viewclass": "BudgetItem",
+                                "height": dp(75),
+                                "item_id": item_id,
+                                "item_name": type_dict[item_id]['Name'],
+                                "real_sum": real_sum,
+                                "budgeted": budget_data_dict[item_id]['Budgeted'],
+                            }
+                        )
 
             else:
-                spent = 0
+                out_list.append(
+                    {
+                        "viewclass": "BudgetTitle",
+                        "height": dp(75),
+                        "type_name": title_text,
+                        "real_sum": 0,
+                        "budgeted": 0,
+                    }
+                )
 
-            if item_id not in global_type_data_dict:
-                continue
+        return out_list
 
-            progress = MDAnchorLayout(
-                MDBoxLayout(
-                    MDBoxLayout(
-                        MDLabel(
-                            text=str(item_id) + ' ' +
-                                 str(global_type_data_dict[item_id]['Name']),
-                            halign='left'
-                        ),
-                        MDLabel(
-                            text=str(budget_data_dict[item_id]['Currency']) +
-                                 ' ' + str(
-                                budget_data_dict[item_id]['Budgeted']),
-                            halign='right'
-                        ),
-                    ),
-                    MDScreen(
-                        ProgressBar(
-                            max=int(budget_data_dict[item_id]['Budgeted']),
-                            value=spent,
-                        ),
-                        size_hint_y=1.25,
-                    ),
-                    MDBoxLayout(
-                        MDLabel(
-                            text=str(spent),
-                            font_style='Caption',
-                            halign='left',
-                        ),
-                        MDLabel(
-                            text='budgeted: ' +
-                                 str(budget_data_dict[item_id]['Currency']) +
-                                 ' ' + str(
-                                budget_data_dict[item_id]['Budgeted']),
-                            font_style='Caption',
-                            halign='right',
-                        ),
-                    ),
-                    md_bg_color=(.45, .3, .1, 1),
-                    orientation='vertical',
-                    size_hint_y=None,
-                    height=dp(60),
-                    padding=dp(3),
-                ),
-                InvisibleButton(
-                    on_release=self.on_release_callback(item_id)
-                ),
-                size_hint_y=None,
-                height=dp(60)
-            )
-
-            getattr(self.ids, budget_menu_name).add_widget(progress)
+    def refresh_rv_data(self, *args):
+        self.ids.Budget_rv.data = self.get_budget_data()
 
     def on_release_callback(self, widget_id):
         return lambda x: self.open_menu_for_a_new_budget(widget_id=widget_id)
-
-    def calculate_n_set_spent(self, budget_data_dict, month_data_dict, progress_bar_name,
-                              spent_label_id, budgeted_label_id, *args) -> None:
-
-        budgeted = sum([
-            budget_data_dict[item_id]['Budgeted']
-            for item_id in budget_data_dict
-        ])
-
-        spent = sum([
-            month_data_dict[item_id]['SUM']
-            for item_id in month_data_dict
-            if item_id in budget_data_dict
-        ])
-
-        getattr(self.ids, progress_bar_name).value = \
-            (spent / budgeted) * 100
-
-        getattr(self.ids, spent_label_id).text = str(spent)
-
-        getattr(self.ids, budgeted_label_id).text = str(budgeted)
 
     def set_budget_list(self, budget_data_dict, budget_menu_name,
                         global_type_data_dict, *args) -> None:
@@ -344,37 +267,3 @@ class BudgetMenu_in(MDScreen):
         app = App.get_running_app()
 
         app.root.ids.main.add_menu_for_a_new_budget()
-
-    def open_grid(self, widget) -> None:
-        print('Open pressed')
-
-        widget.parent.parent.parent.height = widget.parent.parent.height
-
-        widget.parent.add_widget(
-            MDRectangleFlatButton(
-                text='Less',
-                size_hint_y=None,
-                height=dp(60),
-                md_bg_color=(.66, .66, .66, 1),
-                on_release=self.close_grid,
-            )
-        )
-
-        widget.parent.remove_widget(widget)
-
-    def close_grid(self, widget) -> None:
-        print('Close pressed')
-
-        widget.parent.parent.parent.height = dp(60)
-
-        widget.parent.add_widget(
-            MDRectangleFlatButton(
-                text='More',
-                size_hint_y=None,
-                height=dp(60),
-                md_bg_color=(.66, .66, .66, 1),
-                on_release=self.open_grid,
-            )
-        )
-
-        widget.parent.remove_widget(widget)

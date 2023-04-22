@@ -1,10 +1,7 @@
-import datetime
-from calendar import monthrange, month_name
-
+from kivy.clock import Clock
 from kivy.properties import NumericProperty
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.screen import MDScreen
-from kivy.clock import Clock
 
 import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
@@ -15,11 +12,7 @@ class Transaction_menu(MDScreen):
     total_accounts_balance = NumericProperty(get_total_accounts_balance())
     def __init__(self, *args, **kwargs):
         # getting history data
-        print(*config.history_dict.items(), sep='\n')
-
         self.months_loaded_at_startup = config.months_loaded_at_startup
-
-        print('months_loaded_at_startup:', self.months_loaded_at_startup)
 
         # getting actually data for menu settings and meny title
         self.current_menu_date = str(config.current_menu_date)[:-3]

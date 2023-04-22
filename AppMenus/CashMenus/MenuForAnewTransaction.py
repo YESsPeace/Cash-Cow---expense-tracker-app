@@ -206,3 +206,17 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         )
 
         update_total_balance_in_UI()
+
+        date_of_changes = self.date_
+
+        # update CategoriesMenu
+        if '.' in date_of_changes:
+            date_of_changes = date_of_changes.split('.')
+            date_of_changes = f'{date_of_changes[-1]}-{date_of_changes[-2]}'
+
+        else:
+            date_of_changes = date_of_changes[:-3]
+
+        for swiper_id in ['my_swiper', 'incomes_swiper']:
+            if getattr(self.parent.ids.CategoriesMenu.ids, swiper_id).has_screen(date_of_changes):
+                getattr(self.parent.ids.CategoriesMenu.ids, swiper_id).get_screen(date_of_changes).refresh_rv_data()
