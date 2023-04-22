@@ -7,7 +7,7 @@ from kivymd.uix.screen import MDScreen
 
 import config
 from database import get_transaction_for_the_period, categories_db_read, incomes_db_read, accounts_db_read, \
-    savings_db_read
+    savings_db_read, transaction_db_read
 
 
 class TransactionItem(MDCard):
@@ -41,9 +41,9 @@ class TransactionItem(MDCard):
                     'Icon': 'android'
                 }
             ),
-            'FromSUM': '5698',
+            'FromSUM': '9999',
             'FromCurrency': 'RUB',
-            'ToSUM': '5698',
+            'ToSUM': '9999',
             'ToCurrency': 'RUB',
             'Comment': ''
         }
@@ -62,34 +62,19 @@ class Transaction_menu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # setting local variable for history dictionary from main Transaction menu
-        self.history_dict = config.history_dict
-        print(*self.history_dict.items(), sep='\n')
+        Clock.schedule_once(self.refresh_rv_data)
 
-        self.current_menu_date_from = config.current_menu_date.replace(day=1)
-        self.current_menu_date_to = config.current_menu_date.replace(day=config.days_in_current_menu_month)
+    def get_rv_data(self, *args) -> list:
+        out_list = []
 
-        print(self.current_menu_date_from)
-        print(config.current_menu_date)
-
-        Clock.schedule_once(self.set_widget_props)
-
-    def set_widget_props(self, *args):
-        Clock.schedule_once(self.history_setter_month)
-
-    def history_setter_month(self, *args):
         history_dict_for_the_period = get_transaction_for_the_period(
-            from_date=str(self.current_menu_date_from),
-            to_date=str(self.current_menu_date_to),
-            history_dict=self.history_dict
+            from_date=str(config.current_menu_date.replace(day=1)),
+            to_date=str(config.current_menu_date.replace(day=config.days_in_current_menu_month)),
+            history_dict=transaction_db_read()
         )
-
-        print(*history_dict_for_the_period.items(), sep='\n')
 
         categories_data = (categories_db_read() | incomes_db_read())
         accounts_data = (accounts_db_read() | savings_db_read())
-
-        self.ids.Transaction_rv.data = []
 
         last_transaction_date = 'DD.MM.YYYY'
 
@@ -105,7 +90,7 @@ class Transaction_menu_in(MDScreen):
             if transaction_data['Date'] != last_transaction_date:
                 last_transaction_date = transaction_data['Date']
 
-                self.ids.Transaction_rv.data.append(
+                out_list.append(
                     {
                         "viewclass": "date_label",
                         "height": dp(40),
@@ -115,7 +100,7 @@ class Transaction_menu_in(MDScreen):
                 )
 
             if (transaction_data['From'][1] is not None) and (transaction_data['To'][1] is not None):
-                self.ids.Transaction_rv.data.append(
+                out_list.append(
                     {
                         "viewclass": "TransactionItem",
                         "height": dp(60),
@@ -125,3 +110,8 @@ class Transaction_menu_in(MDScreen):
                         "transaction_id": transaction_id
                     }
                 )
+
+        return out_list
+
+    def refresh_rv_data(self, *args):
+        self.ids.Transaction_rv.data = self.get_rv_data()

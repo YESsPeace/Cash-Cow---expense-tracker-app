@@ -16,7 +16,7 @@ import config
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
-from AppMenus.other_func import update_total_balance_in_UI
+from AppMenus.other_func import update_total_balance_in_UI, update_menus
 from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
 
 
@@ -61,7 +61,7 @@ class menu_for_new_account(MDScreen):
             savings_db_add(self.account_info)
 
         update_total_balance_in_UI()
-        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
+        update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         Snackbar(text="Account created").open()
 
@@ -76,7 +76,7 @@ class menu_for_new_account(MDScreen):
             savings_db_edit(self.account_info)
 
         update_total_balance_in_UI()
-        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
+        update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         Snackbar(text="Account edited").open()
 
@@ -90,7 +90,7 @@ class menu_for_new_account(MDScreen):
         )
 
         update_total_balance_in_UI()
-        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
+        update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         Snackbar(text="Account deleted").open()
 

@@ -1,6 +1,3 @@
-import csv
-from calendar import month_name, monthrange
-
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.properties import OptionProperty, BooleanProperty
@@ -8,10 +5,8 @@ from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
 
 import config
-from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
-from database import transaction_db_write, transaction_db_read, accounts_and_savings_db_edit_balance
-
-from AppMenus.other_func import calculate, update_month_menu_by_date, update_total_balance_in_UI
+from AppMenus.other_func import calculate, update_total_balance_in_UI, update_menus
+from database import transaction_db_write, transaction_db_read
 
 
 class menu_for_a_new_transaction(MDNavigationDrawer):
@@ -198,25 +193,6 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         # updating history_dict
         config.history_dict = transaction_db_read()
 
-        update_month_menu_by_date(
-            self,
-            date_of_changes=str(self.date_),
-            main_menu_id='Transaction_menu',
-            month_menu_name=Transaction_menu_in
-        )
-
         update_total_balance_in_UI()
 
-        date_of_changes = self.date_
-
-        # update CategoriesMenu
-        if '.' in date_of_changes:
-            date_of_changes = date_of_changes.split('.')
-            date_of_changes = f'{date_of_changes[-1]}-{date_of_changes[-2]}'
-
-        else:
-            date_of_changes = date_of_changes[:-3]
-
-        for swiper_id in ['my_swiper', 'incomes_swiper']:
-            if getattr(self.parent.ids.CategoriesMenu.ids, swiper_id).has_screen(date_of_changes):
-                getattr(self.parent.ids.CategoriesMenu.ids, swiper_id).get_screen(date_of_changes).refresh_rv_data()
+        update_menus(date_of_changes=self.date_)

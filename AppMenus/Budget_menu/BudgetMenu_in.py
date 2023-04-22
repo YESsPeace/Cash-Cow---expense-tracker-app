@@ -1,28 +1,14 @@
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivy.properties import NumericProperty, StringProperty
-from kivy.uix.behaviors import ButtonBehavior
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.progressbar import ProgressBar
-from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton, MDRectangleFlatButton
+from kivy.properties import NumericProperty, StringProperty, ListProperty
 from kivymd.uix.card import MDCard
-from kivymd.uix.gridlayout import MDGridLayout
-from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.scrollview import MDScrollView
-from kivy.app import App
 
 import config
 from database import get_categories_month_data, budget_data_read, \
     transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
     incomes_db_read, categories_db_read, savings_db_read, get_savings_month_data
-
-
-class InvisibleButton(Button):
-    pass
 
 
 class BudgetItem(MDCard):
@@ -128,6 +114,7 @@ class BudgetMenu_in(MDScreen):
                                 "item_name": type_dict[item_id]['Name'],
                                 "real_sum": real_sum,
                                 "budgeted": budget_data_dict[item_id]['Budgeted'],
+                                "on_release": self.on_release_callback(item_id)
                             }
                         )
 
@@ -148,66 +135,12 @@ class BudgetMenu_in(MDScreen):
         self.ids.Budget_rv.data = self.get_budget_data()
 
     def on_release_callback(self, widget_id):
-        return lambda x: self.open_menu_for_a_new_budget(widget_id=widget_id)
-
-    def set_budget_list(self, budget_data_dict, budget_menu_name,
-                        global_type_data_dict, *args) -> None:
-        # if not (len(budget_data_dict) == len(global_type_data_dict)):
-        if len(global_type_data_dict) > len(budget_data_dict):
-            self.Budget_grid = MDGridLayout(
-                md_bg_color=(.3, .5, .4, 1),
-                size_hint_y=None,
-                adaptive_height=True,
-                cols=4,
-            )
-
-            if len(global_type_data_dict) > 3:
-                self.Budget_grid.add_widget(
-                    MDAnchorLayout(
-                        MDRectangleFlatButton(
-                            text='More',
-                            size_hint_y=None,
-                            height=dp(60),
-                            md_bg_color=(.66, .66, .66, 1),
-                            on_release=self.open_grid,
-                        )
-                    ),
-                )
-
-            for item_id in set(global_type_data_dict) - set(budget_data_dict):
-                category = global_type_data_dict[item_id]
-
-                self.Budget_grid.add_widget(
-                    MDBoxLayout(
-                        MDIconButton(
-                            pos_hint={'center_x': 0.5, 'top': 0.5},
-                            id=str(item_id),
-                            md_bg_color=category['Color'][:-1] + [1],
-                            icon_size=dp(15),
-                            on_release=self.on_release_callback(item_id),
-                        ),
-                        MDLabel(
-                            text=category['Name'],
-                            size_hint=(1, .25),
-                            halign='center',
-                        ),
-                        orientation='vertical',
-                        size_hint_y=None,
-                        height=dp(60)
-                    ),
-                )
-
-            self.Budget_ScrollView = MDScrollView(
-                self.Budget_grid,
-                adaptive_height=True,
-                size_hint=(1, None),
-                height=dp(60),
-            )
-
-            getattr(self.ids, budget_menu_name).add_widget(self.Budget_ScrollView)
+        return lambda: self.open_menu_for_a_new_budget(widget_id=widget_id)
 
     def open_menu_for_a_new_budget(self, widget_id, *args):
         widget_type = str(widget_id).split('_')[0].lower()
+
+        budget_data_dict, type_dict, month_data_dict = None, None, None
 
         if widget_type == 'savings':
             budget_data_dict = budget_data_read(id='savings_', db_name='budget_data_savings')
@@ -248,22 +181,23 @@ class BudgetMenu_in(MDScreen):
                     )
                 )
 
-        date = str(self.budget_data_date).replace('-', '')
+        if (not budget_data_dict is None) and (not type_dict is None) and not month_data_dict is None:
+            date = str(self.budget_data_date).replace('-', '')
 
-        if date in budget_data_dict:
-            budget_data_dict = budget_data_dict[date]
+            if date in budget_data_dict:
+                budget_data_dict = budget_data_dict[date]
 
-        budgeted = budget_data_dict.get(widget_id, {}).get('Budgeted')
-        sum = month_data_dict.get(widget_id, {}).get('SUM')
+            budgeted = budget_data_dict.get(widget_id, {}).get('Budgeted')
+            sum = month_data_dict.get(widget_id, {}).get('SUM')
 
-        config.item = {
-            'Name': type_dict[widget_id]['Name'],
-            'Color': type_dict[widget_id]['Color'],
-            'id': widget_id,
-            'SUM': sum if not sum is None else 0,
-            'Budgeted': budgeted if not budgeted is None else 0,
-        }
+            config.item = {
+                'Name': type_dict[widget_id]['Name'],
+                'Color': type_dict[widget_id]['Color'],
+                'id': widget_id,
+                'SUM': sum if not sum is None else 0,
+                'Budgeted': budgeted if not budgeted is None else 0,
+            }
 
-        app = App.get_running_app()
+            app = App.get_running_app()
 
-        app.root.ids.main.add_menu_for_a_new_budget()
+            app.root.ids.main.add_menu_for_a_new_budget()

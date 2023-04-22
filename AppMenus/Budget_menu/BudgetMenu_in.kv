@@ -14,9 +14,8 @@
     MDScreen:
         size_hint_y: 1.25
 
-        ProgressBar:
-            max: root.budgeted
-            value: root.real_sum
+        MDProgressBar:
+            value: (root.real_sum / root.budgeted) * 100
 
     MDBoxLayout:
         orientation: 'horizontal'
@@ -46,9 +45,8 @@
     MDScreen:
         size_hint_y: 1.25
 
-        ProgressBar:
-            max: root.budgeted
-            value: root.real_sum
+        MDProgressBar:
+            value: (root.real_sum / root.budgeted) * 100
 
     MDBoxLayout:
         orientation: 'horizontal'

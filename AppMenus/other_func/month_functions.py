@@ -43,47 +43,28 @@ def load_month(self, date, menu):
     self.ids.my_swiper.current = name_
 
 
-def update_month_menu_by_date(self, date_of_changes: str, main_menu_id: str, month_menu_name):
-    date_of_changes = str(date_of_changes)
+def update_menus(date_of_changes=None):
+    app = App.get_running_app()
 
-    if '.' in date_of_changes:
-        date_of_changes = date_of_changes.split('.')
-        date_of_changes = f'{date_of_changes[-1]}-{date_of_changes[-2]}'
+    app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
 
-    else:
-        date_of_changes = date_of_changes[:-3]
+    if not date_of_changes is None:
+        if '.' in date_of_changes:
+            date_of_changes = date_of_changes.split('.')
+            date_of_changes = f'{date_of_changes[-1]}-{date_of_changes[-2]}'
 
-    if getattr(self.parent.ids, main_menu_id).ids.my_swiper.has_screen(date_of_changes):
-        getattr(self.parent.ids, main_menu_id).ids.my_swiper.remove_widget(
-            getattr(self.parent.ids, main_menu_id).ids.my_swiper.get_screen(date_of_changes)
-        )
+        else:
+            date_of_changes = date_of_changes[:-3]
 
-        # # new temp_date values
-        # temp_date = config.current_menu_date
-        # temp_menu_month_name = config.current_menu_month_name
-        # temp_days_in_current_menu_month = config.days_in_current_menu_month
-        #
-        # # replace date_value for create a new screen of Transaction_menu
-        # config.current_menu_date = config.current_menu_date.replace(
-        #     day=int(self.date_.split('.')[0]),
-        #     month=int(self.date_.split('.')[1]),
-        #     year=int(self.date_.split('.')[2])
-        # )
-
-        # config.current_menu_month_name = month_name[config.current_menu_date.month]
-        # config.days_in_current_menu_month = monthrange(config.current_menu_date.year,
-        #                                                config.current_menu_date.month)[1]
-
-        # add a new screen of main_menu
-        if month_menu_name == 'BudgetMenu_in':
-            getattr(self.parent.ids, main_menu_id).ids.my_swiper.add_widget(
-                BudgetMenu_in(name=date_of_changes)
-            )
-
-        # # restore old date values
-        # config.current_menu_date = temp_date
-        # config.current_menu_month_name = temp_menu_month_name
-        # config.days_in_current_menu_month = temp_days_in_current_menu_month
+        for menu_id, swiper_id in [
+            ('CategoriesMenu', 'my_swiper'),
+            ('CategoriesMenu', 'incomes_swiper'),
+            ('Transaction_menu', 'my_swiper'),
+            ('BudgetMenu', 'my_swiper')
+        ]:
+            if getattr(getattr(app.root.ids.main.ids, menu_id).ids, swiper_id).has_screen(date_of_changes):
+                getattr(getattr(app.root.ids.main.ids, menu_id).ids, swiper_id).get_screen(
+                    date_of_changes).refresh_rv_data()
 
 
 def update_total_balance_in_UI():
