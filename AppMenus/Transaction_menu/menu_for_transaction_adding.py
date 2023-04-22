@@ -77,18 +77,16 @@ class MenuForTransactionAdding(MDNavigationDrawer):
             Snackbar(text="Firstly create an account and an expense category").open()
 
     def set_new_func_to_expense_and_incomes_buttons(self, *args):
-        for menu_id, grid_id in [('Categories_buttons_menu', 'GridCategoriesMenu'),
-                                 ('Incomes_buttons_menu', 'GridIncomesMenu')]:
-            for box in getattr(getattr(self.ids, menu_id).ids, grid_id).children:
-                for container in box.children:
-                    for button in container.children:
-                        try:
-                            button.unbind(on_release=getattr(self.ids, menu_id).open_menu_for_a_new_transaction)
+        for menu_id, rv_id in [('Categories_buttons_menu', 'Categories_rv'),
+                                 ('Incomes_buttons_menu', 'Incomes_rv')]:
 
-                            button.bind(on_release=self.on_category_callback(button.id))
+            new_data = getattr(self.ids, menu_id).get_rv_data()
 
-                        except AttributeError:
-                            continue
+            for item in new_data:
+                item['on_release'] = self.on_account_callback(item['category_id'])
+
+            getattr(getattr(self.ids, menu_id).ids, rv_id).data = new_data
+
 
     def set_new_func_to_transfer_buttons(self, *args):
         accounts_data = self.ids.AccountsMenu_main.get_accounts_data()

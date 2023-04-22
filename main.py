@@ -140,8 +140,6 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Categories_menu/categories_buttons_menu.kv')
         Builder.load_file('AppMenus/Categories_menu/Incomes_buttons_menu.kv')
 
-        Builder.load_file('AppMenus/Categories_menu/WaterFill.kv')
-
         # Menu_For_new_category
         Builder.load_file('AppMenus/CashMenus/MenuForAnewBudget.kv')
         Builder.load_file('AppMenus/Categories_menu/Menu_For_new_category/Menu_for_new_or_edit_category.kv')
