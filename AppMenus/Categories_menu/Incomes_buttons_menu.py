@@ -125,7 +125,12 @@ class Incomes_buttons_menu(MDScreen):
                         last_account = last_account[0]
 
             else:
-                last_account = 'account_1'
+                if len(accounts_data) > 0:
+                    last_account = 'account_1'
+
+                else:
+                    Snackbar(text="Firstly create an account and an expense category").open()
+                    return
 
             config.second_transaction_item = {'id': last_account,
                                               'Name':

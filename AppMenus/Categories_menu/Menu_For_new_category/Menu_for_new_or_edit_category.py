@@ -10,6 +10,7 @@ from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
+from AppMenus.other_func import update_menus
 from database import db_data_delete, db_data_edit, db_data_add
 
 
@@ -26,15 +27,17 @@ class menu_for_new_or_edit_category(MDScreen):
         super().__init__(*args, **kwargs)
 
     def complete_pressed(self, *args):
+        self.category_item['Name'] = self.ids.category_name_text_field.text
+
         if self.category_item.get('new') is True:
             self.create_category()
 
-        elif (self.category_item != config.category_item) or \
-                (self.ids.category_name_text_field.text != self.category_item['Name']):
+        elif self.category_item.values() != config.category_item.values():
             self.edit_category()
 
         else:
             self.del_myself()
+            Snackbar(text="There's nothing to do").open()
 
     def create_category(self, *args):
         print('# creating category started')
@@ -45,6 +48,7 @@ class menu_for_new_or_edit_category(MDScreen):
             params=self.category_item
         )
 
+        update_menus(str(config.current_menu_date))
         self.del_myself()
         Snackbar(text="Category created").open()
 
@@ -58,6 +62,7 @@ class menu_for_new_or_edit_category(MDScreen):
             color=self.category_item['Color']
         )
 
+        update_menus(str(config.current_menu_date))
         self.del_myself()
         Snackbar(text="Category edited").open()
 
@@ -67,6 +72,7 @@ class menu_for_new_or_edit_category(MDScreen):
             db_name=self.category_item['db_name'],
             item_id=self.category_item['ID']
         )
+        update_menus(str(config.current_menu_date))
         self.del_myself()
         Snackbar(text="Category deleted").open()
 

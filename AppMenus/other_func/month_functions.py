@@ -43,7 +43,7 @@ def load_month(self, date, menu):
     self.ids.my_swiper.current = name_
 
 
-def update_menus(date_of_changes=None):
+def update_menus(date_of_changes: str =None):
     app = App.get_running_app()
 
     app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()

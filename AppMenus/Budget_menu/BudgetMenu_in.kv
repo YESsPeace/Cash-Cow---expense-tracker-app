@@ -15,7 +15,7 @@
         size_hint_y: 1.25
 
         MDProgressBar:
-            value: (root.real_sum / root.budgeted) * 100
+            value: (root.real_sum / root.budgeted) * 100 if root.budgeted > 0 else 0
 
     MDBoxLayout:
         orientation: 'horizontal'
@@ -46,7 +46,7 @@
         size_hint_y: 1.25
 
         MDProgressBar:
-            value: (root.real_sum / root.budgeted) * 100
+            value: (root.real_sum / root.budgeted) * 100 if root.budgeted > 0 else 0
 
     MDBoxLayout:
         orientation: 'horizontal'

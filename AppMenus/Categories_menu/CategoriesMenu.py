@@ -106,7 +106,10 @@ class CategoriesMenu(MDScreen):
         )
 
         # rebind buttons functions
-        for swiper_id, rv_id in [('my_swiper', 'Categories_rv'), ('incomes_swiper', 'Incomes_rv')]:
+        for swiper_id, rv_id, plus_button_id in [
+            ('my_swiper', 'Categories_rv', 'plus_button_categories'),
+            ('incomes_swiper', 'Incomes_rv', 'plus_button_incomes')
+        ]:
             new_data = getattr(self.ids, swiper_id).get_screen(self.current_menu_date).get_rv_data()
 
             for item in new_data:
@@ -121,7 +124,7 @@ class CategoriesMenu(MDScreen):
                         'Color': [.33, .33, .33, 1],
                         'Icon': 'plus',
                     },
-                    "on_release": self.on_category_callback('plus_button_categories')
+                    "on_release": self.on_category_callback(plus_button_id)
                 }
             )
 
