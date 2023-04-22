@@ -136,8 +136,15 @@ class Incomes_buttons_menu(MDScreen):
 
                 if last_transaction['Type'] in ['Transfer', 'Expenses']:
                     last_account = last_transaction['From']
+
+                    if type(last_account) is tuple:
+                        last_account = last_account[0]
+
                 else:
-                    last_account = last_transaction['To'][0]
+                    last_account = last_transaction['To']
+
+                    if type(last_account) is tuple:
+                        last_account = last_account[0]
 
             else:
                 last_account = 'account_1'
