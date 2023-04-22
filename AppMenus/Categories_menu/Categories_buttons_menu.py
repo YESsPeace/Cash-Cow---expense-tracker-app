@@ -2,23 +2,15 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.widget import Widget
 from kivy.weakproxy import WeakProxy
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
-from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
-
-from random import choice
-
 from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
-
-from config import icon_list
-
 from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
     get_categories_month_data, budget_data_read, categories_db_read
 
@@ -97,20 +89,6 @@ class Categories_buttons_menu(MDScreen):
 
     def category_button_callback(self, category_id):
         return lambda: self.open_menu_for_a_new_transaction(category_id)
-
-    def add_plus_button(self, *args):
-        # add plus button, which opening menu for adding a new categories
-        app = App.get_running_app()
-
-        plus_button = MDIconButton(
-            pos_hint={'center_x': 0.5, 'top': 0.5},
-            id='plus_button_categories',
-            icon="plus",
-            on_release=app.root.ids.main.ids.CategoriesMenu.open_menu_for_edit_categories,
-        )
-
-        self.ids.GridCategoriesMenu.add_widget(plus_button)
-        self.ids['plus_button_categories'] = WeakProxy(plus_button)
 
     def del_plus_button(self, *args):
         self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)

@@ -106,20 +106,29 @@ class CategoriesMenu(MDScreen):
         )
 
         # rebind buttons functions
-        for swiper_id, menu_id in [('my_swiper', 'GridCategoriesMenu'), ('incomes_swiper', 'GridIncomesMenu')]:
-            for box in getattr(getattr(self.ids, swiper_id).get_screen(self.current_menu_date).ids, menu_id).children:
-                for container in box.children:
-                    for button in container.children:
-                        try:
-                            button.unbind(on_release=getattr(self.ids, swiper_id).get_screen(
-                                self.current_menu_date).open_menu_for_a_new_transaction)
+        for swiper_id, rv_id in [('my_swiper', 'Categories_rv'), ('incomes_swiper', 'Incomes_rv')]:
+            new_data = getattr(self.ids, swiper_id).get_screen(self.current_menu_date).get_rv_data()
 
-                            button.bind(on_release=self.open_menu_for_edit_categories)
+            for item in new_data:
+                item['on_release'] = self.on_category_callback(item['category_id'])
 
-                        except AttributeError:
-                            continue
+            new_data.append(
+                {
+                    "viewclass": "CategoryItem",
+                    "height": dp(80),
+                    "category_data": {
+                        'Name': 'Добавить',
+                        'Color': [.33, .33, .33, 1],
+                        'Icon': 'plus',
+                    },
+                    "on_release": self.on_category_callback('plus_button_categories')
+                }
+            )
 
-            getattr(self.ids, swiper_id).get_screen(self.current_menu_date).add_plus_button()
+            getattr(getattr(self.ids, swiper_id).get_screen(self.current_menu_date).ids, rv_id).data = new_data
+
+    def on_category_callback(self, category_id):
+        return lambda: self.open_menu_for_edit_categories(category_id)
 
     def quit_from_edit_mode(self, *args):
         print('# quit from edit mode')
@@ -130,51 +139,30 @@ class CategoriesMenu(MDScreen):
         self.ids.top_bar.add_widget(self.top_btn_bar)
         self.ids.top_bar.add_widget(self.month_menu)
 
-        for swiper_id in ['my_swiper', 'incomes_swiper']:
-            getattr(self.ids, swiper_id).get_screen(self.current_menu_date).del_plus_button()
-
         # rebind buttons functions
-        for swiper_id, menu_id, plus_button_id in \
-                [('my_swiper', 'GridCategoriesMenu', 'plus_button_categories'),
-                 ('incomes_swiper', 'GridIncomesMenu', 'plus_button_incomes')]:
-            for box in getattr(getattr(self.ids, swiper_id).get_screen(self.current_menu_date).ids, menu_id).children:
-                for container in box.children:
-                    for button in container.children:
-                        try:
-                            print(button.id)
+        for swiper_id, rv_id in [('my_swiper', 'Categories_rv'), ('incomes_swiper', 'Incomes_rv')]:
+            getattr(self.ids, swiper_id).get_screen(self.current_menu_date).refresh_rv_data()
 
-                            if button.id == plus_button_id:
-                                continue
-
-                            button.unbind(on_release=self.open_menu_for_edit_categories)
-
-                            button.bind(on_release= \
-                                            getattr(self.ids, swiper_id).get_screen(
-                                                self.current_menu_date).open_menu_for_a_new_transaction)
-
-                        except AttributeError:
-                            continue
-
-    def open_menu_for_edit_categories(self, button, *args):
-        print(f'# Clicked - {button.id}')
+    def open_menu_for_edit_categories(self, category_id, *args):
+        print(f'# Clicked - {category_id}')
 
         self.quit_from_edit_mode()
 
-        if button.id in ['plus_button_categories', 'plus_button_incomes']:
+        if category_id in ['plus_button_categories', 'plus_button_incomes']:
             config.category_item = {
                 'ID': None,
                 'Name': '',
                 'Color': [0.71, 0.72, 0.69, 0.5],
                 'Icon': 'basket-outline',
                 'new': True,
-                'db_name': button.id.split('_')[-1] + '_db'
+                'db_name': category_id.split('_')[-1] + '_db'
             }
 
         else:
-            config.category_item = (categories_db_read() | incomes_db_read()).get(button.id)
-            config.category_item['ID'] = button.id
+            config.category_item = (categories_db_read() | incomes_db_read()).get(category_id)
+            config.category_item['ID'] = category_id
             config.category_item['db_name'] = 'categories_db' \
-                if button.id.split('_')[0] == 'categories' else 'incomes_db'
+                if category_id.split('_')[0] == 'categories' else 'incomes_db'
 
         app = App.get_running_app()
 
