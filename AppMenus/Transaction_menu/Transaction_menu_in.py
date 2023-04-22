@@ -2,9 +2,7 @@ from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import DictProperty, NumericProperty, StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton
 from kivymd.uix.card import MDCard
-from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
@@ -17,47 +15,40 @@ class TransactionItem(MDCard):
     padding = [dp(5), dp(5), dp(5), dp(5)]
     md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
 
-    transaction_data = DictProperty()
-    transaction_id = NumericProperty()
+    transaction_id = NumericProperty(0)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    transaction_data = DictProperty(
+        {
+            'Date': '18.04.2023',
+            'Type': 'Expenses',
+            'From': (
+                'account_0',
+                {
+                    'Name': 'default_account',
+                    'Color': [0, 0, 0, 1],
+                    'Balance': 0.0,
+                    'Currency': 'RUB',
+                    'IncludeInTheTotalBalance': 0,
+                    'Description': 'None',
+                    'Icon': 'android'
+                }
+            ),
+            'To': (
+                'category_0',
+                {
+                    'Name': 'default_category',
+                    'Color': [0, 0, 0, 1],
+                    'Icon': 'android'
+                }
+            ),
+            'FromSUM': '5698',
+            'FromCurrency': 'RUB',
+            'ToSUM': '5698',
+            'ToCurrency': 'RUB',
+            'Comment': ''
+        }
+    )
 
-        Clock.schedule_once(self.set_widget_props)
-
-    def set_widget_props(self, *args):
-        if len(self.transaction_data) <= 0:
-            return
-
-        transaction_data = self.transaction_data
-
-        self.add_widget(
-            MDIconButton(
-                icon=str(transaction_data['To']['Icon']),
-                md_bg_color=transaction_data['To']['Color'][:-1]
-            )
-        )
-
-        self.add_widget(
-            MDBoxLayout(
-                MDLabel(
-                    text=str(transaction_data['To']['Name'])
-                ),
-                MDLabel(
-                    text=str(transaction_data['From']['Name'])
-                ),
-                orientation='vertical',
-                padding=[dp(5), 0, 0, 0],
-                spacing=dp(1)
-            )
-        )
-
-        self.add_widget(
-            MDLabel(
-                text=str(transaction_data['ToSUM']),
-                halign='right'
-            )
-        )
 
 class date_label(MDBoxLayout):
     padding = [dp(5), dp(5), dp(5), dp(5)]
@@ -65,16 +56,6 @@ class date_label(MDBoxLayout):
 
     date = StringProperty()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        Clock.schedule_once(self.set_widget_props)
-
-    def set_widget_props(self, *args):
-        self.add_widget(
-            MDLabel(
-                text=str(self.date)
-            )
-        )
 
 class Transaction_menu_in(MDScreen):
 
@@ -115,6 +96,12 @@ class Transaction_menu_in(MDScreen):
         for transaction_id in history_dict_for_the_period.keys():
             transaction_data = history_dict_for_the_period[transaction_id]
 
+            transaction_data['From'] = (transaction_data['From'],
+                                        (categories_data | accounts_data).get(transaction_data['From']))
+
+            transaction_data['To'] = (transaction_data['To'],
+                                      (categories_data | accounts_data).get(transaction_data['To']))
+
             if transaction_data['Date'] != last_transaction_date:
                 last_transaction_date = transaction_data['Date']
 
@@ -127,17 +114,14 @@ class Transaction_menu_in(MDScreen):
                     }
                 )
 
-
-            transaction_data['From'] = (categories_data | accounts_data)[transaction_data['From']]
-            transaction_data['To'] = (categories_data | accounts_data)[transaction_data['To']]
-
-            self.ids.Transaction_rv.data.append(
-                {
-                    "viewclass": "TransactionItem",
-                    "height": dp(60),
-                    "orientation": "horizontal",
-                    "ripple_behavior": True,
-                    "transaction_data": transaction_data,
-                    "transaction_id": transaction_id
-                }
-            )
+            if (transaction_data['From'][1] is not None) and (transaction_data['To'][1] is not None):
+                self.ids.Transaction_rv.data.append(
+                    {
+                        "viewclass": "TransactionItem",
+                        "height": dp(60),
+                        "orientation": "horizontal",
+                        "ripple_behavior": True,
+                        "transaction_data": transaction_data,
+                        "transaction_id": transaction_id
+                    }
+                )

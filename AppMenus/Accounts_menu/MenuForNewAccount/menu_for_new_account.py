@@ -61,8 +61,10 @@ class menu_for_new_account(MDScreen):
             savings_db_add(self.account_info)
 
         update_total_balance_in_UI()
+        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
         self.quit_from_menu()
         Snackbar(text="Account created").open()
+
 
     def edit_account(self, *args):
         print('# editing account started')
@@ -74,8 +76,10 @@ class menu_for_new_account(MDScreen):
             savings_db_edit(self.account_info)
 
         update_total_balance_in_UI()
+        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
         self.quit_from_menu()
         Snackbar(text="Account edited").open()
+
 
     def delete_account(self, *args):
         print('# deleting category started')
@@ -86,6 +90,7 @@ class menu_for_new_account(MDScreen):
         )
 
         update_total_balance_in_UI()
+        self.parent.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
         self.quit_from_menu()
         Snackbar(text="Account deleted").open()
 

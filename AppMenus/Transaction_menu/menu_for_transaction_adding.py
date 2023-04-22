@@ -85,21 +85,30 @@ class MenuForTransactionAdding(MDNavigationDrawer):
                         try:
                             button.unbind(on_release=getattr(self.ids, menu_id).open_menu_for_a_new_transaction)
 
-                            button.bind(on_release=self.put)
+                            button.bind(on_release=self.on_category_callback(button.id))
 
                         except AttributeError:
                             continue
 
     def set_new_func_to_transfer_buttons(self, *args):
-        for box_id in ['accounts_Boxlines', 'savings_Boxlines']:
-            for button in getattr(self.ids.AccountsMenu_main.ids, box_id).children:
-                button.unbind(on_release=self.ids.AccountsMenu_main.open_menu_for_new_account)
-                button.bind(on_release=self.put)
+        accounts_data = self.ids.AccountsMenu_main.get_accounts_data()
+
+        for item in accounts_data:
+            if item['viewclass'] == 'AccountsItem':
+                item['on_release'] = self.on_account_callback(item['account_id'])
+
+        self.ids.AccountsMenu_main.ids.accounts_rv.data = accounts_data
+
+    def on_account_callback(self, widget_id):
+        return lambda: self.put(widget_id)
+
+    def on_category_callback(self, widget_id):
+        return lambda _: self.put(widget_id)
 
     def del_myself(self, *args):
         self.parent.remove_widget(self)
 
-    def put(self, widget, **kwargs):
+    def put(self, widget_id, *args):
         # closing the old menu
         self.status = 'closed'
 
@@ -108,11 +117,14 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         # reselection the first item
         if config.choosing_first_transaction:
             config.choosing_first_transaction = False
-            if str(widget.id) in self.transfer:
+            if str(widget_id) in self.transfer:
                 config.first_transaction_item = None
-                config.first_transaction_item = {'id': widget.id, 'Name': widget.text,
-                                                 'Color': widget.md_bg_color[:-1] + [1],
-                                                 'Currency': self.transfer[str(widget.id)]['Currency']}
+                config.first_transaction_item = {
+                    'id': widget_id,
+                    'Name': self.transfer[widget_id]['Name'],
+                    'Color': self.transfer[widget_id]['Color'][:-1],
+                    'Currency': 'RUB'  # last_transaction['FromCurrency']
+                }
             else:
                 Snackbar(text="You can't spend money from the category").open()
 
@@ -121,40 +133,35 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         # typical selection
         else:
             if len(config.history_dict) > 0:
-                # first_item
                 config.last_transaction_id = list(config.history_dict)[-1]
-
-                last_id = -1
-                while not config.history_dict[config.last_transaction_id]['Type'] in ['Transfer', 'Expenses']:
-                    last_id -= 1
-                    config.last_transaction_id = list(config.history_dict)[last_id]
-
                 last_transaction = config.history_dict[config.last_transaction_id]
 
-                last_account = last_transaction['From']
+                if last_transaction['Type'] in ['Transfer', 'Expenses']:
+                    last_account = last_transaction['From']
+                else:
+                    last_account = last_transaction['To'][0]
 
             else:
                 last_account = 'account_1'
 
-            config.first_transaction_item = {'id': last_account,
-                                             'Name':
-                                                 config.global_accounts_data_dict[last_account]['Name'],
-                                             'Color': config.global_accounts_data_dict[last_account]['Color'][:-1] + [
-                                                 1],
-                                             'Currency': 'RUB'  # last_transaction['FromCurrency']
-                                             }
+            config.first_transaction_item = {
+                'id': last_account,
+                'Name': self.transfer[last_account]['Name'],
+                'Color': self.transfer[last_account]['Color'][:-1],
+                'Currency': 'RUB'  # last_transaction['FromCurrency']
+            }
             # second item
-            config.second_transaction_item = (self.expense_dict | self.transfer)[widget.id]
+            config.second_transaction_item = (self.expense_dict | self.transfer)[widget_id]
             config.second_transaction_item['Color'] = config.second_transaction_item['Color'][:-1] + [1]
-            config.second_transaction_item['id'] = widget.id
+            config.second_transaction_item['id'] = widget_id
 
-            if widget.id.split('_')[0] == 'income':
+            if widget_id.split('_')[0] == 'income':
                 config.first_transaction_item, config.second_transaction_item = config.second_transaction_item, config.first_transaction_item
 
             print(*config.second_transaction_item.items(), sep='\n')
 
-            if str(widget.id) in self.transfer:
-                config.second_transaction_item['Currency'] = self.transfer[str(widget.id)]['Currency']
+            if str(widget_id) in self.transfer:
+                config.second_transaction_item['Currency'] = self.transfer[str(widget_id)]['Currency']
 
             else:
                 config.second_transaction_item['Currency'] = 'RUB'

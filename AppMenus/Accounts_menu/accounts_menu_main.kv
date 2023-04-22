@@ -1,3 +1,26 @@
+<AccountsItem>:
+    MDAnchorLayout:
+        size_hint_x: None
+        width: dp(60)
+        padding: dp(20)
+        md_bg_color: root.account_data['Color']
+
+        MDIconButton:
+            icon: str(root.account_data['Icon'])
+
+    MDLabel:
+        text: str(root.account_data['Name'])
+
+    MDLabel:
+        text: str(root.account_data['Balance'])
+        halign: 'right'
+
+
+<type_label>:
+    MDLabel:
+        text: str(root.text)
+
+
 <AccountsMenu_main>:
     RecycleView:
         id: accounts_rv

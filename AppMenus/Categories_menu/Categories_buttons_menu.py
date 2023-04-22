@@ -162,7 +162,7 @@ class Categories_buttons_menu(MDScreen):
                 if last_transaction['Type'] in ['Transfer', 'Expenses']:
                     last_account = last_transaction['From']
                 else:
-                    last_account = last_transaction['To']
+                    last_account = last_transaction['To'][0]
 
 
             else:

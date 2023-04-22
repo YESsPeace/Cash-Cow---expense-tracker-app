@@ -1,3 +1,28 @@
+<TransactionItem>:
+    MDIconButton:
+        icon: str(root.transaction_data['To'][1]['Icon'])
+        md_bg_color: root.transaction_data['To'][1]['Color'][:-1]
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: [dp(5), 0, 0, 0]
+        spacing: dp(1)
+
+        MDLabel:
+            text: str(root.transaction_data['To'][1]['Name'])
+
+        MDLabel:
+            text: str(root.transaction_data['From'][1]['Name'])
+
+    MDLabel:
+        text: str(root.transaction_data['ToSUM'])
+        halign: 'right'
+
+<date_label>:
+    MDLabel:
+        text: str(root.date)
+
+
 <Transaction_menu_in>:
     md_bg_color: 0, 0, 0, 0
     MDBoxLayout:
