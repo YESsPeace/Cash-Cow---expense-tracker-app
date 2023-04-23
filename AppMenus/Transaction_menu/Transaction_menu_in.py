@@ -122,8 +122,6 @@ class Transaction_menu_in(MDScreen):
         return lambda: self.open_menu_for_transaction_info(transaction_id, transaction_data)
 
     def open_menu_for_transaction_info(self, transaction_id, transaction_data, *args):
-        print(transaction_id)
-
         app = App.get_running_app()
 
         app.root.ids.main.open_menu_for_transaction_info(transaction_id, transaction_data)

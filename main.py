@@ -69,16 +69,33 @@ class MainSrceen(MDScreen):
 
     def add_menu_for_a_new_transaction(
             self,
+            transaction_id=0,
+            transaction_data=None,
+            edit_transaction_mode=False,
             first_transaction_item=None,
-            second_transaction_item=None
+            second_transaction_item=None,
     ):
         if (not first_transaction_item is None) and (not second_transaction_item is None):
-            self.add_widget(
-                menu_for_a_new_transaction(
-                    first_transaction_item=first_transaction_item,
-                    second_transaction_item=second_transaction_item
+            if not transaction_data is None:
+                self.add_widget(
+                    menu_for_a_new_transaction(
+                        transaction_id=transaction_id,
+                        transaction_data=transaction_data,
+                        edit_transaction_mode=edit_transaction_mode,
+                        first_transaction_item=first_transaction_item,
+                        second_transaction_item=second_transaction_item
+                    )
                 )
-            )
+
+            else:
+                self.add_widget(
+                    menu_for_a_new_transaction(
+                        transaction_id=transaction_id,
+                        edit_transaction_mode=edit_transaction_mode,
+                        first_transaction_item=first_transaction_item,
+                        second_transaction_item=second_transaction_item
+                    )
+                )
 
 
         else:

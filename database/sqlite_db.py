@@ -181,6 +181,7 @@ def transaction_db_write(trans_data_dict):
                  trans_data_dict['ToCurrency'], trans_data_dict['Comment'])
                 )
     base.commit()
+    print('# transaction written:', *trans_data_dict.items(), sep='\n')
 
     for account in {trans_data_dict['From']: -trans_data_dict['FromSUM'],
                     trans_data_dict['To']: trans_data_dict['ToSUM']}.items():

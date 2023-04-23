@@ -65,7 +65,6 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
                         button_level = int(categories_month_data_dict[category_id]['SUM']) / \
                                        int(categories_budget_data_dict[self.budget_data_date][category_id]['Budgeted'])
 
-                        print(f'Category level for {category_id}: {button_level}')
 
                     else:
                         button_level = 0

@@ -71,8 +71,6 @@ class MenuForTransactionAddingBase(Widget):
             if widget_id.split('_')[0] == 'income':
                 first_transaction_item, second_transaction_item = second_transaction_item, first_transaction_item
 
-            print(*second_transaction_item.items(), sep='\n')
-
             if str(widget_id) in accounts_data:
                 second_transaction_item['Currency'] = accounts_data[str(widget_id)]['Currency']
 
