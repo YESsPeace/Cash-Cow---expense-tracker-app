@@ -1,9 +1,6 @@
+from kivy.graphics import Color, Rectangle
 from kivy.properties import OptionProperty, BooleanProperty, Clock
-from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivymd.uix.button import MDIconButton
-from kivymd.uix.label import MDLabel
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
-from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
 import config
@@ -65,6 +62,10 @@ class MenuForTransactionAdding(MDNavigationDrawer):
         self.expense_dict = categories_db_read() | incomes_db_read()
         # getting data for transfer
         self.transfer = accounts_db_read() | savings_db_read()
+
+        with self.canvas.before:
+            Color(0, 0, 0, .5)
+            Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
         Clock.schedule_once(self.set_widgets_props)
 

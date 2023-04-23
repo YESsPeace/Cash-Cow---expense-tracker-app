@@ -1,6 +1,6 @@
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
-from kivy.properties import OptionProperty, BooleanProperty
+from kivy.properties import OptionProperty, BooleanProperty, NumericProperty, DictProperty
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.pickers import MDDatePicker
 
@@ -25,6 +25,10 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         ),
     )
     enable_swiping = BooleanProperty(False)
+
+    edit_transaction = BooleanProperty(False)
+    transaction_id = NumericProperty()
+    transaction_data = DictProperty()
 
     def update_status(self, *_) -> None:
         status = self.status
@@ -152,6 +156,13 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
     def calculate_btn_pressed(self):
         self.ids.sum_label.text = f'{self.currency_first} {calculate(self.ids.sum_label.text)}'
+
+    def done_button_pressed(self):
+        if self.edit_transaction is True:
+            pass
+
+        else:
+            self.write_transaction(self.ids.sum_label.text)
 
     def write_transaction(self, sum):
         # menu

@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import DictProperty, NumericProperty, StringProperty
@@ -14,6 +15,8 @@ class TransactionItem(MDCard):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
     md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+    ripple_behavior = True
+    orientation = "horizontal"
 
     transaction_id = NumericProperty(0)
 
@@ -104,10 +107,9 @@ class Transaction_menu_in(MDScreen):
                     {
                         "viewclass": "TransactionItem",
                         "height": dp(60),
-                        "orientation": "horizontal",
-                        "ripple_behavior": True,
                         "transaction_data": transaction_data,
-                        "transaction_id": transaction_id
+                        "transaction_id": transaction_id,
+                        "on_release": self.on_transaction_item_callback(transaction_id, transaction_data)
                     }
                 )
 
@@ -115,3 +117,13 @@ class Transaction_menu_in(MDScreen):
 
     def refresh_rv_data(self, *args):
         self.ids.Transaction_rv.data = self.get_rv_data()
+
+    def on_transaction_item_callback(self, transaction_id, transaction_data, *args):
+        return lambda: self.open_menu_for_transaction_info(transaction_id, transaction_data)
+
+    def open_menu_for_transaction_info(self, transaction_id, transaction_data, *args):
+        print(transaction_id)
+
+        app = App.get_running_app()
+
+        app.root.ids.main.open_menu_for_transaction_info(transaction_id, transaction_data)

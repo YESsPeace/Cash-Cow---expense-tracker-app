@@ -1,0 +1,99 @@
+<menu_for_transaction_info>:
+    pos_hint: {'center_x': .5}
+    size_hint: 1, .5
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        pos_hint: {'top': 1}
+
+        MDLabel:
+            text: str(root.transaction_data['Date'])
+            text_color: 1, 1, 1, 1
+            halign: 'left'
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            spacing: dp(1)
+            height: dp(85)
+
+            MDRectangleFlatButton:
+                id: first_item_label
+
+                text: str(root.transaction_data['From'][1]['Name'])
+                size_hint: 1, 1
+                md_bg_color: root.transaction_data['From'][1]['Color'][:-1]
+                text_color: "white"
+                line_color: self.md_bg_color
+#                on_release: root.first_trans_item_pressed()
+
+            MDRectangleFlatButton:
+                id: second_item_label
+
+                text: str(root.transaction_data['To'][1]['Name'])
+                size_hint: 1, 1
+                md_bg_color: root.transaction_data['To'][1]['Color'][:-1]
+                text_color: "white"
+                line_color: self.md_bg_color
+#                on_release: root.second_trans_item_pressed()
+
+        MDBoxLayout:
+            orientation: 'vertical'
+            md_bg_color: .6, .1, .2, 1
+            size_hint_y: None
+            height: dp(115)
+
+            MDCard:
+                radius: [0, 0, 0, 0]
+                md_bg_color: .6, .1, .2, 1
+                ripple_behavior: True
+                size_hint_y: .65
+
+                MDLabel:
+                    id: sum_label
+                    text: f"₽ {root.transaction_data['ToSUM']}"
+                    text_color: 1, 1, 1, 1
+                    halign: 'center'
+                    size_hint: 1, 1
+
+            TextInput:
+                id: note_input
+                text: 'notes'
+                halign: 'center'
+                multiline: False
+                size_hint_y: .35
+                cursor_color: 1, 1, 1, 1
+                foreground_color: 1, 1, 1, 1
+                background_color: .59, .09, .19, 1
+
+        MDBoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: None
+            height: dp(80)
+            padding: dp(5)
+            spacing: dp(5)
+
+            MDBoxLayout:
+                orientation: 'vertical'
+
+                MDIconButton:
+                    pos_hint: {'center_x': 0.5}
+                    icon: 'delete'
+                    md_bg_color: [.7, .3, .3, 1]
+
+                MDLabel:
+                    text: 'Delete'
+                    halign: 'center'
+
+            MDBoxLayout:
+                orientation: 'vertical'
+
+                MDIconButton:
+                    pos_hint: {'center_x': 0.5}
+                    icon: 'calendar'
+                    md_bg_color: [.66, .66, .66, 1]
+
+                MDLabel:
+                    text: 'Edit date'
+                    halign: 'center'
+

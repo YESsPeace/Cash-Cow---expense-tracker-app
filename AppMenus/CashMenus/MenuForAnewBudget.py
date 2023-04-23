@@ -1,3 +1,4 @@
+from kivy.graphics import Color, Rectangle
 from kivy.properties import BooleanProperty, OptionProperty
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.clock import Clock
@@ -35,6 +36,10 @@ class menu_for_a_new_budget(MDNavigationDrawer):
         print(*self.item.items(), sep='\n')
 
         super().__init__(*args, **kwargs)
+
+        with self.canvas.before:
+            Color(0, 0, 0, .5)
+            Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
         Clock.schedule_once(self.set_widgets_prop)
 

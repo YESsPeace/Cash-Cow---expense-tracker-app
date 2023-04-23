@@ -4,6 +4,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import NumericProperty
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -34,8 +35,36 @@ class CategoriesMenu(MDScreen):
 
         self.months_loaded_at_startup = config.months_loaded_at_startup
 
+        Clock.schedule_once(self.set_widget_props)
+
+    def set_widget_props(self, *args):
         Clock.schedule_once(self.set_transition)
-        # Clock.schedule_once(self.add_pre_loaded_months)
+
+        self.ids['total_balance_label'] = MDLabel(
+            id='total_balance_label',
+            text=str(self.total_accounts_balance),
+            halign="center",
+            valign="middle",
+        )
+
+        self.ids['total_balance_label'].font_size = "26sp"
+
+        self.top_btn_bar = MDBoxLayout(
+            MDIconButton(
+                icon='menu',
+                size_hint_y=1,
+            ),
+            self.ids['total_balance_label'],
+            MDIconButton(
+                icon='pencil',
+                size_hint_y=1,
+                on_release=self.start_edit_mode,
+            ),
+            orientation='horizontal',
+            size_hint_y=None,
+            height=dp(60),
+            md_bg_color=[.6, .1, .2, 1],
+        )
 
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())
@@ -43,16 +72,6 @@ class CategoriesMenu(MDScreen):
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
         self.ids.incomes_swiper.transition = NoTransition()
-
-    def add_pre_loaded_months(self, *args):
-        print('CategoriesMenu.add_pre_loaded_months')
-        for _ in range(self.months_loaded_at_startup):
-            self.load_previous_month()
-
-        for _ in range(self.months_loaded_at_startup):
-            self.load_next_month()
-
-        print("CategoriesMenu's Screens", self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
         load_previous_month(self, Categories_buttons_menu)
@@ -78,7 +97,6 @@ class CategoriesMenu(MDScreen):
         print('# start edit mode')
 
         # switch top_bar to edit mode
-        self.top_btn_bar = copy(self.ids.top_btn_bar)
         self.month_menu = copy(self.ids.month_menu)
 
         self.ids.top_bar.clear_widgets()

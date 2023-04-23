@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.graphics import Rectangle, Color
 from kivy.properties import BooleanProperty, OptionProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivymd.uix.card import MDCard
@@ -41,6 +42,11 @@ class menu_for_choice_new_account_type(MDNavigationDrawer):
                 'type': None
             }
         super().__init__(*args, **kwargs)
+
+        with self.canvas.before:
+            Color(0, 0, 0, .5)
+            Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
+
 
     def update_status(self, *_) -> None:
         status = self.status

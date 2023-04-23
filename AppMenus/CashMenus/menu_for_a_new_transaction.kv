@@ -207,5 +207,5 @@
                 background_color: .25, 0, .1, 1
                 on_release:
                     if self.text == '=': root.calculate_btn_pressed()
-                    elif self.text == 'done': root.write_transaction(sum_label.text)
+                    elif self.text == 'done': root.done_button_pressed()
                     self.text = 'done'

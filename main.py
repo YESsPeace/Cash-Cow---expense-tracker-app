@@ -25,8 +25,26 @@ class MainSrceen(MDScreen):
         config.main_screen_pos = self.pos
         config.main_screen_size = self.size
 
-    def open_menu_for_transaction_adding(self):
-        self.add_widget(MenuForTransactionAdding())
+    def open_menu_for_transaction_adding(self, transaction_id=None, transaction_data=None):
+        if (not transaction_id is None) and (not transaction_data is None):
+            self.add_widget(
+                MenuForTransactionAdding(
+                    transaction_id=transaction_id,
+                    transaction_data=transaction_data,
+                    edit_transaction=True
+                )
+            )
+
+        else:
+            self.add_widget(MenuForTransactionAdding())
+
+    def open_menu_for_transaction_info(self, transaction_id, transaction_data, *args):
+        self.add_widget(
+            menu_for_transaction_info(
+                transaction_id=transaction_id,
+                transaction_data=transaction_data
+            )
+        )
 
     def add_menu_for_a_new_transaction(self):
         self.add_widget(menu_for_a_new_transaction())
@@ -149,6 +167,7 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu.kv')
         Builder.load_file('AppMenus/Transaction_menu/transaction_menu_in.kv')
         Builder.load_file('AppMenus/Transaction_menu/menu_for_transaction_adding.kv')
+        Builder.load_file('AppMenus/Transaction_menu/menu_for_transaction_info.kv')
 
         # BudgeMenu
         Builder.load_file('AppMenus/Budget_menu/BudgetMenu.kv')
