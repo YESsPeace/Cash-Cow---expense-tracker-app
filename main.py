@@ -12,6 +12,7 @@ from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.scrollview import MDScrollView
+from kivymd.uix.snackbar import Snackbar
 
 import config
 
@@ -25,18 +26,38 @@ class MainSrceen(MDScreen):
         config.main_screen_pos = self.pos
         config.main_screen_size = self.size
 
-    def open_menu_for_transaction_adding(self, transaction_id=None, transaction_data=None):
-        if (not transaction_id is None) and (not transaction_data is None):
+    def open_menu_for_transaction_adding(
+            self,
+            choosing_first_transaction=False,
+            choosing_second_transaction=True,
+            first_transaction_item=None,
+            second_transaction_item=None,
+    ):
+        if not first_transaction_item is None:
             self.add_widget(
                 MenuForTransactionAdding(
-                    transaction_id=transaction_id,
-                    transaction_data=transaction_data,
-                    edit_transaction=True
+                    choosing_first_transaction=choosing_first_transaction,
+                    choosing_second_transaction=choosing_second_transaction,
+                    first_transaction_item=first_transaction_item,
+                )
+            )
+
+        elif not second_transaction_item is None:
+            self.add_widget(
+                MenuForTransactionAdding(
+                    choosing_first_transaction=choosing_first_transaction,
+                    choosing_second_transaction=choosing_second_transaction,
+                    second_transaction_item=second_transaction_item
                 )
             )
 
         else:
-            self.add_widget(MenuForTransactionAdding())
+            self.add_widget(
+                MenuForTransactionAdding(
+                    choosing_first_transaction=choosing_first_transaction,
+                    choosing_second_transaction=choosing_second_transaction,
+                )
+            )
 
     def open_menu_for_transaction_info(self, transaction_id, transaction_data, *args):
         self.add_widget(
@@ -46,8 +67,22 @@ class MainSrceen(MDScreen):
             )
         )
 
-    def add_menu_for_a_new_transaction(self):
-        self.add_widget(menu_for_a_new_transaction())
+    def add_menu_for_a_new_transaction(
+            self,
+            first_transaction_item=None,
+            second_transaction_item=None
+    ):
+        if (not first_transaction_item is None) and (not second_transaction_item is None):
+            self.add_widget(
+                menu_for_a_new_transaction(
+                    first_transaction_item=first_transaction_item,
+                    second_transaction_item=second_transaction_item
+                )
+            )
+
+
+        else:
+            Snackbar(text="There's no first or second transaction item").open()
 
     def add_menu_for_a_new_budget(self):
         self.add_widget(menu_for_a_new_budget())

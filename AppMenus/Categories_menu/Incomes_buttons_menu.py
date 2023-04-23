@@ -9,6 +9,7 @@ from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
 import config
+from AppMenus.BasicMenus import MenuForTransactionAddingBase
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from database import get_transaction_for_the_period, transaction_db_read, budget_data_read, \
     get_incomes_month_data, accounts_db_read, savings_db_read, incomes_db_read
@@ -26,7 +27,7 @@ class IncomeItem(MDBoxLayout):
     )
 
 
-class Incomes_buttons_menu(MDScreen):
+class Incomes_buttons_menu(MDScreen, MenuForTransactionAddingBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -86,69 +87,3 @@ class Incomes_buttons_menu(MDScreen):
 
     def del_plus_button(self, *args):
         self.ids.GridIncomesMenu.remove_widget(self.ids.plus_button_incomes)
-
-    def open_menu_for_a_new_transaction(self, widget_id, *args) -> None:
-        # getting info for a new menu
-        incomes_data = incomes_db_read()
-        accounts_data = accounts_db_read() | savings_db_read()
-        # reselection the first item
-        if config.choosing_first_transaction:
-            config.choosing_first_transaction = False
-            if str(widget_id) in accounts_data:
-                config.first_transaction_item = {
-                    'id': widget_id,
-                    'Name': accounts_data[widget_id]['Name'],
-                    'Color': accounts_data[widget_id]['Color'][:-1],
-                    'Currency': 'RUB'  # last_transaction['FromCurrency']
-                }
-
-            else:
-                Snackbar(text="You can't spend money from the income").open()
-
-        # typical selection
-        else:
-            # second item
-            if len(config.history_dict) > 0:
-                config.last_transaction_id = list(config.history_dict)[-1]
-                last_transaction = config.history_dict[config.last_transaction_id]
-
-                if last_transaction['Type'] in ['Transfer', 'Expenses']:
-                    last_account = last_transaction['From']
-
-                    if type(last_account) is tuple:
-                        last_account = last_account[0]
-
-                else:
-                    last_account = last_transaction['To']
-
-                    if type(last_account) is tuple:
-                        last_account = last_account[0]
-
-            else:
-                if len(accounts_data) > 0:
-                    last_account = 'account_1'
-
-                else:
-                    Snackbar(text="Firstly create an account and an expense category").open()
-                    return
-
-            config.second_transaction_item = {'id': last_account,
-                                              'Name':
-                                                  accounts_data[last_account]['Name'],
-                                              'Color': accounts_data[last_account]['Color'][:-1],
-                                              'Currency': 'RUB'  # last_transaction['FromCurrency']
-                                              }
-            # first item
-            config.first_transaction_item = {
-                'id': widget_id,
-                'Name': incomes_data[widget_id]['Name'],
-                'Color': incomes_data[widget_id]['Color'][:-1]
-            }
-
-            if str(widget_id) in accounts_data:
-                config.first_transaction_item['Currency'] = accounts_data[str(widget_id)]['Currency']
-            else:
-                config.first_transaction_item['Currency'] = 'RUB'
-
-        # adding a new menu to the app
-        self.parent.parent.parent.parent.parent.parent.parent.parent.parent.add_widget(menu_for_a_new_transaction())

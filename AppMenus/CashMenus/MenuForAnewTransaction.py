@@ -1,78 +1,26 @@
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
-from kivy.properties import OptionProperty, BooleanProperty, NumericProperty, DictProperty
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
+from kivy.properties import NumericProperty, DictProperty
 from kivymd.uix.pickers import MDDatePicker
 
 import config
+from AppMenus.BasicMenus import PopUpMenuBase
 from AppMenus.other_func import calculate, update_total_balance_in_UI, update_menus
 from database import transaction_db_write, transaction_db_read
 
 
-class menu_for_a_new_transaction(MDNavigationDrawer):
-    # the menu opening, when we know what exactly will be in transaction
-    # Account, Category of expense and other
-    state = OptionProperty("open", options=("close", "open"))
-    status = OptionProperty(
-        "opened",
-        options=(
-            "closed",
-            "opening_with_swipe",
-            "opening_with_animation",
-            "opened",
-            "closing_with_swipe",
-            "closing_with_animation",
-        ),
-    )
-    enable_swiping = BooleanProperty(False)
+class menu_for_a_new_transaction(PopUpMenuBase):
+    first_transaction_item = DictProperty()
+    second_transaction_item = DictProperty()
 
-    edit_transaction = BooleanProperty(False)
     transaction_id = NumericProperty()
     transaction_data = DictProperty()
 
-    def update_status(self, *_) -> None:
-        status = self.status
-        if status == "closed":
-            self.state = "close"
-        elif status == "opened":
-            self.state = "open"
-        elif self.open_progress == 1 and status == "opening_with_animation":
-            self.status = "opened"
-            self.state = "open"
-        elif self.open_progress == 0 and status == "closing_with_animation":
-            self.status = "closed"
-            self.state = "close"
-
-            self.del_myself()
-
-        elif status in (
-                "opening_with_swipe",
-                "opening_with_animation",
-                "closing_with_swipe",
-                "closing_with_animation",
-        ):
-            pass
-        if self.status == "closed":
-            self.opacity = 0
-        else:
-            self.opacity = 1
-
     def __init__(self, *args, **kwargs):
-
-        # getting currency code name like 'USD'
-        # the first item is from last transaction account in class transaction menu
-        self.code_name_of_first_currency = config.first_transaction_item.setdefault('Currency', 'RUB')
-        # the second is from the pressed button in class MenuForTransactionAdding
-        self.code_name_of_second_currency = config.second_transaction_item['Currency']
-        print(f'from: {self.code_name_of_first_currency}; to: {self.code_name_of_second_currency}')
-
-        # getting symbol of the currency like 'USD' = '$'
-        self.currency_first = config.currency_symbol_dict[self.code_name_of_first_currency]
-        self.second_currency = config.currency_symbol_dict[self.code_name_of_second_currency]
-        print(f'from: {self.currency_first}; to: {self.second_currency}')
-
         # default text in calculator
-        self.default_sum_label_text = f'{self.currency_first} 0'
+        self.default_sum_label_text = f'₽ 0'
+
+        super().__init__(*args, **kwargs)
 
         # transaction value to write
         # default value for a transaction
@@ -82,18 +30,15 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         # getting type of transaction
         self.type_ = None
 
-        if config.second_transaction_item['id'].split('_')[0] == 'categories':
+        if self.second_transaction_item['id'].split('_')[0] == 'categories':
             self.type_ = 'Expenses'
 
-        elif (config.first_transaction_item['id'].split('_')[0] in ['account', 'savings']) and \
-                (config.second_transaction_item['id'].split('_')[0] in ['account', 'savings']):
+        elif (self.first_transaction_item['id'].split('_')[0] in ['account', 'savings']) and \
+                (self.second_transaction_item['id'].split('_')[0] in ['account', 'savings']):
             self.type_ = 'Transfer'
 
         else:
             self.type_ = 'Income'
-
-        # after creating all kivy widgets
-        super().__init__(*args, **kwargs)
 
         # just dark background
         with self.canvas.before:
@@ -101,27 +46,30 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
         # setting info for transaction items into widgets
-        self.ids.first_item_label.text = config.first_transaction_item['Name']
-        self.ids.first_item_label.md_bg_color = config.first_transaction_item['Color']
+        self.ids.first_item_label.text = self.first_transaction_item['Name']
+        self.ids.first_item_label.md_bg_color = self.first_transaction_item['Color']
 
-        self.ids.second_item_label.text = config.second_transaction_item['Name']
-        self.ids.second_item_label.md_bg_color = config.second_transaction_item['Color']
-
-    def del_myself(self):
-        self.parent.remove_widget(self)
+        self.ids.second_item_label.text = self.second_transaction_item['Name']
+        self.ids.second_item_label.md_bg_color = self.second_transaction_item['Color']
 
     def first_trans_item_pressed(self, *args):
         print('FIRST')
-        self.parent.open_menu_for_transaction_adding()
-
-        config.choosing_first_transaction = True
+        self.parent.open_menu_for_transaction_adding(
+            choosing_first_transaction=True,
+            choosing_second_transaction=False,
+            second_transaction_item=self.second_transaction_item
+        )
 
         self.del_myself()
 
     def second_trans_item_pressed(self, *args):
         print('SECOND')
 
-        self.parent.open_menu_for_transaction_adding()
+        self.parent.open_menu_for_transaction_adding(
+            choosing_first_transaction=False,
+            choosing_second_transaction=True,
+            first_transaction_item=self.first_transaction_item,
+        )
 
         self.del_myself()
 
@@ -155,14 +103,10 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
         print(f'Date: type - {type(value)}, {value}; date - {self.date_}')
 
     def calculate_btn_pressed(self):
-        self.ids.sum_label.text = f'{self.currency_first} {calculate(self.ids.sum_label.text)}'
+        self.ids.sum_label.text = f'₽ {calculate(self.ids.sum_label.text)}'
 
     def done_button_pressed(self):
-        if self.edit_transaction is True:
-            pass
-
-        else:
-            self.write_transaction(self.ids.sum_label.text)
+        self.write_transaction(self.ids.sum_label.text)
 
     def write_transaction(self, sum):
         # menu
@@ -185,8 +129,8 @@ class menu_for_a_new_transaction(MDNavigationDrawer):
 
         transaction_['Date'] = self.date_
         transaction_['Type'] = self.type_
-        transaction_['From'] = config.first_transaction_item['id']
-        transaction_['To'] = config.second_transaction_item['id']
+        transaction_['From'] = self.first_transaction_item['id']
+        transaction_['To'] = self.second_transaction_item['id']
         transaction_['FromSUM'] = sum
         transaction_['FromCurrency'] = self.code_name_of_first_currency
         transaction_['ToSUM'] = sum

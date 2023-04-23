@@ -3,13 +3,12 @@ from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty
 from kivy.uix.widget import Widget
-from kivy.weakproxy import WeakProxy
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
 import config
+from AppMenus.BasicMenus import MenuForTransactionAddingBase
 from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from database import accounts_db_read, get_transaction_for_the_period, savings_db_read, transaction_db_read, \
     get_categories_month_data, budget_data_read, categories_db_read
@@ -32,7 +31,7 @@ class WaterFill(Widget):
     color = ListProperty([0.2, 0.2, 0.2, 1])
 
 
-class Categories_buttons_menu(MDScreen):
+class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -92,69 +91,3 @@ class Categories_buttons_menu(MDScreen):
 
     def del_plus_button(self, *args):
         self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)
-
-    def open_menu_for_a_new_transaction(self, widget_id, *args) -> None:
-        categories_data = categories_db_read()
-        accounts_data = accounts_db_read() | savings_db_read()
-        # getting info for a new menu
-
-        # reselection the first item
-        if config.choosing_first_transaction:
-            config.choosing_first_transaction = False
-            if str(widget_id) in accounts_data:
-                config.first_transaction_item = {
-                    'id': widget_id,
-                    'Name': accounts_data[widget_id]['Name'],
-                    'Color': accounts_data[widget_id]['Color'][:-1],
-                    'Currency': 'RUB'  # last_transaction['FromCurrency']
-                }
-
-            else:
-                Snackbar(text="You can't spend money from the category").open()
-
-        # typical selection
-        else:
-            # first_item
-            if len(config.history_dict) > 0:
-                config.last_transaction_id = list(config.history_dict)[-1]
-                last_transaction = config.history_dict[config.last_transaction_id]
-
-                if last_transaction['Type'] in ['Transfer', 'Expenses']:
-                    last_account = last_transaction['From']
-                    if type(last_account) is tuple:
-                        last_account = last_account[0]
-
-                else:
-                    last_account = last_transaction['To']
-                    if type(last_account) is tuple:
-                        last_account = last_account[0]
-
-
-            else:
-                if len(accounts_data) > 0:
-                    last_account = 'account_1'
-
-                else:
-                    Snackbar(text="Firstly create an account and an expense category").open()
-                    return
-
-            config.first_transaction_item = {'id': last_account,
-                                             'Name': accounts_data[last_account]['Name'],
-                                             'Color': accounts_data[last_account]['Color'][:-1],
-                                             'Currency': 'RUB'  # last_transaction['FromCurrency']
-                                             }
-            # second item
-            config.second_transaction_item = {'id': widget_id,
-                                              'Name': categories_data[widget_id]['Name'],
-                                              'Color': categories_data[widget_id]
-                                                       ['Color'][:-1]}
-
-            if str(widget_id) in accounts_data:
-                config.second_transaction_item['Currency'] = accounts_data[str(widget_id)]['Currency']
-            else:
-                config.second_transaction_item['Currency'] = 'RUB'
-
-        # adding a new menu to the app
-        app = App.get_running_app()
-
-        app.root.ids.main.add_widget(menu_for_a_new_transaction())
