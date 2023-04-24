@@ -41,7 +41,7 @@ class menu_for_a_new_budget(MDNavigationDrawer):
             Color(0, 0, 0, .5)
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
-        Clock.schedule_once(self.set_widgets_prop)
+        Clock.schedule_once(self.set_widgets_prop, 1)
 
     def set_widgets_prop(self, *args):
         self.set_progressbar_value(self, *args)

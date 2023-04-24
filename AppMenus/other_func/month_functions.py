@@ -4,7 +4,6 @@ from calendar import monthrange, month_name
 from kivy.app import App
 
 import config
-from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
 
 
 def load_previous_month(self, menu):

@@ -13,11 +13,11 @@ class MenuForTransactionAdding(PopUpMenuBase, MenuForTransactionAddingBase):
             Color(0, 0, 0, .5)
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
-        Clock.schedule_once(self.set_widgets_props)
+        Clock.schedule_once(self.set_widgets_props, -1)
 
     def set_widgets_props(self, *args):
-        Clock.schedule_once(self.set_new_func_to_expense_and_incomes_buttons)
-        Clock.schedule_once(self.set_new_func_to_transfer_buttons)
+        Clock.schedule_once(self.set_new_func_to_expense_and_incomes_buttons, -1)
+        Clock.schedule_once(self.set_new_func_to_transfer_buttons, -1)
 
     def set_new_func_to_expense_and_incomes_buttons(self, *args):
         for menu_id, rv_id in [('Categories_buttons_menu', 'Categories_rv'),

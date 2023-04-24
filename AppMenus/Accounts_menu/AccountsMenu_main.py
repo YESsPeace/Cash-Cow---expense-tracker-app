@@ -1,3 +1,5 @@
+import datetime
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
@@ -43,7 +45,7 @@ class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.set_accounts)
+        Clock.schedule_once(self.set_accounts, -1)
 
     def on_release_callback(self, account_id):
         return lambda: self.open_menu_for_new_account(account_id)
@@ -80,6 +82,7 @@ class AccountsMenu_main(MDScreen):
 
     def set_accounts(self, *args):
         self.ids.accounts_rv.data = self.get_accounts_data()
+
 
     def open_menu_for_new_account(self, account_id, *args):
         print(account_id)

@@ -4,8 +4,7 @@ from kivy.uix.widget import Widget
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.snackbar import Snackbar
 
-import config
-from database import accounts_db_read, savings_db_read, categories_db_read, incomes_db_read
+from database import accounts_db_read, savings_db_read, categories_db_read, incomes_db_read, transaction_db_read
 
 
 class MenuForTransactionAddingBase(Widget):
@@ -16,9 +15,9 @@ class MenuForTransactionAddingBase(Widget):
     second_transaction_item = DictProperty()
 
     def open_menu_for_a_new_transaction(self, widget_id, *args):
-
         accounts_data = accounts_db_read() | savings_db_read()
         categories_data = categories_db_read() | incomes_db_read()
+        history_dict = transaction_db_read()
 
         # reselection the first item
         if self.choosing_first_transaction:
@@ -38,9 +37,9 @@ class MenuForTransactionAddingBase(Widget):
 
         # typical selection
         else:
-            if len(config.history_dict) > 0:
-                config.last_transaction_id = list(config.history_dict)[-1]
-                last_transaction = config.history_dict[config.last_transaction_id]
+            if len(history_dict) > 0:
+                last_transaction_id = list(history_dict)[-1]
+                last_transaction = history_dict[last_transaction_id]
 
                 if last_transaction['Type'] in ['Transfer', 'Expenses']:
                     last_account = last_transaction['From']
@@ -76,9 +75,6 @@ class MenuForTransactionAddingBase(Widget):
 
             else:
                 second_transaction_item['Currency'] = 'RUB'
-
-        # print('# first_transaction_item', first_transaction_item)
-        # print('# second_transaction_item', second_transaction_item)
 
         app = App.get_running_app()
 

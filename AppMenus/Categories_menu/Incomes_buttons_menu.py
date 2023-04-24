@@ -1,18 +1,13 @@
-from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import DictProperty, StringProperty, NumericProperty
-from kivy.weakproxy import WeakProxy
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.BasicMenus import MenuForTransactionAddingBase
-from AppMenus.CashMenus.MenuForAnewTransaction import menu_for_a_new_transaction
 from database import get_transaction_for_the_period, transaction_db_read, budget_data_read, \
-    get_incomes_month_data, accounts_db_read, savings_db_read, incomes_db_read
+    get_incomes_month_data, incomes_db_read
 
 
 class IncomeItem(MDBoxLayout):
@@ -34,7 +29,7 @@ class Incomes_buttons_menu(MDScreen, MenuForTransactionAddingBase):
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
         # getting info for a_new_transaction_menu
-        Clock.schedule_once(self.refresh_rv_data)
+        Clock.schedule_once(self.refresh_rv_data, 2)
 
     def get_rv_data(self, *args) -> list:
         out_list = []

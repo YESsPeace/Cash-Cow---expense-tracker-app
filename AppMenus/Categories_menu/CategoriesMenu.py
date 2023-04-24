@@ -4,7 +4,6 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import NumericProperty
-from kivy.uix.label import Label
 from kivy.uix.screenmanager import NoTransition
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
@@ -12,11 +11,9 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.screen import MDScreen
 
 import config
-from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
-
-from AppMenus.other_func import load_next_month, load_previous_month, get_total_accounts_balance
-
 from AppMenus.Categories_menu.Categories_buttons_menu import Categories_buttons_menu
+from AppMenus.Categories_menu.Incomes_buttons_menu import Incomes_buttons_menu
+from AppMenus.other_func import load_next_month, load_previous_month, get_total_accounts_balance
 from database import categories_db_read, incomes_db_read
 
 
@@ -33,12 +30,10 @@ class CategoriesMenu(MDScreen):
 
         super().__init__(*args, **kwargs)
 
-        self.months_loaded_at_startup = config.months_loaded_at_startup
-
-        Clock.schedule_once(self.set_widget_props)
+        Clock.schedule_once(self.set_widget_props, 1)
 
     def set_widget_props(self, *args):
-        Clock.schedule_once(self.set_transition)
+        Clock.schedule_once(self.set_transition, 1)
 
         self.ids['total_balance_label'] = MDLabel(
             id='total_balance_label',

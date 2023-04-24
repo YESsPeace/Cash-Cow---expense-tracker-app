@@ -38,7 +38,7 @@ class icon_choice_menu(MDNavigationDrawer):
         self.category_item = config.category_item
 
         super().__init__(*args, **kwargs)
-        Clock.schedule_once(self.set_widget_props)
+        Clock.schedule_once(self.set_widget_props, 1)
 
     def set_widget_props(self, *args):
         self.set_icons_grid()

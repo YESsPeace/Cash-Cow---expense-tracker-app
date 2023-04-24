@@ -13,10 +13,8 @@ from database import accounts_db_read, savings_db_read, categories_db_read, inco
 
 class Transaction_menu(MDScreen):
     total_accounts_balance = NumericProperty(get_total_accounts_balance())
-    def __init__(self, *args, **kwargs):
-        # getting history data
-        self.months_loaded_at_startup = config.months_loaded_at_startup
 
+    def __init__(self, *args, **kwargs):
         # getting actually data for menu settings and meny title
         self.current_menu_date = str(config.current_menu_date)[:-3]
         self.current_menu_month_name = config.current_menu_month_name
@@ -25,24 +23,13 @@ class Transaction_menu(MDScreen):
 
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.set_transition)
-        # Clock.schedule_once(self.add_pre_loaded_months)
+        Clock.schedule_once(self.set_transition, 1)
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()
 
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())
-
-    def add_pre_loaded_months(self, *args):
-        print('TransactionMenu.add_pre_loaded_months')
-        for _ in range(self.months_loaded_at_startup):
-            self.load_previous_month()
-
-        for _ in range(self.months_loaded_at_startup):
-            self.load_next_month()
-
-        print("TransactionMenu's Screens:", self.ids.my_swiper.screen_names)
 
     def load_previous_month(self):
         load_previous_month(self, Transaction_menu_in)

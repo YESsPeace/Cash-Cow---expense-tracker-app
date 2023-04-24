@@ -1,3 +1,5 @@
+import datetime
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
@@ -43,7 +45,7 @@ class BudgetMenu_in(MDScreen):
         self.current_menu_date = config.current_menu_date
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        Clock.schedule_once(self.refresh_rv_data)
+        Clock.schedule_once(self.refresh_rv_data, 2)
 
     def get_budget_data(self, *args) -> list:
         out_list = []

@@ -1,3 +1,5 @@
+import datetime
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
@@ -65,7 +67,7 @@ class Transaction_menu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.refresh_rv_data)
+        Clock.schedule_once(self.refresh_rv_data, 2)
 
     def get_rv_data(self, *args) -> list:
         out_list = []

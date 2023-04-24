@@ -34,7 +34,7 @@ class menu_for_new_account(MDScreen):
 
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.set_menu_widgets)
+        Clock.schedule_once(self.set_menu_widgets, -1)
 
     def complete_pressed(self, *args):
         self.account_info['Name'] = self.ids.account_name_text_field.text

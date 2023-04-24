@@ -19,23 +19,9 @@ class BudgetMenu(MDScreen):
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        self.months_loaded_at_startup = config.months_loaded_at_startup
-
-        Clock.schedule_once(self.set_transition)
-        # Clock.schedule_once(self.add_pre_loaded_months)
-
+        Clock.schedule_once(self.set_transition, 1)
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())
-
-    def add_pre_loaded_months(self, *args):
-        print('BudgetMenu.add_pre_loaded_months')
-        for _ in range(self.months_loaded_at_startup):
-            self.load_previous_month()
-
-        for _ in range(self.months_loaded_at_startup):
-            self.load_next_month()
-
-        print("BudgetMenu's Screens:", self.ids.my_swiper.screen_names)
 
     def set_transition(self, *args):
         self.ids.my_swiper.transition = NoTransition()

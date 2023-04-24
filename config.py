@@ -1,14 +1,6 @@
 import datetime
 from calendar import monthrange, month_name
 
-from kivymd.icon_definitions import md_icons
-
-from database import categories_db_read, sql_start, accounts_db_read, \
-    savings_db_read, transaction_db_read, month_in_history
-
-# app checking
-start_app_time = datetime.datetime.now()
-
 # ___date___
 date_today = datetime.date.today()
 
@@ -36,28 +28,6 @@ current_menu_month_name = month_name[current_menu_month]
 main_screen_pos = None
 main_screen_size = None
 
-sql_start()
-
-# Accounts Menu
-global_accounts_data_dict = accounts_db_read()
-
-global_savings_data_dict = savings_db_read()
-
-icon_list = list(md_icons.keys())
-
-# transaction menu
-history_dict = transaction_db_read()
-
-Transaction_menu_in_last_date = None
-
-# all menus
-months_loaded_at_startup = month_in_history(history_dict) + 1
-
-if months_loaded_at_startup > 6:
-    months_loaded_at_startup = 6
-
-# menu for a new transaction
-last_transaction_id = None
 currency_symbol_dict = {
     'RUB': '₽',
     'USD': '$',

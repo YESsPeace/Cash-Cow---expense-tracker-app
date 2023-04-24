@@ -1,11 +1,13 @@
-import os
-import sys
+import datetime
+
+from database import sql_start
+
+start_app_time = datetime.datetime.now()
+sql_start()
 
 from kivy.app import App
-from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty, Clock
-from kivy.resources import resource_add_path
 from kivy.uix.screenmanager import ScreenManager, NoTransition
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigation
@@ -20,7 +22,6 @@ from AppMenus import *
 
 
 class MainSrceen(MDScreen):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         config.main_screen_pos = self.pos
@@ -159,10 +160,10 @@ class MainSrceen(MDScreen):
 class My_BottomNavigation(MDBottomNavigation):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        Clock.schedule_once(self.set_widget_props)
+        Clock.schedule_once(self.set_widget_props, 1)
 
     def set_widget_props(self, *args):
-        Clock.schedule_once(self.set_transition)
+        Clock.schedule_once(self.set_transition, 1)
 
     def set_transition(self, *args):
         self.ids.tab_manager.transition = NoTransition()
@@ -187,6 +188,9 @@ class ContentNavigationDrawer(MDScrollView):
 
 
 class MoneyStatApp(MDApp):
+    def on_start(self):
+        print("APP LOADED TIME App:", datetime.datetime.now() - start_app_time)
+
     def build(self):
         self.theme_cls.material_style = "M3"
         self.theme_cls.theme_style = "Dark"
@@ -237,11 +241,5 @@ class MoneyStatApp(MDApp):
 
 
 if __name__ == '__main__':
-    if hasattr(sys, '_MEIPASS'):
-        resource_add_path(os.path.join(sys._MEIPASS))
-
-    # smartphone screen
-    Window.size = (0.6 * 640, 0.6 * 1136)
-
     # start the app
     MoneyStatApp().run()
