@@ -77,7 +77,7 @@ class menu_for_new_or_edit_category(MDScreen):
         Snackbar(text="only in future.").open()
 
     def open_color_picker(self):
-        self.color_picker = MDColorPicker(size_hint=(0.5, 0.85))
+        self.color_picker = MDColorPicker(size_hint=(None, None), size=(dp(350), dp(600)))
         self.color_picker.open()
         self.color_picker.bind(
             on_release=self.set_selected_color,

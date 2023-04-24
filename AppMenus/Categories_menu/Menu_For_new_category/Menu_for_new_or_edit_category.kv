@@ -30,7 +30,7 @@
                         size: self.size
 
             MDLabel:
-                text: 'category'
+                text: 'Category'
                 halign: "left"
                 valign: "middle"
                 font_style: 'H4'
@@ -60,14 +60,13 @@
                 MDLabel:
                     text: 'Name'
                     theme_text_color: 'Secondary'
-                    font_style: 'Caption'
+                    font_style: 'H5'
 
             MDScreen:
                 MDTextField:
                     id: category_name_text_field
 
                     text: root.category_item.get('Name', '<Category Name>')
-                    theme_text_color: 'Primary'
                     font_style: 'H5'
 
     MDScreen:

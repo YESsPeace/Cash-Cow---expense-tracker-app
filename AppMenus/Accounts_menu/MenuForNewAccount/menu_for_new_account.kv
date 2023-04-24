@@ -64,14 +64,13 @@
                 MDLabel:
                     text: 'Name'
                     theme_text_color: 'Secondary'
-                    font_style: 'Caption'
+                    font_style: 'H5'
 
             MDScreen:
                 MDTextField:
                     id: account_name_text_field
 
                     text: root.account_info.get('Name', '<account Name>')
-                    theme_text_color: 'Primary'
                     font_style: 'H5'
 
     MDScreen:
@@ -154,27 +153,6 @@
 
                         halign: "right"
                         text: str(root.account_info.setdefault('Balance', 0))
-
-#                MDBoxLayout:
-#                    orientation: 'horizontal'
-#                    size_hint: 1, None
-#                    padding: dp(5)
-#                    height: dp(50)
-#                    md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
-#
-#                    MDScreen:
-#                        MDLabel:
-#                            text: 'Include in total balance'
-#
-#                    MDScreen:
-#                        size_hint: None, None
-#                        size: dp(75), dp(30)
-#                        pos_hint: {'center_y': 0.5}
-#
-#                        MDSwitch:
-#                            pos_hint: {'center_y': 0.25}
-#                            on_active:
-#                                root.switch_updated(self)
 
                 BoxLayoutButton:
                     orientation: 'vertical'

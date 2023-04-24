@@ -118,7 +118,19 @@ class Transaction_menu_in(MDScreen):
         return out_list
 
     def refresh_rv_data(self, *args):
-        self.ids.Transaction_rv.data = self.get_rv_data()
+        new_data = self.get_rv_data()
+
+        if len(new_data) < 1:
+            new_data.append(
+                {
+                    "viewclass": "date_label",
+                    "height": dp(40),
+                    "orientation": "horizontal",
+                    "date": "There's no transactions in this month",
+                }
+            )
+
+        self.ids.Transaction_rv.data = new_data
 
     def on_transaction_item_callback(self, transaction_id, transaction_data, *args):
         return lambda: self.open_menu_for_transaction_info(transaction_id, transaction_data)
