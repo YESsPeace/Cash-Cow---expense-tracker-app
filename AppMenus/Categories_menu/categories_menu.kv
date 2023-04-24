@@ -1,17 +1,12 @@
-<My_TabbedPanelItem@MDCard+TabbedPanelItem>:
-    md_bg_color: [.1, .1, .6, .3]
-    radius: [0, 0, 0, 0]
-    text: 'df'
+<BoxLayoutToggleButton@BoxLayoutButton>:
 
-
-    MDLabel:
-        text: root.text
 
 <CategoriesMenu>:
     md_bg_color: app.theme_color
 
     MDBoxLayout:
         orientation: 'vertical'
+        pos_hint: {'top': 1}
 
         MDBoxLayout:
             id: top_bar
@@ -111,40 +106,75 @@
                         root.load_next_month()
                         app.root.ids.main.update_month_menu_group()
 
-        TabbedPanel:
+        MDBoxLayout:
             id: tab_manager
-            do_default_tab: False
-            tab_pos: 'top_mid'
-            tab_width: self.width/2 - 7
+            orientation: 'horizontal'
+            pos_hint: {'top': 1}
+            spacing: dp(5)
+            size_hint_y: None
+            height: dp(50)
 
-            canvas.before:
-                Color:
-                    rgba: .15, .15, .15, 1
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            BoxLayoutToggleButton:
+                id: CategoriesButton
 
-            TabbedPanelItem:
-                text: 'Expenses'
+                md_bg_color: [0.3, 0.3, 0.3, 1.0]
+                size_hint: 1, 1
 
+                on_release:
+                    self.md_bg_color = [0.3, 0.3, 0.3, 1.0]
+                    category_screens.transition.direction = 'right'
+                    category_screens.current = 'Categories'
+                    IncomesButton.md_bg_color = [0.15, 0.15, 0.15, 1.0]
+
+                MDLabel:
+                    text: "Categories"
+                    halign: 'center'
+                    valign: 'center'
+
+
+
+            BoxLayoutToggleButton:
+                id: IncomesButton
+
+                md_bg_color: [0.15, 0.15, 0.15, 1.0]
+                size_hint: 1, 1
+
+                on_release:
+                    self.md_bg_color = [0.3, 0.3, 0.3, 1.0]
+                    category_screens.transition.direction = 'left'
+                    category_screens.current = 'Incomes'
+                    CategoriesButton.md_bg_color = [0.15, 0.15, 0.15, 1.0]
+
+                MDLabel:
+                    text: "Incomes"
+                    halign: 'center'
+                    valign: 'center'
+
+
+        MDScreenManager:
+            id: category_screens
+
+            MDScreen:
+                name: 'Categories'
                 ScreenManager:
                     id: my_swiper
                     size_hint_y: None
-                    height: root.height - top_bar.height
-                    y: root.height - self.height - top_bar.height
+                    height: root.height - top_bar.height - tab_manager.height - dp(10)
+                    y: root.height - self.height - top_bar.height - tab_manager.height - dp(10)
 
                     Categories_buttons_menu:
                         id: buttons_menu
                         name: root.current_menu_date
 
-            TabbedPanelItem:
-                text: 'Incomes'
+
+            MDScreen:
+                name: 'Incomes'
 
                 ScreenManager:
                     id: incomes_swiper
                     size_hint_y: None
-                    height: root.height - top_bar.height
-                    y: root.height - self.height - top_bar.height
+                    height: root.height - top_bar.height - tab_manager.height - dp(10)
+                    y: root.height - self.height - top_bar.height - tab_manager.height - dp(10)
 
                     Incomes_buttons_menu:
                         id: incomes_buttons_menu
