@@ -2,6 +2,7 @@ import datetime
 from calendar import monthrange, month_name
 
 from kivy.app import App
+from kivy.uix.screenmanager import SlideTransition
 
 import config
 
@@ -11,6 +12,7 @@ def load_previous_month(self, menu):
 
     previous_month_date = config.current_menu_date - datetime.timedelta(days=1)
 
+    self.ids.my_swiper.transition = SlideTransition(duration=.25, direction='right')
     load_month(self, previous_month_date, menu)
 
 
@@ -20,6 +22,7 @@ def load_next_month(self, menu):
     # getting next month
     next_month_date = config.current_menu_date + datetime.timedelta(days=1)
 
+    self.ids.my_swiper.transition = SlideTransition(duration=.25, direction='left')
     load_month(self, next_month_date, menu)
 
 

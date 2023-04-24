@@ -7,13 +7,11 @@ sql_start()
 
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty, Clock
-from kivy.uix.screenmanager import ScreenManager, NoTransition
+from kivy.properties import Clock
+from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigation
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.snackbar import Snackbar
 
 import config
@@ -160,14 +158,13 @@ class MainSrceen(MDScreen):
 class My_BottomNavigation(MDBottomNavigation):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        Clock.schedule_once(self.set_widget_props, 1)
+        Clock.schedule_once(self.set_widget_props, -1)
 
     def set_widget_props(self, *args):
-        Clock.schedule_once(self.set_transition, 1)
+        Clock.schedule_once(self.set_transition, -1)
 
     def set_transition(self, *args):
-        self.ids.tab_manager.transition = NoTransition()
-
+        self.ids.tab_manager.transition = SlideTransition(duration=.75)
 
 class Manager(ScreenManager):
     pass

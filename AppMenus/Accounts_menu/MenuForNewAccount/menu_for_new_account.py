@@ -23,7 +23,7 @@ from database import account_db_add, savings_db_add, savings_db_edit, accounts_d
 class BoxLayoutButton(MDCard):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+    ripple_behavior = True
 
 
 class menu_for_new_account(MDScreen):

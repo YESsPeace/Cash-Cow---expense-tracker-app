@@ -1,11 +1,9 @@
 <BoxLayoutButton>:
-    radius: [0, 0, 0, 0]
-    padding: [dp(5), dp(5), dp(5), dp(5)]
     size_hint_y: None
     height: dp(50)
 
 <menu_for_new_account>:
-    md_bg_color: (0.85, 0.85, 0.85, 1)
+    md_bg_color: app.theme_color
 
     MDBoxLayout:
         id: top_bar
@@ -37,9 +35,9 @@
 
             MDLabel:
                 text: 'Account'
-                font_size: 18
                 halign: "left"
                 valign: "middle"
+                font_style: 'H4'
 
 
             MDIconButton:
@@ -100,14 +98,11 @@
                     height: dp(25)
                     MDLabel:
                         text: 'Account'
-                        theme_text_color: "Custom"
-                        text_color: .05, .9, .05, 1
+                        font_style: 'H6'
 
                 BoxLayoutButton:
-                    ripple_behavior: True
                     orientation: 'vertical'
-                    size_hint: 1, None
-                    height: dp(50)
+
                     on_release:
                         root.change_account_type()
 
@@ -119,25 +114,11 @@
 
                         text: root.account_info['type']
 
-                BoxLayoutButton:
-                    ripple_behavior: True
-                    orientation: 'vertical'
-                    size_hint: 1, None
-                    height: dp(50)
-                    on_release:
-                        root.currency_pressed()
-
-                    MDLabel:
-                        text: 'account currency'
-
-                    MDLabel:
-                        text: 'Russian ruble ₽'
-
-
 
                 MDBoxLayout:
                     orientation: 'vertical'
                     size_hint: 1, None
+                    padding: dp(5)
                     height: dp(75)
                     md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
 
@@ -157,14 +138,10 @@
                     height: dp(25)
                     MDLabel:
                         text: 'Balance'
-                        theme_text_color: "Custom"
-                        text_color: .05, .9, .05, 1
+                        font_style: 'H6'
 
                 BoxLayoutButton:
-                    ripple_behavior: True
                     orientation: 'horizontal'
-                    size_hint: 1, None
-                    height: dp(50)
                     on_release:
                         root.open_balance_writer()
 
@@ -178,31 +155,58 @@
                         halign: "right"
                         text: str(root.account_info.setdefault('Balance', 0))
 
-                MDBoxLayout:
-                    orientation: 'horizontal'
-                    size_hint: 1, None
-                    height: dp(50)
-                    md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+#                MDBoxLayout:
+#                    orientation: 'horizontal'
+#                    size_hint: 1, None
+#                    padding: dp(5)
+#                    height: dp(50)
+#                    md_bg_color: [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+#
+#                    MDScreen:
+#                        MDLabel:
+#                            text: 'Include in total balance'
+#
+#                    MDScreen:
+#                        size_hint: None, None
+#                        size: dp(75), dp(30)
+#                        pos_hint: {'center_y': 0.5}
+#
+#                        MDSwitch:
+#                            pos_hint: {'center_y': 0.25}
+#                            on_active:
+#                                root.switch_updated(self)
 
-                    MDScreen:
+                BoxLayoutButton:
+                    orientation: 'vertical'
+                    height: dp(80)
+
+                    on_release:
+                        root.open_icon_choice_menu()
+
+                    MDLabel:
+                        text: 'Change icon'
+                        halign: 'left'
+                        valign: 'center'
+
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        spacing: dp(5)
+
+                        MDIconButton:
+                            icon: root.account_info.get('Icon', 'card')
+                            size_hint: None, 1
+                            width: self.height
+
                         MDLabel:
-                            text: 'Include in total balance'
+                            id: icon_label
 
-                    MDScreen:
-                        size_hint_x: None
-                        width: dp(75)
-                        MDSwitch:
-                            pos_hint: {'center_y': 0.5}
+                            text: root.account_info.get('Icon', 'card')
+                            halign: 'left'
+                            valign: 'center'
 
-                            on_active:
-                                root.switch_updated(self)
 
                 BoxLayoutButton:
                     id: change_color
-
-                    ripple_behavior: True
-                    size_hint_y: None
-                    height: dp(50)
 
                     on_release:
                         root.open_color_picker()

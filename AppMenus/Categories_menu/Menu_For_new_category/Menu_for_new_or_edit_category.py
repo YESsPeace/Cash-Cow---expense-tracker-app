@@ -14,10 +14,6 @@ from AppMenus.other_func import update_menus
 from database import db_data_delete, db_data_edit, db_data_add
 
 
-class BoxLayoutButton(MDCard, BoxLayout):
-    pass
-
-
 class menu_for_new_or_edit_category(MDScreen):
     def __init__(self, *args, **kwargs):
         self.category_item = config.category_item

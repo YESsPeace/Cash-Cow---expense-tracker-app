@@ -8,33 +8,26 @@
             orientation: 'vertical'
             size_hint_y: None
             height: top_btn_bar.height
+            md_bg_color: .6, .1, .2, 1
 
             MDBoxLayout:
                 id: top_btn_bar
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: dp(60)
-                md_bg_color: .5, .7, .3, 1
 
                 MDIconButton:
                     icon: ''
                     size_hint_y: 1
                     width: self.height
 
-                    canvas.before:
-                        Color:
-                            rgba: .9, .7, .3, 1
-                        Rectangle:
-                            pos: self.pos
-                            size: self.size
-
                 MDLabel:
                     id: total_balance_label
 
                     text: str(root.total_accounts_balance)
-                    font_size: 26
                     halign: "center"
                     valign: "middle"
+                    font_style: 'H4'
 
 
                 MDIconButton:
@@ -44,13 +37,6 @@
 
                     on_release:
                         root.open_menu_for_new_account()
-
-                    canvas.before:
-                        Color:
-                            rgba: .9, .7, .3, 1
-                        Rectangle:
-                            pos: self.pos
-                            size: self.size
 
         MDScreen:
             AccountsMenu_main:

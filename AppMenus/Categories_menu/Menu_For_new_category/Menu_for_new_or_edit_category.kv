@@ -1,5 +1,5 @@
 <menu_for_new_or_edit_category>:
-    md_bg_color: (0.85, 0.85, 0.85, 1)
+    md_bg_color: app.theme_color
 
     MDBoxLayout:
         id: top_bar
@@ -31,9 +31,9 @@
 
             MDLabel:
                 text: 'category'
-                font_size: 18
                 halign: "left"
                 valign: "middle"
+                font_style: 'H4'
 
 
             MDIconButton:
@@ -84,38 +84,35 @@
             spacing: dp(15)
 
             BoxLayoutButton:
-                ripple_behavior: True
                 orientation: 'vertical'
-                size_hint: 1, None
-                height: dp(150)
-                padding: dp(10)
-                spacing: dp(5)
+                height: dp(80)
 
                 on_release:
-                    root.currency_pressed()
+                    root.open_icon_choice_menu()
 
-                MDScreen:
-                    md_bg_color: (.33, .33, .33, 1)
+                MDLabel:
+                    text: 'Change icon'
+                    halign: 'left'
+                    valign: 'center'
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    spacing: dp(5)
+
+                    MDIconButton:
+                        icon: root.category_item.get('Icon', 'android')
+                        size_hint: None, 1
+                        width: self.height
+
                     MDLabel:
-                        text: 'Settings'
+                        id: icon_label
 
-
-                MDScreen:
-                    md_bg_color: (.33, .33, .33, 1)
-                    MDBoxLayout:
-                        orientation: 'vertical'
-                        MDLabel:
-                            text: 'Category currency'
-
-                        MDLabel:
-                            text: 'Russian ruble ₽'
+                        text: root.category_item.get('Icon', 'card')
+                        halign: 'left'
+                        valign: 'center'
 
             BoxLayoutButton:
                 id: change_color
-
-                ripple_behavior: True
-                size_hint_y: None
-                height: dp(75)
 
                 on_release:
                     root.open_color_picker()
@@ -137,10 +134,6 @@
 
             BoxLayoutButton:
                 id: remove_btn
-
-                ripple_behavior: True
-                size_hint_y: None
-                height: dp(75)
 
                 on_release:
                     root.delete_category()

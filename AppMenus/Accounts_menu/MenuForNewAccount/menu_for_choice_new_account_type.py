@@ -8,10 +8,6 @@ import config
 from AppMenus.BasicMenus import PopUpMenuBase
 
 
-class BoxLayoutButton(MDCard, BoxLayout):
-    pass
-
-
 class menu_for_choice_new_account_type(PopUpMenuBase):
     new_account = BooleanProperty(True)
 

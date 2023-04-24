@@ -1,6 +1,6 @@
 from kivy.clock import Clock
 from kivy.properties import NumericProperty
-from kivy.uix.screenmanager import NoTransition
+from kivy.uix.screenmanager import NoTransition, SlideTransition
 from kivymd.uix.screen import MDScreen
 
 import config
@@ -19,12 +19,8 @@ class BudgetMenu(MDScreen):
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        Clock.schedule_once(self.set_transition, 1)
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())
-
-    def set_transition(self, *args):
-        self.ids.my_swiper.transition = NoTransition()
 
     def load_previous_month(self):
         load_previous_month(self, BudgetMenu_in)

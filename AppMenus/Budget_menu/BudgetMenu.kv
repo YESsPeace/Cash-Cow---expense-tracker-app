@@ -31,9 +31,9 @@
                 id: total_balance_label
 
                 text: str(root.total_accounts_balance)
-                font_size: 26
                 halign: "center"
                 valign: "middle"
+                font_style: 'H4'
 
 
             MDIconButton:
@@ -63,29 +63,31 @@
                     root.load_previous_month()
                     app.root.ids.main.update_month_menu_group()
 
-            MDLabel:
+            MDScreen:
+                BoxLayoutButton:
+                    pos_hint: {'center_x': .5,}
+                    adaptive_width: True
+                    height: self.parent.height
+                    size_hint_x: None
+                    md_bg_color: .6, .1, .2, 1
+                    spacing: dp(10)
 
-            MDBoxLayout
-                size_hint_x: 2
-
-                MDIconButton
-                    id: month_icon
-                    icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
-                    size_hint_y: .5
-                    width: self.height
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-
-                MDRectangleFlatButton:
-                    id: month_label
-                    text: root.current_menu_month_name
-                    line_color: 0, 0, 0, 0
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    font_size: '18sp'
-
-
-            MDLabel:
+                    MDIcon:
+                        id: month_icon
+                        icon: root.days_in_month_icon_dict[root.days_in_current_menu_month]
+                        size_hint: None, None
+                        height: dp(25)
+                        width: self.height
+                        pos_hint: {'right': 0, 'center_y': 0.5}
+                    MDScreen:
+                        size_hint_x: None
+                        width: month_label.width
+                        MDLabel:
+                            id: month_label
+                            text: root.current_menu_month_name
+                            font_size: '18sp'
+                            halign: 'left'
+                            valign: 'center'
 
             MDIconButton:
                 icon: 'arrow-right'

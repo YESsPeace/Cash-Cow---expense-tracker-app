@@ -37,7 +37,7 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
         # getting info for a_new_transaction_menu
-        Clock.schedule_once(self.refresh_rv_data, 2)
+        Clock.schedule_once(self.refresh_rv_data, 0.5)
 
     def get_rv_data(self, *args) -> list:
         out_list = []

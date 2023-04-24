@@ -67,7 +67,7 @@ class Transaction_menu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.refresh_rv_data, 2)
+        Clock.schedule_once(self.refresh_rv_data, 0.5)
 
     def get_rv_data(self, *args) -> list:
         out_list = []

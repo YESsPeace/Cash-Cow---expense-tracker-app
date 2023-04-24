@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.properties import NumericProperty
-from kivy.uix.screenmanager import NoTransition
+from kivy.uix.screenmanager import NoTransition, SlideTransition
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.snackbar import Snackbar
 
@@ -22,11 +22,6 @@ class Transaction_menu(MDScreen):
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
         super().__init__(*args, **kwargs)
-
-        Clock.schedule_once(self.set_transition, 1)
-
-    def set_transition(self, *args):
-        self.ids.my_swiper.transition = NoTransition()
 
     def update_total_accounts_balance(self, *args):
         self.ids.total_balance_label.text = str(get_total_accounts_balance())
