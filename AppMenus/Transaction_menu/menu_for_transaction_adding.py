@@ -2,7 +2,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.properties import Clock
 
 import config
-from AppMenus.BasicMenus import PopUpMenuBase, MenuForTransactionAddingBase
+from BasicMenus import PopUpMenuBase, MenuForTransactionAddingBase
 
 
 class MenuForTransactionAdding(PopUpMenuBase, MenuForTransactionAddingBase):

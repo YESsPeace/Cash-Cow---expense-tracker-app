@@ -70,7 +70,7 @@
                 MDTextField:
                     id: account_name_text_field
 
-                    text: root.account_info.get('Name', '<account Name>')
+                    text: root.item.get('Name', '<account Name>')
                     font_style: 'H5'
 
     MDScreen:
@@ -111,7 +111,7 @@
                     MDLabel:
                         id: account_type_label
 
-                        text: root.account_info['type']
+                        text: root.item['type']
 
 
                 MDBoxLayout:
@@ -128,7 +128,7 @@
                         MDTextField:
                             id: account_description_text_field
 
-                            text: root.account_info.get('Description', 'None')
+                            text: root.item.get('Description', 'None')
                             theme_text_color: 'Secondary'
                             font_style: 'H5'
 
@@ -152,7 +152,7 @@
                         id: account_balance
 
                         halign: "right"
-                        text: str(root.account_info.setdefault('Balance', 0))
+                        text: str(root.item.setdefault('Balance', 0))
 
                 BoxLayoutButton:
                     orientation: 'vertical'
@@ -171,14 +171,14 @@
                         spacing: dp(5)
 
                         MDIconButton:
-                            icon: root.account_info.get('Icon', 'card')
+                            icon: root.item.get('Icon', 'card')
                             size_hint: None, 1
                             width: self.height
 
                         MDLabel:
                             id: icon_label
 
-                            text: root.account_info.get('Icon', 'card')
+                            text: root.item.get('Icon', 'card')
                             halign: 'left'
                             valign: 'center'
 
@@ -231,11 +231,11 @@
 
 
     MDIconButton:
-        id: account_button
+        id: icon_button
         pos: root.width - dp(60), root.height - dp(174)
 
-        icon: root.account_info.get('Icon', 'card')
-        md_bg_color: root.account_info.get('Color', [0, 0, 0, 1])[:-1] + [1]
+        icon: root.item.get('Icon', 'card')
+        md_bg_color: root.item.get('Color', [0, 0, 0, 1])[:-1] + [1]
 
         on_release:
             root.open_icon_choice_menu()

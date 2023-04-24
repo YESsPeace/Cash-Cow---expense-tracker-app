@@ -1,14 +1,12 @@
+from kivy.clock import Clock
 from kivy.graphics import Rectangle, Color
 from kivy.metrics import dp
-from kivy.properties import BooleanProperty, OptionProperty, StringProperty, ListProperty
-from kivymd.uix.button import MDIconButton
-from kivymd.uix.card import MDCard
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
+from kivy.properties import StringProperty, ListProperty
 from kivymd.icon_definitions import md_icons
-from kivy.clock import Clock
+from kivymd.uix.card import MDCard
 
 import config
-from AppMenus.BasicMenus import PopUpMenuBase
+from BasicMenus import PopUpMenuBase
 
 
 class CustomIconItem(MDCard):
@@ -29,8 +27,8 @@ class CustomIconItem(MDCard):
 
 class icon_choice_menu(PopUpMenuBase):
     title_text = StringProperty('Category item')
-    button_id = StringProperty('category_button')
-    info_dict_name = StringProperty('category_item')
+    button_id = StringProperty('icon_button')
+    info_dict_name = StringProperty('item')
     current_item_icon = StringProperty()
 
     def __init__(self, *args, **kwargs):

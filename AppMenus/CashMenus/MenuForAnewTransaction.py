@@ -5,7 +5,7 @@ from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.snackbar import Snackbar
 
 import config
-from AppMenus.BasicMenus import PopUpMenuBase
+from BasicMenus import PopUpMenuBase
 from AppMenus.other_func import calculate, update_total_balance_in_UI, update_menus
 from database import transaction_db_write, transaction_db_read
 

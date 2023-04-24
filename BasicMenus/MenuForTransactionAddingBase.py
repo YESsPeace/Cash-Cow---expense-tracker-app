@@ -1,10 +1,9 @@
 from kivy.app import App
-from kivy.properties import BooleanProperty, OptionProperty, DictProperty
+from kivy.properties import BooleanProperty, DictProperty
 from kivy.uix.widget import Widget
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.snackbar import Snackbar
 
-from database import accounts_db_read, savings_db_read, categories_db_read, incomes_db_read, transaction_db_read
+from database import savings_db_read, incomes_db_read, accounts_db_read, categories_db_read, transaction_db_read
 
 
 class MenuForTransactionAddingBase(Widget):
@@ -79,54 +78,9 @@ class MenuForTransactionAddingBase(Widget):
         app = App.get_running_app()
 
         app.root.ids.main.add_menu_for_a_new_transaction(
-                first_transaction_item=first_transaction_item,
-                second_transaction_item=second_transaction_item
-            )
+            first_transaction_item=first_transaction_item,
+            second_transaction_item=second_transaction_item
+        )
 
         if hasattr(self, 'del_myself'):
             self.del_myself()
-
-
-class PopUpMenuBase(MDNavigationDrawer):
-    state = OptionProperty("open", options=("close", "open"))
-    status = OptionProperty(
-        "opened",
-        options=(
-            "closed",
-            "opening_with_swipe",
-            "opening_with_animation",
-            "opened",
-            "closing_with_swipe",
-            "closing_with_animation",
-        ),
-    )
-    enable_swiping = BooleanProperty(False)
-
-    def update_status(self, *_) -> None:
-        status = self.status
-        if status == "closed":
-            self.state = "close"
-        elif status == "opened":
-            self.state = "open"
-        elif self.open_progress == 1 and status == "opening_with_animation":
-            self.status = "opened"
-            self.state = "open"
-        elif self.open_progress == 0 and status == "closing_with_animation":
-            self.status = "closed"
-            self.state = "close"
-
-            # when person start reselection first item, but close the menu not finish
-        elif status in (
-                "opening_with_swipe",
-                "opening_with_animation",
-                "closing_with_swipe",
-                "closing_with_animation",
-        ):
-            pass
-        if self.status == "closed":
-            self.opacity = 0
-        else:
-            self.opacity = 1
-
-    def del_myself(self, *args):
-        self.parent.remove_widget(self)

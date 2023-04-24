@@ -66,7 +66,7 @@
                 MDTextField:
                     id: category_name_text_field
 
-                    text: root.category_item.get('Name', '<Category Name>')
+                    text: root.item.get('Name', '<Category Name>')
                     font_style: 'H5'
 
     MDScreen:
@@ -99,14 +99,14 @@
                     spacing: dp(5)
 
                     MDIconButton:
-                        icon: root.category_item.get('Icon', 'android')
+                        icon: root.item.get('Icon', 'android')
                         size_hint: None, 1
                         width: self.height
 
                     MDLabel:
                         id: icon_label
 
-                        text: root.category_item.get('Icon', 'card')
+                        text: root.item.get('Icon', 'card')
                         halign: 'left'
                         valign: 'center'
 
@@ -154,11 +154,11 @@
 
 
     MDIconButton:
-        id: category_button
+        id: icon_button
         pos: root.width - dp(60), root.height - dp(174)
 
-        icon: root.category_item.get('Icon', 'android')
-        md_bg_color: root.category_item.get('Color', [0, 0, 0, 1])[:-1] + [1]
+        icon: root.item.get('Icon', 'android')
+        md_bg_color: root.item.get('Color', [0, 0, 0, 1])[:-1] + [1]
 
         on_release:
             root.open_icon_choice_menu()

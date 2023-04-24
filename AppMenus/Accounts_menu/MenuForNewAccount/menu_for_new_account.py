@@ -17,6 +17,7 @@ from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writ
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
 from AppMenus.other_func import update_total_balance_in_UI, update_menus
+from BasicMenus import MenuForEditItemBase
 from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
 
 
@@ -26,25 +27,25 @@ class BoxLayoutButton(MDCard):
     ripple_behavior = True
 
 
-class menu_for_new_account(MDScreen):
+class menu_for_new_account(MenuForEditItemBase):
     def __init__(self, *args, **kwargs):
-        self.account_info = config.account_info.copy()
+        self.item = config.account_info.copy()
 
-        print(*self.account_info.items(), sep='\n')
+        print(*self.item.items(), sep='\n')
 
         super().__init__(*args, **kwargs)
 
         Clock.schedule_once(self.set_menu_widgets, -1)
 
     def complete_pressed(self, *args):
-        self.account_info['Name'] = self.ids.account_name_text_field.text
+        self.item['Name'] = self.ids.account_name_text_field.text
 
-        self.account_info['Description'] = self.ids.account_description_text_field.text
+        self.item['Description'] = self.ids.account_description_text_field.text
 
-        if self.account_info.get('new') is True:
+        if self.item.get('new') is True:
             self.create_account()
 
-        elif self.account_info != config.account_info:
+        elif self.item != config.account_info:
             self.edit_account()
 
         else:
@@ -54,11 +55,11 @@ class menu_for_new_account(MDScreen):
     def create_account(self, *args):
         print('# creation account started')
 
-        if self.account_info['type'] == 'regular':
-            account_db_add(self.account_info)
+        if self.item['type'] == 'regular':
+            account_db_add(self.item)
 
-        elif self.account_info['type'] == 'savings':
-            savings_db_add(self.account_info)
+        elif self.item['type'] == 'savings':
+            savings_db_add(self.item)
 
         update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
@@ -69,11 +70,11 @@ class menu_for_new_account(MDScreen):
     def edit_account(self, *args):
         print('# editing account started')
 
-        if self.account_info['type'] == 'regular':
-            accounts_db_edit(self.account_info)
+        if self.item['type'] == 'regular':
+            accounts_db_edit(self.item)
 
-        elif self.account_info['type'] == 'savings':
-            savings_db_edit(self.account_info)
+        elif self.item['type'] == 'savings':
+            savings_db_edit(self.item)
 
         update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
@@ -85,8 +86,8 @@ class menu_for_new_account(MDScreen):
         print('# deleting category started')
 
         db_data_delete(
-            db_name='savings_db' if self.account_info['ID'].split('_')[0] == 'savings' else 'accounts_db',
-            item_id=self.account_info['ID'],
+            db_name='savings_db' if self.item['ID'].split('_')[0] == 'savings' else 'accounts_db',
+            item_id=self.item['ID'],
         )
 
         update_total_balance_in_UI()
@@ -98,37 +99,15 @@ class menu_for_new_account(MDScreen):
         self.add_widget(
             icon_choice_menu(
                 title_text='Account icon',
-                button_id='account_button',
-                info_dict_name='account_info',
             )
         )
-
-    def open_color_picker(self):
-        self.color_picker = MDColorPicker(size_hint=(None, None), size=(dp(350), dp(600)))
-        self.color_picker.open()
-        self.color_picker.bind(
-            on_release=self.set_selected_color,
-        )
-
-    def set_selected_color(
-            self,
-            instance_color_picker: MDColorPicker,
-            type_color: str,
-            selected_color: Union[list, str],
-    ):
-        self.color_picker._real_remove_widget()
-        print(f"Selected color is {selected_color}")
-        print(type(selected_color))
-
-        self.ids.account_button.md_bg_color = selected_color[:-1] + [1]
-        self.account_info['Color'] = selected_color[:-1] + [0.5]
 
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
         Snackbar(text="only in future.").open()
 
     def set_menu_widgets(self, *args):
-        if self.account_info['type'] == 'savings':
+        if self.item['type'] == 'savings':
             self.add_goal_button()
 
     def add_goal_button(self, *args):
@@ -155,7 +134,7 @@ class menu_for_new_account(MDScreen):
 
         goal_balance_label = MDLabel(
             halign="right",
-            text=str(self.account_info.setdefault('Goal', 0)),
+            text=str(self.item.setdefault('Goal', 0)),
             id='goal_balance'
         )
 
@@ -174,14 +153,10 @@ class menu_for_new_account(MDScreen):
 
     def switch_updated(self, switch, *args):
         if switch.active is True:
-            self.account_info['IncludeInTheTotalBalance'] = 1
+            self.item['IncludeInTheTotalBalance'] = 1
 
         else:
-            self.account_info['IncludeInTheTotalBalance'] = 0
+            self.item['IncludeInTheTotalBalance'] = 0
 
     def open_balance_writer(self, *args):
         self.add_widget(balance_writer(text_widget_id='account_balance'))
-
-    def quit_from_menu(self, *args):
-        self.parent.current = 'main'
-        self.parent.remove_widget(self)

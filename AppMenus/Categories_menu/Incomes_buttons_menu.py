@@ -5,7 +5,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screen import MDScreen
 
 import config
-from AppMenus.BasicMenus import MenuForTransactionAddingBase
+from BasicMenus import MenuForTransactionAddingBase
 from database import get_transaction_for_the_period, transaction_db_read, budget_data_read, \
     get_incomes_month_data, incomes_db_read
 

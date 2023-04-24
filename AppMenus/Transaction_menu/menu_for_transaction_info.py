@@ -3,7 +3,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.properties import NumericProperty, DictProperty
 
 import config
-from AppMenus.BasicMenus import PopUpMenuBase
+from BasicMenus import PopUpMenuBase
 
 
 class menu_for_transaction_info(PopUpMenuBase):

@@ -1,11 +1,9 @@
 from kivy.app import App
 from kivy.graphics import Rectangle, Color
 from kivy.properties import BooleanProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivymd.uix.card import MDCard
 
 import config
-from AppMenus.BasicMenus import PopUpMenuBase
+from BasicMenus import PopUpMenuBase
 
 
 class menu_for_choice_new_account_type(PopUpMenuBase):
