@@ -18,12 +18,9 @@
             md_bg_color: .6, .1, .2, 1
 
             MDIconButton:
-                icon: 'menu'
+                icon: ''
                 size_hint_y: 1
                 width: self.height
-
-                on_release:
-                    nav_drawer.set_state("open")
 
                 canvas.before:
                     Color:
@@ -119,6 +116,3 @@
         md_bg_color: .6, .2, 0, 1
         on_release:
             root.open_menu_for_transaction_adding()
-
-    MyNavigationDrawer:
-        id: nav_drawer

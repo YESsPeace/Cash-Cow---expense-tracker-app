@@ -19,12 +19,9 @@
                 md_bg_color: .6, .1, .2, 1
 
                 MDIconButton:
-                    icon: 'menu'
+                    icon: ''
                     size_hint_y: 1
                     width: self.height
-
-                    on_release:
-                        nav_drawer.set_state("open")
 
                     canvas.before:
                         Color:
@@ -141,9 +138,3 @@
                     Incomes_buttons_menu:
                         id: incomes_buttons_menu
                         name: root.current_menu_date
-
-
-
-    MyNavigationDrawer:
-        id: nav_drawer
-

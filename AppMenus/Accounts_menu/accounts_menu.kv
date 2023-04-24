@@ -17,12 +17,9 @@
                 md_bg_color: .5, .7, .3, 1
 
                 MDIconButton:
-                    icon: 'menu'
+                    icon: ''
                     size_hint_y: 1
                     width: self.height
-
-                    on_release:
-                        nav_drawer.set_state("open")
 
                     canvas.before:
                         Color:
@@ -58,6 +55,3 @@
         MDScreen:
             AccountsMenu_main:
                 id: AccountsMenu_main_id
-
-    MyNavigationDrawer:
-        id: nav_drawer

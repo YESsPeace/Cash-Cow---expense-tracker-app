@@ -173,20 +173,6 @@ class Manager(ScreenManager):
     pass
 
 
-class MyNavigationDrawer(MDNavigationDrawer):
-
-    def open_main(self):
-        print(1)
-
-    def open_other(self):
-        print(2)
-
-
-class ContentNavigationDrawer(MDScrollView):
-    screen_manager = ObjectProperty()
-    nav_drawer = ObjectProperty()
-
-
 class MoneyStatApp(MDApp):
     def on_start(self):
         print("APP LOADED TIME App:", datetime.datetime.now() - start_app_time)

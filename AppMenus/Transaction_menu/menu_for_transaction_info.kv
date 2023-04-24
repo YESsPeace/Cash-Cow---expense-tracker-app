@@ -1,15 +1,16 @@
 <menu_for_transaction_info>:
     pos_hint: {'center_x': .5}
-    size_hint: 1, .5
+    size_hint: 1, None
+    height: dp(330)
 
     MDBoxLayout:
+        id: main_box
         orientation: 'vertical'
-        pos_hint: {'top': 1}
 
         MDLabel:
             text: str(root.transaction_data['Date'])
-            text_color: 1, 1, 1, 1
-            halign: 'left'
+            size_hint_y: None
+            height: dp(20)
 
         MDBoxLayout:
             orientation: 'horizontal'
@@ -25,7 +26,6 @@
                 md_bg_color: root.transaction_data['From'][1]['Color'][:-1]
                 text_color: "white"
                 line_color: self.md_bg_color
-#                on_release: root.first_trans_item_pressed()
 
             MDRectangleFlatButton:
                 id: second_item_label
@@ -35,7 +35,6 @@
                 md_bg_color: root.transaction_data['To'][1]['Color'][:-1]
                 text_color: "white"
                 line_color: self.md_bg_color
-#                on_release: root.second_trans_item_pressed()
 
         MDBoxLayout:
             orientation: 'vertical'
