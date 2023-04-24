@@ -1,13 +1,25 @@
-from kivy.properties import BooleanProperty, OptionProperty, StringProperty
+from kivy.graphics import Rectangle, Color
+from kivy.metrics import dp
+from kivy.properties import BooleanProperty, OptionProperty, StringProperty, ListProperty
 from kivymd.uix.button import MDIconButton
+from kivymd.uix.card import MDCard
 from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.icon_definitions import md_icons
 from kivy.clock import Clock
 
 import config
+from AppMenus.BasicMenus import PopUpMenuBase
 
 
-class CustomIconItem(MDIconButton):
+class CustomIconItem(MDCard):
+    radius = [0, 0, 0, 0]
+    padding = [dp(5), dp(5), dp(5), dp(5)]
+    spacing = dp(5)
+    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+
+    icon_name = StringProperty('android')
+    color = ListProperty([0, 0, 0, 1])
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -15,29 +27,21 @@ class CustomIconItem(MDIconButton):
         self.parent.set_icon(icon_name=self.icon)
 
 
-class icon_choice_menu(MDNavigationDrawer):
-    state = OptionProperty("open", options=("close", "open"))
-    status = OptionProperty(
-        "opened",
-        options=(
-            "closed",
-            "opening_with_swipe",
-            "opening_with_animation",
-            "opened",
-            "closing_with_swipe",
-            "closing_with_animation",
-        ),
-    )
-    enable_swiping = BooleanProperty(False)
-
+class icon_choice_menu(PopUpMenuBase):
     title_text = StringProperty('Category item')
     button_id = StringProperty('category_button')
     info_dict_name = StringProperty('category_item')
+    current_item_icon = StringProperty()
 
     def __init__(self, *args, **kwargs):
-        self.category_item = config.category_item
+        self.category_item, self.account_item = config.category_item, config.account_info
 
         super().__init__(*args, **kwargs)
+
+        with self.canvas.before:
+            Color(0, 0, 0, .5)
+            Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
+
         Clock.schedule_once(self.set_widget_props, 1)
 
     def set_widget_props(self, *args):
@@ -48,26 +52,25 @@ class icon_choice_menu(MDNavigationDrawer):
         def add_icon_item(icon_name):
             self.ids.rv.data.append(
                 {
-                    "viewclass": "MDIconButton",
-                    "icon": icon_name,
-                    "md_bg_color": color,
+                    "viewclass": "CustomIconItem",
+                    "icon_name": icon_name,
+                    "color": color,
                     "on_release": lambda icon_name=icon_name: self.set_icon(icon_name),
                 }
             )
-
-        current_item_icon = self.category_item.get('Icon')
 
         self.ids.rv.data = []
 
         for icon_name in md_icons.keys():
             color = [.55, .55, .55, 1]
 
-            if icon_name == current_item_icon:
+            if icon_name == self.current_item_icon:
                 color = [.9, .1, .1, 1]
 
             if search:
-                if text in icon_name:
+                if text.lower() in icon_name.lower():
                     add_icon_item(icon_name)
+
             else:
                 add_icon_item(icon_name)
 
@@ -79,33 +82,3 @@ class icon_choice_menu(MDNavigationDrawer):
         print('# icon selected:', self.ids.icon_preview.icon)
         getattr(self.parent, self.info_dict_name)['Icon'] = self.ids.icon_preview.icon
         self.del_myself()
-
-    def update_status(self, *_) -> None:
-        status = self.status
-        if status == "closed":
-            self.state = "close"
-        elif status == "opened":
-            self.state = "open"
-        elif self.open_progress == 1 and status == "opening_with_animation":
-            self.status = "opened"
-            self.state = "open"
-        elif self.open_progress == 0 and status == "closing_with_animation":
-            self.status = "closed"
-            self.state = "close"
-
-            self.del_myself()
-
-        elif status in (
-                "opening_with_swipe",
-                "opening_with_animation",
-                "closing_with_swipe",
-                "closing_with_animation",
-        ):
-            pass
-        if self.status == "closed":
-            self.opacity = 0
-        else:
-            self.opacity = 1
-
-    def del_myself(self):
-        self.parent.remove_widget(self)

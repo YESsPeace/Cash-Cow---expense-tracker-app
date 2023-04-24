@@ -1,3 +1,12 @@
+<CustomIconItem>:
+    MDIconButton:
+        icon: root.icon_name
+        md_bg_color: root.color
+
+    MDLabel:
+        text: root.icon_name
+
+
 <icon_choice_menu>:
     size_hint: None, None
     size: dp(310), dp(630)
@@ -47,9 +56,9 @@
                     key_viewclass: 'viewclass'
                     key_size: 'height'
 
-                    RecycleGridLayout:
+                    RecycleBoxLayout:
                         default_size: None, dp(56)
                         default_size_hint: 1, None
                         size_hint_y: None
                         height: self.minimum_height
-                        cols: 4
+                        orientation: 'vertical'
