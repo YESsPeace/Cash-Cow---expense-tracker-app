@@ -177,7 +177,7 @@ def transaction_db_write(trans_data_dict):
                 f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
                 f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (trans_data_dict['Date'], trans_data_dict['Type'], trans_data_dict['From'], trans_data_dict['To'],
-                 trans_data_dict['FromSUM'], trans_data_dict['FromCurrency'], trans_data_dict['ToSUM'],
+                 str(trans_data_dict['FromSUM']), trans_data_dict['FromCurrency'], str(trans_data_dict['ToSUM']),
                  trans_data_dict['ToCurrency'], trans_data_dict['Comment'])
                 )
     base.commit()

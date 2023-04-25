@@ -1,5 +1,6 @@
 import datetime
 
+from BasicMenus.CustomWidgets import TopNotification
 from database import sql_start
 
 start_app_time = datetime.datetime.now()
@@ -12,7 +13,6 @@ from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.snackbar import Snackbar
 
 import config
 
@@ -98,7 +98,7 @@ class MainSrceen(MDScreen):
 
 
         else:
-            Snackbar(text="There's no first or second transaction item").open()
+            TopNotification(text="There's no first or second transaction item").open()
 
     def add_menu_for_a_new_budget(self):
         self.add_widget(menu_for_a_new_budget())
@@ -137,6 +137,7 @@ class MainSrceen(MDScreen):
         month_screen_name = str(config.current_menu_date)[:-3]
 
         for month_menu in [(self.ids.CategoriesMenu, Categories_buttons_menu),
+                           (self.ids.CategoriesMenu, Incomes_buttons_menu),
                            (self.ids.Transaction_menu, Transaction_menu_in),
                            (self.ids.BudgetMenu, BudgetMenu_in)]:
 
@@ -150,9 +151,20 @@ class MainSrceen(MDScreen):
                     month_menu[0].ids.my_swiper.current = month_screen_name
 
                 else:
+
                     month_menu[0].ids.my_swiper.add_widget(
                         month_menu[1](name=month_screen_name)
                     )
+
+                    month_menu[0].ids.my_swiper.current = month_screen_name
+
+                if config.current_menu_date.strftime("%Y") + config.current_menu_date.strftime("%m") == \
+                        config.date_today.strftime("%Y") + config.date_today.strftime("%m"):
+                    month_menu[0].ids.top_bar.md_bg_color = [.6, .1, .2, 1]
+
+
+                else:
+                    month_menu[0].ids.top_bar.md_bg_color = [.33, .33, .33, 1]
 
 
 class My_BottomNavigation(MDBottomNavigation):
@@ -165,6 +177,7 @@ class My_BottomNavigation(MDBottomNavigation):
 
     def set_transition(self, *args):
         self.ids.tab_manager.transition = SlideTransition(duration=.75)
+
 
 class Manager(ScreenManager):
     pass

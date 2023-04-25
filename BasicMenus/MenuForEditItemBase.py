@@ -6,10 +6,16 @@ from kivymd.uix.pickers import MDColorPicker
 from kivymd.uix.screen import MDScreen
 
 
+@cache
+def create_color_picker():
+    color_picker = MDColorPicker(size_hint=(None, None), size=(dp(350), dp(600)))
+    return color_picker
+
+
 class MenuForEditItemBase(MDScreen):
-    @cache
+
     def open_color_picker(self):
-        self.color_picker = MDColorPicker(size_hint=(None, None), size=(dp(350), dp(600)))
+        self.color_picker = create_color_picker()
         self.color_picker.open()
         self.color_picker.bind(
             on_release=self.set_selected_color,
@@ -21,7 +27,7 @@ class MenuForEditItemBase(MDScreen):
             type_color: str,
             selected_color: Union[list, str],
     ):
-        self.color_picker._real_remove_widget()
+        # self.color_picker._real_remove_widget()
         print(f"Selected color is {selected_color}")
         print(type(selected_color))
 

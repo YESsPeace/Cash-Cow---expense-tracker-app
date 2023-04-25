@@ -1,8 +1,8 @@
 from kivy.app import App
 from kivy.properties import BooleanProperty, DictProperty
 from kivy.uix.widget import Widget
-from kivymd.uix.snackbar import Snackbar
 
+from BasicMenus.CustomWidgets import TopNotification
 from database import savings_db_read, incomes_db_read, accounts_db_read, categories_db_read, transaction_db_read
 
 
@@ -31,7 +31,7 @@ class MenuForTransactionAddingBase(Widget):
                 second_transaction_item = self.second_transaction_item
 
             else:
-                Snackbar(text="You can't spend money from the category").open()
+                TopNotification(text="You can't spend money from the category").open()
                 return
 
         # typical selection
@@ -75,6 +75,12 @@ class MenuForTransactionAddingBase(Widget):
             else:
                 second_transaction_item['Currency'] = 'RUB'
 
+        if first_transaction_item['id'] == second_transaction_item['id']:
+            TopNotification(text="You are trying to write an operation " + \
+                                 f"from {first_transaction_item['Name']} to " + \
+                                 f"{second_transaction_item['Name']}").open()
+            return
+
         app = App.get_running_app()
 
         app.root.ids.main.add_menu_for_a_new_transaction(
@@ -84,3 +90,6 @@ class MenuForTransactionAddingBase(Widget):
 
         if hasattr(self, 'del_myself'):
             self.del_myself()
+
+        elif hasattr(self.parent.parent.parent, 'del_myself'):
+            self.parent.parent.parent.del_myself()

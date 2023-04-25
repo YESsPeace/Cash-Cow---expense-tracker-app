@@ -1,16 +1,9 @@
-from typing import Union
-
-from kivy.weakproxy import WeakProxy
-
-from kivy.app import App
 from kivy.metrics import dp
 from kivy.properties import Clock
-from kivy.uix.boxlayout import BoxLayout
+from kivy.weakproxy import WeakProxy
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
-from kivymd.uix.pickers import MDColorPicker
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
@@ -18,6 +11,7 @@ from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type i
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
 from AppMenus.other_func import update_total_balance_in_UI, update_menus
 from BasicMenus import MenuForEditItemBase
+from BasicMenus.CustomWidgets import TopNotification
 from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
 
 
@@ -50,7 +44,7 @@ class menu_for_new_account(MenuForEditItemBase):
 
         else:
             self.quit_from_menu()
-            Snackbar(text="There's nothing to change").open()
+            TopNotification(text="There's nothing to change").open()
 
     def create_account(self, *args):
         print('# creation account started')
@@ -64,7 +58,7 @@ class menu_for_new_account(MenuForEditItemBase):
         update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
-        Snackbar(text="Account created").open()
+        TopNotification(text="Account created").open()
 
 
     def edit_account(self, *args):
@@ -79,7 +73,7 @@ class menu_for_new_account(MenuForEditItemBase):
         update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
-        Snackbar(text="Account edited").open()
+        TopNotification(text="Account edited").open()
 
 
     def delete_account(self, *args):
@@ -93,7 +87,7 @@ class menu_for_new_account(MenuForEditItemBase):
         update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
-        Snackbar(text="Account deleted").open()
+        TopNotification(text="Account deleted").open()
 
     def open_icon_choice_menu(self, *args):
         self.add_widget(
@@ -104,7 +98,7 @@ class menu_for_new_account(MenuForEditItemBase):
 
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
-        Snackbar(text="only in future.").open()
+        TopNotification(text="only in future.").open()
 
     def set_menu_widgets(self, *args):
         if self.item['type'] == 'savings':

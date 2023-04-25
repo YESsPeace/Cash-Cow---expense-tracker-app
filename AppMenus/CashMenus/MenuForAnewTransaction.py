@@ -2,17 +2,25 @@ from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.properties import NumericProperty, DictProperty, BooleanProperty
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.snackbar import Snackbar
 
 import config
-from BasicMenus import PopUpMenuBase
 from AppMenus.other_func import calculate, update_total_balance_in_UI, update_menus
-from database import transaction_db_write, transaction_db_read
+from BasicMenus import PopUpMenuBase
+from BasicMenus.CustomWidgets import TopNotification
+from database import transaction_db_write
 
 
 class menu_for_a_new_transaction(PopUpMenuBase):
-    first_transaction_item = DictProperty()
-    second_transaction_item = DictProperty()
+    first_transaction_item = DictProperty(
+        {
+            'Name': ''
+        }
+    )
+    second_transaction_item = DictProperty(
+        {
+            'Name': ''
+        }
+    )
 
     edit_transaction_mode = BooleanProperty(False)
 
@@ -51,10 +59,10 @@ class menu_for_a_new_transaction(PopUpMenuBase):
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
         # setting info for transaction items into widgets
-        self.ids.first_item_label.text = self.first_transaction_item['Name']
+        # self.ids.first_item_label.text = self.first_transaction_item['Name']
         self.ids.first_item_label.md_bg_color = self.first_transaction_item['Color']
 
-        self.ids.second_item_label.text = self.second_transaction_item['Name']
+        # self.ids.second_item_label.text = self.second_transaction_item['Name']
         self.ids.second_item_label.md_bg_color = self.second_transaction_item['Color']
 
     def first_trans_item_pressed(self, *args):
@@ -137,10 +145,14 @@ class menu_for_a_new_transaction(PopUpMenuBase):
             print(self.transaction_id)
             print(*self.transaction_data.items(), sep='\n')
 
-            Snackbar(text='Transaction editing will only in the future').open()
+            TopNotification(text='Transaction editing will only in the future').open()
+            return
 
-        else:
-            self.write_transaction()
+        if self.transaction_data['FromSUM'] <= 0 or self.transaction_data['ToSUM'] <= 0:
+            TopNotification(text="Incorrect transaction sum").open()
+            return
+
+        self.write_transaction()
 
     def write_transaction(self):
         # writing

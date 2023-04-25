@@ -3,7 +3,7 @@ import datetime
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivy.properties import DictProperty, NumericProperty, StringProperty
+from kivy.properties import DictProperty, NumericProperty, StringProperty, ListProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
@@ -21,6 +21,8 @@ class TransactionItem(MDCard):
     orientation = "horizontal"
 
     transaction_id = NumericProperty(0)
+    sign = StringProperty('')
+    color = ListProperty([1, 1, 1])
 
     transaction_data = DictProperty(
         {
@@ -87,7 +89,7 @@ class Transaction_menu_in(MDScreen):
             transaction_data = history_dict_for_the_period[transaction_id]
 
             transaction_data['From'] = (transaction_data['From'],
-                                        (categories_data | accounts_data).get(transaction_data['From']))
+                                        (categories_data | accounts_data).get((transaction_data['From'])))
 
             transaction_data['To'] = (transaction_data['To'],
                                       (categories_data | accounts_data).get(transaction_data['To']))
@@ -111,6 +113,8 @@ class Transaction_menu_in(MDScreen):
                         "height": dp(60),
                         "transaction_data": transaction_data,
                         "transaction_id": transaction_id,
+                        "sign": config.transaction_color[transaction_data['Type']][0],
+                        "color": config.transaction_color[transaction_data['Type']][1],
                         "on_release": self.on_transaction_item_callback(transaction_id, transaction_data)
                     }
                 )

@@ -44,8 +44,16 @@ def load_month(self, date, menu):
 
     self.ids.my_swiper.current = name_
 
+    if config.current_menu_date.strftime("%Y") + config.current_menu_date.strftime("%m") == \
+            config.date_today.strftime("%Y") + config.date_today.strftime("%m"):
+        self.ids.top_bar.md_bg_color = [.6, .1, .2, 1]
 
-def update_menus(date_of_changes: str =None):
+
+    else:
+        self.ids.top_bar.md_bg_color = [.33, .33, .33, 1]
+
+
+def update_menus(date_of_changes: str = None):
     app = App.get_running_app()
 
     app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()

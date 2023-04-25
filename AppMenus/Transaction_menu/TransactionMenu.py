@@ -1,13 +1,11 @@
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.properties import NumericProperty
-from kivy.uix.screenmanager import NoTransition, SlideTransition
 from kivymd.uix.screen import MDScreen
-from kivymd.uix.snackbar import Snackbar
 
 import config
 from AppMenus.Transaction_menu.Transaction_menu_in import Transaction_menu_in
 from AppMenus.other_func import load_previous_month, load_next_month, get_total_accounts_balance
+from BasicMenus.CustomWidgets import TopNotification
 from database import accounts_db_read, savings_db_read, categories_db_read, incomes_db_read
 
 
@@ -41,4 +39,4 @@ class Transaction_menu(MDScreen):
             app.root.ids.main.open_menu_for_transaction_adding()
 
         else:
-            Snackbar(text="Firstly create an account and an expense category").open()
+            TopNotification(text="Firstly create an account and an expense category").open()

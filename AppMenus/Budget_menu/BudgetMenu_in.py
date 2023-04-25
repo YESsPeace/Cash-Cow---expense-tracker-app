@@ -1,4 +1,5 @@
 import datetime
+from copy import copy
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -28,7 +29,7 @@ class BudgetItem(MDCard):
 class BudgetTitle(MDCard):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
+    # md_bg_color = ListProperty([0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0])
 
     type_name = StringProperty('default_budget_type')
     real_sum = NumericProperty(0)
@@ -50,7 +51,7 @@ class BudgetMenu_in(MDScreen):
     def get_budget_data(self, *args) -> list:
         out_list = []
 
-        for type_dict, budget_data_dict, month_data_dict, title_text in [
+        for type_dict, budget_data_dict, month_data_dict, title_text, title_color in [
             (
                     categories_db_read(),  # type_dict
                     budget_data_read(id='categories_', db_name='budget_data_categories'),  # budget_data_dict
@@ -61,7 +62,8 @@ class BudgetMenu_in(MDScreen):
                             history_dict=transaction_db_read()
                         )
                     ),  # month_data_dict
-                    'Categories'  # title_text
+                    'Categories',  # title_text
+                    [.85, .13, .2, .1],  # title_color
             ),
             (
                     savings_db_read(),  # type_dict
@@ -73,7 +75,8 @@ class BudgetMenu_in(MDScreen):
                             history_dict=transaction_db_read()
                         )
                     ),  # month_data_dict
-                    'Savings'  # title_text
+                    'Savings',  # title_text
+                    [1, .84, 0, .1],  # title_color
             ),
             (
                     incomes_db_read(),  # type_dict
@@ -85,7 +88,8 @@ class BudgetMenu_in(MDScreen):
                             history_dict=transaction_db_read()
                         )
                     ),  # month_data_dict
-                    'Incomes'  # title_text
+                    'Incomes',  # title_text
+                    [.2, .9, .3, .1],  # title_color
             ),
         ]:
 
@@ -99,6 +103,7 @@ class BudgetMenu_in(MDScreen):
                         "type_name": title_text,
                         "real_sum": sum(month_data_dict[item_id]['SUM'] for item_id in month_data_dict),
                         "budgeted": sum(budget_data_dict[item_id]['Budgeted'] for item_id in budget_data_dict),
+                        "md_bg_color": title_color
                     }
                 )
 
@@ -128,6 +133,7 @@ class BudgetMenu_in(MDScreen):
                         "type_name": title_text,
                         "real_sum": 0,
                         "budgeted": 0,
+                        "md_bg_color": title_color
                     }
                 )
 

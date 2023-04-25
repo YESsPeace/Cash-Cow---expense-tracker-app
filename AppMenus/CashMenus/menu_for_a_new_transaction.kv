@@ -16,19 +16,41 @@
             spacing: dp(1)
             height: dp(85)
 
-            MDRectangleFlatButton:
-                id: first_item_label
+            BoxLayoutButton:
                 size_hint: 1, 1
-                text_color: "white"
-                line_color: self.md_bg_color
+                id: first_item_label
+                orientation: 'vertical'
+                padding: [dp(20),0,dp(20),dp(20)]
                 on_release: root.first_trans_item_pressed()
 
-            MDRectangleFlatButton:
-                id: second_item_label
+                MDLabel:
+                    text: 'From'
+                    halign: 'left'
+                    valign: 'center'
+
+                MDLabel:
+                    text: root.first_transaction_item.get('Name')
+                    halign: 'center'
+                    valign: 'center'
+                    font_size: "18sp"
+
+            BoxLayoutButton:
                 size_hint: 1, 1
-                text_color: "white"
-                line_color: self.md_bg_color
+                id: second_item_label
+                orientation: 'vertical'
+                padding: [dp(20),0,dp(20),dp(20)]
                 on_release: root.second_trans_item_pressed()
+
+                MDLabel:
+                    text: 'To'
+                    halign: 'left'
+                    valign: 'center'
+
+                MDLabel:
+                    text: root.second_transaction_item.get('Name')
+                    halign: 'center'
+                    valign: 'center'
+                    font_size: "18sp"
 
         MDBoxLayout:
             orientation: 'vertical'
@@ -135,7 +157,8 @@
                 background_normal: ''
                 background_color: .25, 0, .1, 1
                 on_release:
-                    sum_label.text = sum_label.text[:-1]
+                    if len(sum_label.text) > 3: sum_label.text = sum_label.text[:-1]
+                    elif len(sum_label.text) == 3: sum_label.text = f"₽ 0"
 
             Button:
                 text: '-'

@@ -38,6 +38,13 @@ first_transaction_item = None
 second_transaction_item = None
 choosing_first_transaction = False
 
+# transaction_menu_in
+transaction_color = {
+    'Expenses': ('- ', [.85, .13, .2]),
+    'Income': ('+ ', [.2, .9, .3]),
+    'Transfer': ('', [1, 1, 1]),
+}
+
 # menu for adding or edition a budget
 item = dict()
 

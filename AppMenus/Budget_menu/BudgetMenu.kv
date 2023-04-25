@@ -7,13 +7,14 @@
         orientation: 'vertical'
         size_hint_y: None
         height: top_btn_bar.height + month_menu.height
+        md_bg_color: .6, .1, .2, 1
 
         MDBoxLayout:
             id: top_btn_bar
             orientation: 'horizontal'
             size_hint_y: None
             height: dp(60)
-            md_bg_color: .6, .1, .2, 1
+            md_bg_color: top_bar.md_bg_color
 
             MDIconButton:
                 icon: ''
@@ -22,7 +23,7 @@
 
                 canvas.before:
                     Color:
-                        rgba: .6, .1, .2, 1
+                        rgba: top_bar.md_bg_color
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -43,7 +44,7 @@
 
                 canvas.before:
                     Color:
-                        rgba: .6, .1, .2, 1
+                        rgba: top_bar.md_bg_color
                     Rectangle:
                         pos: self.pos
                         size: self.size
@@ -53,7 +54,7 @@
             size_hint_y: None
             height: dp(40)
 
-            md_bg_color: .6, .1, .2, 1
+            md_bg_color: top_bar.md_bg_color
 
             MDIconButton:
                 icon: 'arrow-left'
@@ -63,14 +64,15 @@
                     root.load_previous_month()
                     app.root.ids.main.update_month_menu_group()
 
-            MDScreen:
-                BoxLayoutButton:
-                    pos_hint: {'center_x': .5,}
-                    adaptive_width: True
-                    height: self.parent.height
+            BoxLayoutButton:
+                pos_hint: {'center_x': .5,}
+                height: self.parent.height
+                md_bg_color: top_bar.md_bg_color
+                spacing: dp(10)
+
+                MDScreen:
                     size_hint_x: None
-                    md_bg_color: .6, .1, .2, 1
-                    spacing: dp(10)
+                    width: self.parent.width / 2 - month_icon.width
 
                     MDIcon:
                         id: month_icon
@@ -78,16 +80,16 @@
                         size_hint: None, None
                         height: dp(25)
                         width: self.height
-                        pos_hint: {'right': 0, 'center_y': 0.5}
-                    MDScreen:
-                        size_hint_x: None
-                        width: month_label.width
-                        MDLabel:
-                            id: month_label
-                            text: root.current_menu_month_name
-                            font_size: '18sp'
-                            halign: 'left'
-                            valign: 'center'
+                        pos_hint: {'right': 1, 'center_y': 0.5}
+
+                MDScreen:
+                    MDLabel:
+                        id: month_label
+                        text: root.current_menu_month_name
+                        font_size: '20sp'
+                        halign: 'left'
+                        valign: 'center'
+
 
             MDIconButton:
                 icon: 'arrow-right'
