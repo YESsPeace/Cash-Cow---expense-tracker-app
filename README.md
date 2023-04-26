@@ -1,6 +1,6 @@
 ### English version
 
-# Money stat App
+# Cash Cow - expense tracker app
 
 This is an application for tracking expenses and income and creating a budget. It is currently being developed as a school project.
 
@@ -32,7 +32,7 @@ ____
 
 ### Версия на Русском
 
-# Money stat App
+# Cash Cow - приложения для учета расходов
 
 Это приложение для учета расходов и доходов, а также составления бюджета. В настоящее время оно разрабатывается как школьный проект.
 
