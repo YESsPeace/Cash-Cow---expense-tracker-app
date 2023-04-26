@@ -117,7 +117,9 @@ class menu_for_new_account(MenuForEditItemBase):
             on_release=lambda x: self.add_widget(
                 balance_writer(
                     text_widget_id='goal_balance',
-                    item_dict_parameter='Goal'
+                    item_dict='item',
+                    item_dict_parameter='Goal',
+                    default_sum_label_text=str(self.item['Goal'])
                 )
             )
         )
@@ -157,4 +159,10 @@ class menu_for_new_account(MenuForEditItemBase):
             self.item['IncludeInTheTotalBalance'] = 0
 
     def open_balance_writer(self, *args):
-        self.add_widget(balance_writer(text_widget_id='account_balance'))
+        self.add_widget(
+            balance_writer(
+                text_widget_id='account_balance',
+                item_dict='item',
+                default_sum_label_text=str(self.item['Balance'])
+            )
+        )

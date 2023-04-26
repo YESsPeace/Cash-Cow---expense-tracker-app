@@ -13,7 +13,7 @@
 
             MDLabel:
                 id: sum_label
-                text: '0'
+                text: root.default_sum_label_text
                 text_color: 1, 1, 1, 1
                 halign: 'center'
                 size_hint_y: .65
@@ -47,7 +47,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -55,7 +55,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -63,7 +63,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -71,7 +71,7 @@
                 background_normal: ''
                 background_color: .25, 0, .1, 1
                 on_release:
-                    sum_label.text = root.default_sum_label_text
+                    sum_label.text = '0'
 
             Button:
                 text: 'x'
@@ -86,7 +86,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -94,7 +94,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -102,7 +102,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -125,7 +125,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -133,7 +133,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
@@ -141,7 +141,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             MDIconButton:
@@ -173,7 +173,7 @@
                 background_normal: ''
                 background_color: 1, 1, 1, .25
                 on_release:
-                    if sum_label.text == root.default_sum_label_text: sum_label.text = sum_label.text[:-1] +    self.text
+                    if sum_label.text == '0': sum_label.text = sum_label.text[:-1] +    self.text
                     else: sum_label.text = sum_label.text + self.text
 
             Button:
