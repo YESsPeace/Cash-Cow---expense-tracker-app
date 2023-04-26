@@ -1,0 +1,39 @@
+<MenuForChoiceABudgetItem>:
+    pos_hint: {'center_x': .5}
+
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, .5
+
+        Rectangle:
+            group: 'a'
+            pos: 0, 0
+            size: 0, 0
+
+    size_hint: 1, .75
+    TabbedPanel:
+        id: tab_manager
+        do_default_tab: False
+        tab_pos: 'top_mid'
+        tab_width: self.width/3 - 7
+
+        TabbedPanelItem:
+            id: expense_tab
+            text: 'Expense'
+
+            Categories_buttons_menu:
+                id: Categories_buttons_menu
+
+        TabbedPanelItem:
+            id: transfer_tab
+            text: 'Savings'
+
+            AccountsMenu_main:
+                id: AccountsMenu_main
+
+        TabbedPanelItem:
+            id: incomes_tab
+            text: 'Income'
+
+            Incomes_buttons_menu:
+                id: Incomes_buttons_menu

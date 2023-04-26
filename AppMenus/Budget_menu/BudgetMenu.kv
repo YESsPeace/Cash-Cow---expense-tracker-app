@@ -42,6 +42,9 @@
                 size_hint_y: 1
                 width: self.height
 
+                on_release:
+                    root.open_menu_for_choice_a_budget_item()
+
                 canvas.before:
                     Color:
                         rgba: top_bar.md_bg_color

@@ -1,5 +1,3 @@
-import datetime
-
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty
@@ -36,8 +34,10 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
 
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
-        # getting info for a_new_transaction_menu
-        Clock.schedule_once(self.refresh_rv_data, 0.5)
+        Clock.schedule_once(self.refresh_rv_data, -1)
+
+    def category_button_callback(self, category_id):
+        return lambda: self.open_menu_for_a_new_transaction(category_id)
 
     def get_rv_data(self, *args) -> list:
         out_list = []
@@ -83,9 +83,6 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
 
     def refresh_rv_data(self, *args):
         self.ids.Categories_rv.data = self.get_rv_data()
-
-    def category_button_callback(self, category_id):
-        return lambda: self.open_menu_for_a_new_transaction(category_id)
 
     def del_plus_button(self, *args):
         self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)

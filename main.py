@@ -100,8 +100,11 @@ class MainSrceen(MDScreen):
         else:
             TopNotification(text="There's no first or second transaction item").open()
 
-    def add_menu_for_a_new_budget(self):
-        self.add_widget(menu_for_a_new_budget())
+    def add_menu_for_edit_budget(self, widget_id):
+        self.add_widget(menu_for_edit_budget(widget_id=widget_id))
+
+    def add_menu_for_choice_a_budget_item(self):
+        self.add_widget(MenuForChoiceABudgetItem())
 
     def add_menu_for_new_or_edit_category(self):
         app = App.get_running_app()
@@ -211,7 +214,6 @@ class MoneyStatApp(MDApp):
         Builder.load_file('AppMenus/Categories_menu/Incomes_buttons_menu.kv')
 
         # Menu_For_new_category
-        Builder.load_file('AppMenus/CashMenus/MenuForAnewBudget.kv')
         Builder.load_file('AppMenus/Categories_menu/Menu_For_new_category/Menu_for_new_or_edit_category.kv')
         Builder.load_file('AppMenus/Categories_menu/Menu_For_new_category/icon_choice_menu.kv')
 
@@ -224,9 +226,11 @@ class MoneyStatApp(MDApp):
         # BudgeMenu
         Builder.load_file('AppMenus/Budget_menu/BudgetMenu.kv')
         Builder.load_file('AppMenus/Budget_menu/BudgetMenu_in.kv')
+        Builder.load_file('AppMenus/Budget_menu/MenuForChoiceABudgetItem.kv')
 
         # CashMenus
         Builder.load_file('AppMenus/CashMenus/menu_for_a_new_transaction.kv')
+        Builder.load_file('AppMenus/CashMenus/MenuForEditBudget.kv')
 
         # main
         Builder.load_file('main_screen.kv')

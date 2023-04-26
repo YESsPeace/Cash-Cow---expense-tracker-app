@@ -1,28 +1,15 @@
-from kivy.graphics import Color, Rectangle
-from kivy.properties import BooleanProperty, OptionProperty
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivy.clock import Clock
+from kivy.graphics import Color, Rectangle
+from kivy.properties import StringProperty
 
 import config
-from AppMenus.Budget_menu.BudgetMenu_in import BudgetMenu_in
-from AppMenus.other_func import calculate, update_menus
-from database import budget_data_write, budget_data_cut, budget_data_edit
+from AppMenus.other_func import update_menus
+from BasicMenus import PopUpMenuBase
+from database import budget_data_write, budget_data_edit, budget_data_cut
 
 
-class menu_for_a_new_budget(MDNavigationDrawer):
-    state = OptionProperty("open", options=("close", "open"))
-    status = OptionProperty(
-        "opened",
-        options=(
-            "closed",
-            "opening_with_swipe",
-            "opening_with_animation",
-            "opened",
-            "closing_with_swipe",
-            "closing_with_animation",
-        ),
-    )
-    enable_swiping = BooleanProperty(False)
+class menu_for_edit_budget(PopUpMenuBase):
+    widget_id = StringProperty()
 
     def __init__(self, *args, **kwargs):
         self.currency = '₽'
@@ -41,42 +28,12 @@ class menu_for_a_new_budget(MDNavigationDrawer):
             Color(0, 0, 0, .5)
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
 
-        Clock.schedule_once(self.set_widgets_prop, 1)
+        Clock.schedule_once(self.set_widgets_prop, -1)
 
     def set_widgets_prop(self, *args):
         self.set_progressbar_value(self, *args)
         self.set_button_color(self, *args)
         self.set_current_budgeted(self, *args)
-
-    def update_status(self, *_) -> None:
-        status = self.status
-        if status == "closed":
-            self.state = "close"
-        elif status == "opened":
-            self.state = "open"
-        elif self.open_progress == 1 and status == "opening_with_animation":
-            self.status = "opened"
-            self.state = "open"
-        elif self.open_progress == 0 and status == "closing_with_animation":
-            self.status = "closed"
-            self.state = "close"
-
-            self.del_myself()
-
-        elif status in (
-                "opening_with_swipe",
-                "opening_with_animation",
-                "closing_with_swipe",
-                "closing_with_animation",
-        ):
-            pass
-        if self.status == "closed":
-            self.opacity = 0
-        else:
-            self.opacity = 1
-
-    def del_myself(self):
-        self.parent.remove_widget(self)
 
     def sign_btn_pressed(self, btn):
         if len(set(self.ids.sum_label.text).intersection({'+', '-', '÷', 'x'})):
