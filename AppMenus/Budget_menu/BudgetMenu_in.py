@@ -9,6 +9,7 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
 
 import config
+from BasicMenus.CustomWidgets import TopNotification
 from database import get_categories_month_data, budget_data_read, \
     transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
     incomes_db_read, categories_db_read, savings_db_read, get_savings_month_data
@@ -146,6 +147,9 @@ class BudgetMenu_in(MDScreen):
         return lambda: self.open_menu_for_a_new_budget(widget_id=widget_id)
 
     def open_menu_for_a_new_budget(self, widget_id, *args):
+        TopNotification(text='Editing and creating a budget will be in future versions').open()
+        return
+
         widget_type = str(widget_id).split('_')[0].lower()
 
         budget_data_dict, type_dict, month_data_dict = None, None, None
