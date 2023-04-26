@@ -55,7 +55,7 @@ class menu_for_new_or_edit_category(MenuForEditItemBase):
         TopNotification(text="Category edited").open()
 
     def delete_category(self, *args):
-        if self.item['new'] is True:
+        if self.item.get('new') is True:
             TopNotification(text="Category not yet created to be deleted").open()
             return
 
