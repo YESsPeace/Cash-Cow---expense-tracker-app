@@ -79,6 +79,10 @@ class menu_for_new_account(MenuForEditItemBase):
     def delete_account(self, *args):
         print('# deleting category started')
 
+        if self.item['new'] is True:
+            TopNotification(text="Account not yet created to be deleted").open()
+            return
+
         db_data_delete(
             db_name='savings_db' if self.item['ID'].split('_')[0] == 'savings' else 'accounts_db',
             item_id=self.item['ID'],

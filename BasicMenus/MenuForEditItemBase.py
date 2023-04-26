@@ -27,9 +27,10 @@ class MenuForEditItemBase(MDScreen):
             type_color: str,
             selected_color: Union[list, str],
     ):
-        # self.color_picker._real_remove_widget()
+        self.color_picker._real_remove_widget()
         print(f"Selected color is {selected_color}")
         print(type(selected_color))
+
 
         self.ids.icon_button.md_bg_color = selected_color[:-1] + [1]
         self.item['Color'] = selected_color[:-1] + [0.5]
