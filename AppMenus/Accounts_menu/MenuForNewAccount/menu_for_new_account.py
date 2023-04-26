@@ -102,7 +102,7 @@ class menu_for_new_account(MenuForEditItemBase):
 
     def currency_pressed(self, *args) -> None:
         print('# currency button pressed')
-        TopNotification(text="only in future.").open()
+        TopNotification(text="Currency will be in future versions.").open()
 
     def set_menu_widgets(self, *args):
         if self.item['type'] == 'savings':

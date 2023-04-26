@@ -145,7 +145,7 @@ class menu_for_a_new_transaction(PopUpMenuBase):
             print(self.transaction_id)
             print(*self.transaction_data.items(), sep='\n')
 
-            TopNotification(text='Transaction editing will only in the future').open()
+            TopNotification(text='Transaction editing will be in future versions').open()
             return
 
         if self.transaction_data['FromSUM'] <= 0 or self.transaction_data['ToSUM'] <= 0:
