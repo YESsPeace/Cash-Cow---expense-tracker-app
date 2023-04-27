@@ -1,3 +1,5 @@
+import threading
+
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty
@@ -34,7 +36,7 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
 
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
-        Clock.schedule_once(self.refresh_rv_data, -1)
+        threading.Thread(target=self.refresh_rv_data).start()
 
     def category_button_callback(self, category_id):
         return lambda: self.open_menu_for_a_new_transaction(category_id)
@@ -82,7 +84,9 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
         return out_list
 
     def refresh_rv_data(self, *args):
-        self.ids.Categories_rv.data = self.get_rv_data()
+        new_data = self.get_rv_data()
+
+        Clock.schedule_once(lambda dt: self.ids.Categories_rv.data.extend(new_data))
 
     def del_plus_button(self, *args):
         self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)

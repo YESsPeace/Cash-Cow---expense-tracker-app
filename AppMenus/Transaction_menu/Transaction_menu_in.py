@@ -1,4 +1,6 @@
 import datetime
+import threading
+from time import sleep
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -69,7 +71,7 @@ class Transaction_menu_in(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.refresh_rv_data, 0.5)
+        threading.Thread(target=self.refresh_rv_data).start()
 
     def get_rv_data(self, *args) -> list:
         out_list = []
@@ -134,7 +136,7 @@ class Transaction_menu_in(MDScreen):
                 }
             )
 
-        self.ids.Transaction_rv.data = new_data
+        Clock.schedule_once(lambda dt: self.ids.Transaction_rv.data.extend(new_data))
 
     def on_transaction_item_callback(self, transaction_id, transaction_data, *args):
         return lambda: self.open_menu_for_transaction_info(transaction_id, transaction_data)

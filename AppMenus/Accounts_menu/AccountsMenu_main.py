@@ -1,4 +1,5 @@
 import datetime
+import threading
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -45,7 +46,7 @@ class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        Clock.schedule_once(self.set_accounts, -1)
+        threading.Thread(target=self.set_accounts).start()
 
     def on_release_callback(self, account_id):
         return lambda: self.open_menu_for_new_account(account_id)
@@ -81,8 +82,9 @@ class AccountsMenu_main(MDScreen):
         return out_list
 
     def set_accounts(self, *args):
-        self.ids.accounts_rv.data = self.get_accounts_data()
+        new_data = self.get_accounts_data()
 
+        Clock.schedule_once(lambda dt: self.ids.accounts_rv.data.extend(new_data))
 
     def open_menu_for_new_account(self, account_id, *args):
         print(account_id)

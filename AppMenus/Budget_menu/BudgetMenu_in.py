@@ -1,4 +1,5 @@
 import datetime
+import threading
 from copy import copy
 
 from kivy.app import App
@@ -47,7 +48,7 @@ class BudgetMenu_in(MDScreen):
         self.current_menu_date = config.current_menu_date
         self.days_in_current_menu_month = config.days_in_current_menu_month
 
-        Clock.schedule_once(self.refresh_rv_data, 0.5)
+        threading.Thread(target=self.refresh_rv_data).start()
 
     def get_budget_data(self, *args) -> list:
         out_list = []
@@ -141,7 +142,9 @@ class BudgetMenu_in(MDScreen):
         return out_list
 
     def refresh_rv_data(self, *args):
-        self.ids.Budget_rv.data = self.get_budget_data()
+        new_data = self.get_budget_data()
+
+        Clock.schedule_once(lambda dt: self.ids.Budget_rv.data.extend(new_data))
 
     def on_release_callback(self, widget_id):
         return lambda: self.open_menu_for_a_new_budget(widget_id=widget_id)

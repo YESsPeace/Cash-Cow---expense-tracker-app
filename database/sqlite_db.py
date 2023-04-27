@@ -3,7 +3,6 @@ import sqlite3 as sq
 
 
 def sql_start() -> None:
-    global base, cur
     base = sq.connect('AppDataBase.db')
     cur = base.cursor()
     if base:
@@ -84,6 +83,9 @@ def sql_start() -> None:
 
 
 def accounts_db_read() -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     accounts_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM accounts_db').fetchall():
@@ -103,6 +105,9 @@ def accounts_db_read() -> dict:
 
 
 def savings_db_read() -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     savings_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM savings_db').fetchall():
@@ -123,6 +128,9 @@ def savings_db_read() -> dict:
 
 
 def categories_db_read() -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     categories_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM categories_db').fetchall():
@@ -138,6 +146,9 @@ def categories_db_read() -> dict:
 
 
 def incomes_db_read() -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     incomes_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM incomes_db').fetchall():
@@ -152,6 +163,9 @@ def incomes_db_read() -> dict:
 
 
 def transaction_db_read() -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     transaction_dict = {}
 
     for row in cur.execute(f'SELECT * FROM transaction_db').fetchall():
@@ -173,6 +187,9 @@ def transaction_db_read() -> dict:
 
 
 def transaction_db_write(trans_data_dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f'INSERT INTO transaction_db '
                 f'(date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note) '
                 f'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
@@ -200,6 +217,9 @@ def budget_data_read for incomes:
 
 
 def budget_data_read(id='categories_', db_name='budget_data_categories') -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     budget_data_dict = {}
 
     for row in cur.execute(f'SELECT * FROM {db_name}').fetchall():
@@ -218,6 +238,9 @@ def budget_data_read(id='categories_', db_name='budget_data_categories') -> dict
 
 
 def budget_data_write(db_name, data_dict) -> None:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f"PRAGMA table_info({db_name})")
     columns = [row[1] for row in cur.fetchall()]
 
@@ -230,6 +253,9 @@ def budget_data_write(db_name, data_dict) -> None:
 
 
 def budget_data_cut(db_name, data_dict) -> None:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f"PRAGMA table_info({db_name})")
     columns = [row[1] for row in cur.fetchall()]
 
@@ -239,6 +265,9 @@ def budget_data_cut(db_name, data_dict) -> None:
 
 
 def budget_data_edit(db_name, data_dict) -> None:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f"PRAGMA table_info({db_name})")
     columns = [row[1] for row in cur.fetchall()]
 
@@ -256,6 +285,9 @@ def budget_data_edit(db_name, data_dict) -> None:
 
 
 def db_data_delete(db_name, item_id):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     if item_id is None:
         print(f"# There's nothing to delete: db_name={db_name}, item_id={item_id}")
         return
@@ -270,6 +302,9 @@ def db_data_delete(db_name, item_id):
 
 
 def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None, color: list = None):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     query = f"UPDATE {db_name} SET "
     params = []
 
@@ -307,6 +342,9 @@ def db_data_edit(db_name: str, item_id: str, name: str = None, icon: str = None,
 
 
 def db_data_add(db_name: str, params: dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     if params.get('Color') is None:
         params['Color'] = [0, 0, 0, 1]
         print('# Color is not a list, so now color=[0, 0, 0, 1]')
@@ -323,6 +361,9 @@ def db_data_add(db_name: str, params: dict):
 
 
 def account_db_add(params: dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f"PRAGMA table_info(accounts_db)")
     columns = [row[1] for row in cur.fetchall()]
 
@@ -344,6 +385,9 @@ def account_db_add(params: dict):
 
 
 def savings_db_add(params: dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     cur.execute(f"PRAGMA table_info(savings_db)")
     columns = [row[1] for row in cur.fetchall()]
 
@@ -366,6 +410,9 @@ def savings_db_add(params: dict):
 
 
 def accounts_db_edit(params: dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     if params.get('Color') is None:
         params['Color'] = [0, 0, 0, 1]
         print('# Color is not a list, so now color=[0, 0, 0, 1]')
@@ -389,6 +436,9 @@ def accounts_db_edit(params: dict):
 
 
 def savings_db_edit(params: dict):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     if params.get('Color') is None:
         params['Color'] = [0, 0, 0, 1]
         print('# Color is not a list, so now color=[0, 0, 0, 1]')
@@ -413,6 +463,9 @@ def savings_db_edit(params: dict):
 
 
 def accounts_and_savings_db_edit_balance(db_name: str, item_id: str, balance_difference: int = 0):
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
     type, id = item_id.split('_')
 
     db_data = accounts_db_read() | savings_db_read()
