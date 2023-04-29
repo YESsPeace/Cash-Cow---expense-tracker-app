@@ -144,7 +144,7 @@ class BudgetMenu_in(MDScreen):
     def refresh_rv_data(self, *args):
         new_data = self.get_budget_data()
 
-        Clock.schedule_once(lambda dt: self.ids.Budget_rv.data.extend(new_data))
+        Clock.schedule_once(lambda dt: setattr(self.ids.Budget_rv, 'data', new_data))
 
     def on_release_callback(self, widget_id):
         return lambda: self.open_menu_for_a_new_budget(widget_id=widget_id)

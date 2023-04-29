@@ -1,9 +1,6 @@
-import datetime
-
 from BasicMenus.CustomWidgets import TopNotification
 from database import sql_start
 
-start_app_time = datetime.datetime.now()
 sql_start()
 
 from kivy.app import App
@@ -187,9 +184,6 @@ class Manager(ScreenManager):
 
 
 class MoneyStatApp(MDApp):
-    def on_start(self):
-        print("APP LOADED TIME App:", datetime.datetime.now() - start_app_time)
-
     def build(self):
         self.theme_cls.material_style = "M3"
         self.theme_cls.theme_style = "Dark"

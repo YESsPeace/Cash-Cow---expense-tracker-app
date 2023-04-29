@@ -136,7 +136,7 @@ class Transaction_menu_in(MDScreen):
                 }
             )
 
-        Clock.schedule_once(lambda dt: self.ids.Transaction_rv.data.extend(new_data))
+        Clock.schedule_once(lambda dt: setattr(self.ids.Transaction_rv, 'data', new_data))
 
     def on_transaction_item_callback(self, transaction_id, transaction_data, *args):
         return lambda: self.open_menu_for_transaction_info(transaction_id, transaction_data)

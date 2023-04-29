@@ -2,7 +2,7 @@ import threading
 
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty
+from kivy.properties import ListProperty, NumericProperty, StringProperty, DictProperty, BooleanProperty
 from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.screen import MDScreen
@@ -31,17 +31,18 @@ class WaterFill(Widget):
 
 
 class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
+
+    data_setting = BooleanProperty(True)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
-        threading.Thread(target=self.refresh_rv_data).start()
+        if self.data_setting is True:
+            threading.Thread(target=self.refresh_rv_data, args=(self.category_button_callback, )).start()
 
-    def category_button_callback(self, category_id):
-        return lambda: self.open_menu_for_a_new_transaction(category_id)
-
-    def get_rv_data(self, *args) -> list:
+    def get_rv_data(self, buttons_callback, *args) -> list:
         out_list = []
 
         categories_data = categories_db_read()
@@ -77,16 +78,19 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
                     "category_id": category_id,
                     "category_data": categories_data[category_id],
                     "button_level": button_level,
-                    "on_release": self.category_button_callback(category_id)
+                    "on_release": buttons_callback(category_id)
                 }
             )
 
         return out_list
 
-    def refresh_rv_data(self, *args):
-        new_data = self.get_rv_data()
+    def refresh_rv_data(self, buttons_callback, *args):
+        new_data = self.get_rv_data(buttons_callback=buttons_callback)
 
-        Clock.schedule_once(lambda dt: self.ids.Categories_rv.data.extend(new_data))
+        Clock.schedule_once(lambda dt: setattr(self.ids.Categories_rv, 'data', new_data))
+
+    def category_button_callback(self, category_id):
+        return lambda: self.open_menu_for_a_new_transaction(category_id)
 
     def del_plus_button(self, *args):
         self.ids.GridCategoriesMenu.remove_widget(self.ids.plus_button_categories)

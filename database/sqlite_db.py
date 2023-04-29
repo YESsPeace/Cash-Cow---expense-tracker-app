@@ -4,7 +4,6 @@ import sqlite3 as sq
 
 def sql_start() -> None:
     base = sq.connect('AppDataBase.db')
-    cur = base.cursor()
     if base:
         print('Date base connected OK')
 

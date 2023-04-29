@@ -84,7 +84,7 @@ class AccountsMenu_main(MDScreen):
     def set_accounts(self, *args):
         new_data = self.get_accounts_data()
 
-        Clock.schedule_once(lambda dt: self.ids.accounts_rv.data.extend(new_data))
+        Clock.schedule_once(lambda dt: setattr(self.ids.accounts_rv, 'data', new_data))
 
     def open_menu_for_new_account(self, account_id, *args):
         print(account_id)
