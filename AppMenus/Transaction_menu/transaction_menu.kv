@@ -19,9 +19,12 @@
             md_bg_color: top_bar.md_bg_color
 
             MDIconButton:
-                icon: ''
+                icon: 'menu'
                 size_hint_y: 1
                 width: self.height
+
+                on_release:
+                    app.root.ids.nav_drawer.set_state("open")
 
                 canvas.before:
                     Color:

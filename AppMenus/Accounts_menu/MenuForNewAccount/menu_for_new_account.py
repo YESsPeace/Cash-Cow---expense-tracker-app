@@ -11,14 +11,11 @@ from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type i
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
 from AppMenus.other_func import update_total_balance_in_UI, update_menus
 from BasicMenus import MenuForEditItemBase
-from BasicMenus.CustomWidgets import TopNotification
+from BasicMenus.CustomWidgets import TopNotification, BoxLayoutButton
 from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
 
 
-class BoxLayoutButton(MDCard):
-    radius = [0, 0, 0, 0]
-    padding = [dp(5), dp(5), dp(5), dp(5)]
-    ripple_behavior = True
+
 
 
 class menu_for_new_account(MenuForEditItemBase):

@@ -1,12 +1,14 @@
-from BasicMenus.CustomWidgets import TopNotification
+from kivymd.uix.navigationdrawer import MDNavigationDrawer
+
+from BasicMenus.CustomWidgets import TopNotification, BoxLayoutButton
 from database import sql_start
 
 sql_start()
 
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.properties import Clock
-from kivy.uix.screenmanager import ScreenManager, SlideTransition
+from kivy.properties import Clock, StringProperty
+from kivy.uix.screenmanager import SlideTransition
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigation
 from kivymd.uix.screen import MDScreen
@@ -179,8 +181,19 @@ class My_BottomNavigation(MDBottomNavigation):
         self.ids.tab_manager.transition = SlideTransition(duration=.75)
 
 
-class Manager(ScreenManager):
+class Manager(MDScreen):
+    def open_menu_for_export_data(self):
+        if not self.ids.main_screen_manager.has_screen('export'):
+            self.ids.main_screen_manager.add_widget(ExportMenu(name='export'))
+        self.ids.main_screen_manager.current = 'export'
+
+
+class MyNavigationDrawer(MDNavigationDrawer):
     pass
+
+
+class DrawerClickableItem(BoxLayoutButton):
+    button_name = StringProperty('')
 
 
 class MoneyStatApp(MDApp):
@@ -225,6 +238,12 @@ class MoneyStatApp(MDApp):
         # CashMenus
         Builder.load_file('AppMenus/CashMenus/menu_for_a_new_transaction.kv')
         Builder.load_file('AppMenus/CashMenus/MenuForEditBudget.kv')
+
+        # BasicMenus
+        Builder.load_file('BasicMenus/CustomWidgets.kv')
+
+        # SettingsMenu
+        Builder.load_file('AppMenus/SettingsMenus/ExportMenu.kv')
 
         # main
         Builder.load_file('main_screen.kv')

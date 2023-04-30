@@ -46,18 +46,5 @@ class MenuForChoiceABudgetItem(PopUpMenuBase, MenuForTransactionAddingBase):
         return lambda: self.open_menu_for_edit_budget(widget_id)
 
     def open_menu_for_edit_budget(self, widget_id, *args):
-        from kivy.utils import platform
-        if platform == 'android':
-            # Имя файла, который нужно экспортировать
-            filename = 'AppDataBase.db'
-            path = '/storage/emulated/0/Download/Cash_cow.db'
+        TopNotification(text='Editing and creating a budget will be in future versions').open()
 
-            import shutil
-
-            # Экспортируем файл во внешнее хранилище
-            shutil.copy(filename, path)
-
-            TopNotification(text=f'Файл {filename} экспортирован в {path}').open()
-
-        else:
-            TopNotification(text='Editing and creating a budget will be in future versions').open()

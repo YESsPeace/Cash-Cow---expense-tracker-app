@@ -1,20 +1,26 @@
-<DrawerClickableItem@MDNavigationDrawerItem>:
-    focus_color: "#e7e4c0"
-    unfocus_color: "#fffcf4"
+<DrawerClickableItem>:
+    md_bg_color: [.16, .16, .16, 1]
+
+    MDLabel:
+        text: root.button_name
 
 <MyNavigationDrawer>:
     id: nav_drawer
     radius: (0, 0, 0, 0)
-#    elevation: 4
     width: "240dp"
- 
 
     MDNavigationDrawerMenu:
+        spacing: dp(5)
 
         DrawerClickableItem:
-            text: 'top'
+            button_name: 'Main'
+            on_release:
+                app.root.ids.main_screen_manager.current = 'main'
+                root.set_state('close')
 
         DrawerClickableItem:
-            text: 'other'
-            on_release: app.root.current = 'other'
+            button_name: 'import & export AppData'
+            on_release:
+                app.root.open_menu_for_export_data()
+                root.set_state('close')
 

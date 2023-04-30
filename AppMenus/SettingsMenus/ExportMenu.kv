@@ -1,0 +1,69 @@
+<ExportMenu>:
+    md_bg_color: app.theme_color
+    MDBoxLayout:
+        id: main_box_layout
+
+        orientation: 'vertical'
+        pos_hint: {'top': 1}
+        size_hint_y: None
+        adaptive_height: True
+        spacing: dp(10)
+
+        MDBoxLayout:
+            id: top_bar
+            orientation: 'vertical'
+            size_hint_y: None
+            adaptive_height: True
+
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(60)
+                md_bg_color: .6, .1, .2, 1
+
+                MDIconButton:
+                    icon: 'menu'
+                    size_hint_y: 1
+                    width: self.height
+
+                    on_release:
+                        app.root.ids.nav_drawer.set_state("open")
+
+                    canvas.before:
+                        Color:
+                            rgba: .6, .1, .2, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                MDLabel:
+                    text: 'Settings'
+                    halign: "left"
+                    valign: "middle"
+                    font_style: 'H4'
+
+        BoxLayoutButton:
+            spacing: dp(10)
+
+            on_release:
+                root.open_file_manager()
+
+            MDIcon:
+                icon: 'archive-arrow-down'
+                pos_hint: {'center_y': .5}
+
+            MDLabel:
+                text: 'Import AppData'
+
+        BoxLayoutButton:
+            spacing: dp(10)
+
+            on_release:
+                root.export_app_data()
+
+            MDIcon:
+                icon: 'archive-arrow-up'
+                pos_hint: {'center_y': .5}
+
+            MDLabel:
+                text: 'Export AppData'

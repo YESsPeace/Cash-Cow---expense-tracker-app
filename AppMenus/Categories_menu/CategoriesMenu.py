@@ -109,6 +109,7 @@ class CategoriesMenu(MDScreen):
         for swiper_id, rv_id in [('my_swiper', 'Categories_rv'), ('incomes_swiper', 'Incomes_rv')]:
             getattr(self.ids, swiper_id).get_screen(self.current_menu_date).refresh_rv_data()
 
+
     def open_menu_for_edit_categories(self, category_id, *args):
         self.quit_from_edit_mode()
         if category_id in ['plus_button_categories', 'plus_button_incomes']:

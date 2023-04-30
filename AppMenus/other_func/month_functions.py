@@ -56,7 +56,7 @@ def load_month(self, date, menu):
 def update_menus(date_of_changes: str = None):
     app = App.get_running_app()
 
-    app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.set_accounts()
+    app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.refresh_rv_data()
 
     if not date_of_changes is None:
         if '.' in date_of_changes:
