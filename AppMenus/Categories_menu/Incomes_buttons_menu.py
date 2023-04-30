@@ -78,8 +78,12 @@ class Incomes_buttons_menu(MDScreen, MenuForTransactionAddingBase):
 
         return out_list
 
-    def refresh_rv_data(self, buttons_callback, *args):
-        new_data = self.get_rv_data(buttons_callback=buttons_callback)
+    def refresh_rv_data(self, buttons_callback=None, *args):
+        if not buttons_callback is None:
+            new_data = self.get_rv_data(buttons_callback=buttons_callback)
+
+        else:
+            new_data = self.get_rv_data(buttons_callback=self.category_button_callback)
 
         Clock.schedule_once(lambda dt: setattr(self.ids.Incomes_rv, 'data', new_data))
 

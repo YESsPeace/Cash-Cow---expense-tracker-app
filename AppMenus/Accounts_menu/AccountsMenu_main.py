@@ -46,12 +46,12 @@ class AccountsMenu_main(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        threading.Thread(target=self.set_accounts).start()
+        threading.Thread(target=self.refresh_rv_data, args=(self.on_release_callback,)).start()
 
     def on_release_callback(self, account_id):
         return lambda: self.open_menu_for_new_account(account_id)
 
-    def get_accounts_data(self, *args):
+    def get_rv_data(self, buttons_callback=None, *args):
         accounts, savings = accounts_db_read(), savings_db_read()
         out_list = []
 
@@ -75,14 +75,18 @@ class AccountsMenu_main(MDScreen):
                         "orientation": "horizontal",
                         "account_data": account_data,
                         "account_id": account_id,
-                        "on_release": self.on_release_callback(account_id)
+                        "on_release": buttons_callback(account_id) if not buttons_callback is None else None
                     }
                 )
 
         return out_list
 
-    def set_accounts(self, *args):
-        new_data = self.get_accounts_data()
+    def refresh_rv_data(self, buttons_callback=None, *args):
+        if not buttons_callback is None:
+            new_data = self.get_rv_data(buttons_callback=buttons_callback)
+
+        else:
+            new_data = self.get_rv_data(buttons_callback=self.on_release_callback)
 
         Clock.schedule_once(lambda dt: setattr(self.ids.accounts_rv, 'data', new_data))
 

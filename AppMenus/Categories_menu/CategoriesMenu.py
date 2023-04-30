@@ -76,10 +76,8 @@ class CategoriesMenu(MDScreen):
             ('my_swiper', 'Categories_rv', 'plus_button_categories'),
             ('incomes_swiper', 'Incomes_rv', 'plus_button_incomes')
         ]:
-            new_data = getattr(self.ids, swiper_id).get_screen(self.current_menu_date).get_rv_data()
-
-            for item in new_data:
-                item['on_release'] = self.on_category_callback(item['category_id'])
+            new_data = getattr(self.ids, swiper_id).get_screen(self.current_menu_date).get_rv_data(
+                buttons_callback=self.on_category_callback)
 
             new_data.append(
                 {

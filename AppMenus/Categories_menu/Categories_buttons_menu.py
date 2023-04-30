@@ -31,7 +31,6 @@ class WaterFill(Widget):
 
 
 class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
-
     data_setting = BooleanProperty(True)
 
     def __init__(self, *args, **kwargs):
@@ -40,7 +39,7 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
         self.budget_data_date = str(config.current_menu_date)[:-3].replace('-', '')
 
         if self.data_setting is True:
-            threading.Thread(target=self.refresh_rv_data, args=(self.category_button_callback, )).start()
+            threading.Thread(target=self.refresh_rv_data, args=(self.category_button_callback,)).start()
 
     def get_rv_data(self, buttons_callback, *args) -> list:
         out_list = []
@@ -84,8 +83,12 @@ class Categories_buttons_menu(MDScreen, MenuForTransactionAddingBase):
 
         return out_list
 
-    def refresh_rv_data(self, buttons_callback, *args):
-        new_data = self.get_rv_data(buttons_callback=buttons_callback)
+    def refresh_rv_data(self, buttons_callback=None, *args):
+        if not buttons_callback is None:
+            new_data = self.get_rv_data(buttons_callback=buttons_callback)
+
+        else:
+            new_data = self.get_rv_data(buttons_callback=self.category_button_callback)
 
         Clock.schedule_once(lambda dt: setattr(self.ids.Categories_rv, 'data', new_data))
 

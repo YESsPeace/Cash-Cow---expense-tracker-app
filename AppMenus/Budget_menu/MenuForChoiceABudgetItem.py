@@ -30,7 +30,7 @@ class MenuForChoiceABudgetItem(PopUpMenuBase, MenuForTransactionAddingBase):
             threading.Thread(target=getattr(self.ids, menu_id).refresh_rv_data, args=(self.on_button_callback,)).start()
 
     def set_new_func_to_transfer_buttons(self, *args):
-        accounts_data = self.ids.AccountsMenu_main.get_accounts_data()
+        accounts_data = self.ids.AccountsMenu_main.get_rv_data()
         new_data = []
 
         for item in accounts_data:
