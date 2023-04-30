@@ -1,24 +1,21 @@
-import datetime
 import threading
-from time import sleep
 
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.properties import DictProperty, NumericProperty, StringProperty, ListProperty
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
 
 import config
+from BasicMenus import BoxLayoutButton
 from database import get_transaction_for_the_period, categories_db_read, incomes_db_read, accounts_db_read, \
     savings_db_read, transaction_db_read
 
 
-class TransactionItem(MDCard):
+class TransactionItem(BoxLayoutButton):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
     ripple_behavior = True
     orientation = "horizontal"
 
@@ -59,9 +56,8 @@ class TransactionItem(MDCard):
     )
 
 
-class date_label(MDBoxLayout):
+class date_label(BoxLayoutButton):
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
 
     date = StringProperty()
 

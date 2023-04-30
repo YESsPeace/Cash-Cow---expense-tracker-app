@@ -28,7 +28,9 @@ class CategoriesMenu(MDScreen):
         self.current_menu_month_name = config.current_menu_month_name
         self.days_in_month_icon_dict = config.days_in_month_icon_dict
         self.days_in_current_menu_month = config.days_in_current_menu_month
+
         self.edit_button_on_release = self.start_edit_mode
+        self.current_layout = 'plus_button_categories'
 
         super().__init__(*args, **kwargs)
 

@@ -17,16 +17,12 @@
             md_bg_color: top_bar.md_bg_color
 
             MDIconButton:
-                icon: ''
+                icon: 'menu'
                 size_hint_y: 1
                 width: self.height
 
-                canvas.before:
-                    Color:
-                        rgba: top_bar.md_bg_color
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
+                on_release:
+                    app.root.ids.nav_drawer.set_state("open")
 
             MDLabel:
                 id: total_balance_label

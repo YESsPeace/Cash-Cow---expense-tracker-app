@@ -1,25 +1,22 @@
-import datetime
 import threading
-from copy import copy
 
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.metrics import dp
-from kivy.properties import NumericProperty, StringProperty, ListProperty
+from kivy.properties import NumericProperty, StringProperty
 from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
 
 import config
-from BasicMenus.CustomWidgets import TopNotification
+from BasicMenus.CustomWidgets import TopNotification, BoxLayoutButton
 from database import get_categories_month_data, budget_data_read, \
     transaction_db_read, get_transaction_for_the_period, get_incomes_month_data, \
     incomes_db_read, categories_db_read, savings_db_read, get_savings_month_data
 
 
-class BudgetItem(MDCard):
+class BudgetItem(BoxLayoutButton):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
     ripple_behavior = True
 
     item_id = StringProperty('categories_0')
@@ -28,10 +25,9 @@ class BudgetItem(MDCard):
     budgeted = NumericProperty(1)
 
 
-class BudgetTitle(MDCard):
+class BudgetTitle(BoxLayoutButton):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
-    # md_bg_color = ListProperty([0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0])
 
     type_name = StringProperty('default_budget_type')
     real_sum = NumericProperty(0)

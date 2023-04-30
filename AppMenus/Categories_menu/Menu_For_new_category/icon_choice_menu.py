@@ -3,17 +3,15 @@ from kivy.graphics import Rectangle, Color
 from kivy.metrics import dp
 from kivy.properties import StringProperty, ListProperty
 from kivymd.icon_definitions import md_icons
-from kivymd.uix.card import MDCard
 
 import config
-from BasicMenus import PopUpMenuBase
+from BasicMenus import PopUpMenuBase, BoxLayoutButton
 
 
-class CustomIconItem(MDCard):
+class CustomIconItem(BoxLayoutButton):
     radius = [0, 0, 0, 0]
     padding = [dp(5), dp(5), dp(5), dp(5)]
     spacing = dp(5)
-    md_bg_color = [0.12941176470588237, 0.12941176470588237, 0.12941176470588237, 1.0]
 
     icon_name = StringProperty('android')
     color = ListProperty([0, 0, 0, 1])

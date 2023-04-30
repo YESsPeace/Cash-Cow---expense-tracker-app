@@ -17,9 +17,12 @@
                 height: dp(60)
 
                 MDIconButton:
-                    icon: ''
+                    icon: 'menu'
                     size_hint_y: 1
                     width: self.height
+
+                    on_release:
+                        app.root.ids.nav_drawer.set_state("open")
 
                 MDLabel:
                     id: total_balance_label
