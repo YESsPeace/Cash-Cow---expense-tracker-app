@@ -1,3 +1,5 @@
+#: import webbrowser webbrowser
+
 <DrawerClickableItem>:
     md_bg_color: [.16, .16, .16, 1]
 
@@ -8,6 +10,7 @@
     id: nav_drawer
     radius: (0, 0, 0, 0)
     width: "240dp"
+    orientation: 'vertical'
 
     MDNavigationDrawerMenu:
         spacing: dp(5)
@@ -24,3 +27,56 @@
                 app.root.open_menu_for_export_data()
                 root.set_state('close')
 
+    MDBoxLayout:
+        size_hint: 1, None
+        adaptive_height: True
+        orientation: 'vertical'
+
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            orientation: 'horizontal'
+
+            MDLabel:
+                text: 'About'
+                font_style: 'H6'
+
+        BoxLayoutButton:
+            spacing: dp(5)
+
+            on_release:
+                webbrowser.open('https://github.com/YESsPeace/Cash-Cow---expense-tracker-app')
+
+            MDIcon:
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                icon: 'information-outline'
+
+            MDLabel:
+                text: 'CashCow 1.0'
+
+        BoxLayoutButton:
+            spacing: dp(5)
+
+            on_release:
+                webbrowser.open('https://boosty.to/yesspeace/donate')
+
+            MDIcon:
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                icon: 'hand-coin'
+
+            MDLabel:
+                text: 'Support me'
+
+
+        BoxLayoutButton:
+            spacing: dp(5)
+
+            on_release:
+                webbrowser.open('https://github.com/YESsPeace/Cash-Cow---expense-tracker-app')
+
+            MDIcon:
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                icon: 'code-tags'
+
+            MDLabel:
+                text: 'Source code'
