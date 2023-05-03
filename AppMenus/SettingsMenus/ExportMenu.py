@@ -1,20 +1,39 @@
-import os.path
+import pathlib
 import shutil
 import sys
 
-from kivy.utils import platform
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.screen import MDScreen
 
 from BasicMenus.CustomWidgets import TopNotification
 
 
+def get_download_path():
+    if sys.platform == 'win32':
+        return str(pathlib.Path.home() / 'Downloads')
+
+    elif sys.platform == 'android':
+        return str(pathlib.Path.home() / 'Download')
+
+    elif sys.platform.startswith('linux'):
+        return str(pathlib.Path.home() / 'Downloads')
+
+    else:
+        return str(pathlib.Path.home())
+
+
 class ExportMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.file_manager = None
-        self.path = os.path.dirname(os.path.abspath(sys.argv[0]).replace('\\', '/'))
+        # self.path = os.path.dirname(os.path.abspath(sys.argv[0]).replace('\\', '/'))
+        self.path = get_download_path()
         print(self.path)
+
+    def import_button_clicked(self):
+        self.open_file_manager()
+
+    def export_button_clicked(self):
+        self.export_app_data()
 
     def open_file_manager(self):
         def exit_manager(*args):
@@ -35,25 +54,23 @@ class ExportMenu(MDScreen):
         self.file_manager.show(self.path)
 
     def import_app_data(self, path_to_file, *args):
-        filename = 'AppDataBase.db'
         try:
-            shutil.copy(path_to_file, filename)
+            shutil.copy(path_to_file, 'AppDataBase.db')
             TopNotification(text=f'Everything went well, please restart the app').open()
 
         except:
             TopNotification(text=f'Something went wrong').open()
 
-    def export_app_data(self):
+    def export_app_data(self, path_to_file=None):
+        if path_to_file is None:
+            path_to_file = self.path
+
         filename = 'AppDataBase.db'
-        path = 'Cash_cow.db'
 
         try:
-            if platform == 'android':
-                path = '/storage/emulated/0/Download/Cash_cow.db'
+            shutil.copy(filename, path_to_file + '/Cash-Cow.db')
 
-            shutil.copy(filename, path)
-
-            TopNotification(text=f'File {filename} exported to Download').open()
+            TopNotification(text=f'File Cash-Cow.db exported to {path_to_file}').open()
 
         except:
             TopNotification(text='Something went wrong').open()
