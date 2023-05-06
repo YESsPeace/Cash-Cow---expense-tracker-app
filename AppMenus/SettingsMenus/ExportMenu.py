@@ -1,31 +1,28 @@
+import os
 import pathlib
 import shutil
 import sys
+from plyer import storagepath
 
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.screen import MDScreen
 
-from BasicMenus.CustomWidgets import TopNotification
+from BasicMenus.CustomWidgets import TopNotification, ErrorNotification
 
 
 def get_download_path():
-    if sys.platform == 'win32':
-        return str(pathlib.Path.home() / 'Downloads')
+    try:
+        return str(storagepath.get_downloads_dir())
 
-    elif sys.platform == 'android':
-        return str(pathlib.Path.home() / 'Download')
+    except Exception as error:
+        ErrorNotification(text=f"Error: {error}").open()
 
-    elif sys.platform.startswith('linux'):
-        return str(pathlib.Path.home() / 'Downloads')
-
-    else:
-        return str(pathlib.Path.home())
+        return str(os.path.dirname(os.path.abspath(sys.argv[0]).replace('\\', '/')))
 
 
 class ExportMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.path = os.path.dirname(os.path.abspath(sys.argv[0]).replace('\\', '/'))
         self.path = get_download_path()
         print(self.path)
 
@@ -45,21 +42,25 @@ class ExportMenu(MDScreen):
             if path[-3:] == '.db':
                 self.import_app_data(path)
 
-        self.file_manager = MDFileManager(
-            exit_manager=exit_manager,
-            select_path=select_path,
-            preview=False
-        )
+        try:
+            self.file_manager = MDFileManager(
+                exit_manager=exit_manager,
+                select_path=select_path,
+                preview=False
+            )
 
-        self.file_manager.show(self.path)
+            self.file_manager.show(self.path)
+
+        except Exception as error:
+            ErrorNotification(text=f"Error: {error}").open()
 
     def import_app_data(self, path_to_file, *args):
         try:
             shutil.copy(path_to_file, 'AppDataBase.db')
             TopNotification(text=f'Everything went well, please restart the app').open()
 
-        except:
-            TopNotification(text=f'Something went wrong').open()
+        except Exception as error:
+            ErrorNotification(text=f"Error: {error}").open()
 
     def export_app_data(self, path_to_file=None):
         if path_to_file is None:
@@ -72,5 +73,5 @@ class ExportMenu(MDScreen):
 
             TopNotification(text=f'File Cash-Cow.db exported to {path_to_file}').open()
 
-        except:
-            TopNotification(text='Something went wrong').open()
+        except Exception as error:
+            ErrorNotification(text=f"Error: {error}").open()
