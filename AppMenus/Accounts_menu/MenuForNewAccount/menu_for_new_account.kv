@@ -97,9 +97,10 @@
 
                 BoxLayoutButton:
                     orientation: 'vertical'
+                    ripple_behavior: root.item.get('new') if not root.item.get('new') is None else False
 
                     on_release:
-                        root.change_account_type()
+                        if self.ripple_behavior: root.change_account_type()
 
                     MDLabel:
                         text: 'Type'
