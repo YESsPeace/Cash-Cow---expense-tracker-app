@@ -5,7 +5,7 @@ import sqlite3 as sq
 def sql_start() -> None:
     base = sq.connect('AppDataBase.db')
     if base:
-        print('Date base connected OK')
+        print('# [Database] connected and created OK')
 
     # categories_db
     base.execute(
@@ -207,6 +207,51 @@ def transaction_db_write(trans_data_dict):
             balance_difference=account[1]
 
         )
+
+
+def get_transaction_data_by_id(transaction_id: int) -> dict:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
+    cur.execute("SELECT * FROM transaction_db WHERE id = ?", (transaction_id,))
+    transaction = cur.fetchone()
+
+    if transaction:
+        id, date, type, from_id, to_id, from_SUM, from_currency, to_SUM, to_currency, note = transaction
+        return dict(id=id, Date=date, Type=type,
+                    From=from_id, To=to_id,
+                    FromSUM=float(from_SUM), FromCurrency=from_currency,
+                    ToSUM=float(to_SUM), ToCurrency=to_currency, Comment=note)
+
+
+    else:
+        print("# transaction not found")
+
+
+def delete_transaction(transaction_id: int) -> None:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
+    if not type(transaction_id) is int:
+        print('# transaction_id is not int')
+        return
+
+    transaction_data = get_transaction_data_by_id(transaction_id)
+
+    if not transaction_data is None:
+        print(*transaction_data.items(), sep='\n')
+
+        cur.execute("DELETE FROM transaction_db WHERE id = ?", (transaction_id,))
+
+        base.commit()
+
+        for account in {transaction_data['From']: transaction_data['FromSUM'],
+                        transaction_data['To']: -transaction_data['ToSUM']}.items():
+            accounts_and_savings_db_edit_balance(
+                db_name='savings_db' if account[0].split('_')[0] == 'savings' else 'accounts_db',
+                item_id=account[0],
+                balance_difference=account[1]
+            )
 
 
 """

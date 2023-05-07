@@ -1,9 +1,15 @@
+import threading
+from functools import partial
+
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.graphics import Color, Rectangle
 from kivy.properties import NumericProperty, DictProperty
 
 import config
-from BasicMenus import PopUpMenuBase
+from AppMenus.other_func import update_menus
+from BasicMenus import PopUpMenuBase, TopNotification
+from database import delete_transaction
 
 
 class menu_for_transaction_info(PopUpMenuBase):
@@ -17,6 +23,18 @@ class menu_for_transaction_info(PopUpMenuBase):
         with self.canvas.before:
             Color(0, 0, 0, .5)
             Rectangle(size=config.main_screen_size, pos=config.main_screen_pos)
+
+    def delete_button_pressed(self, *args):
+        # deleting transaction
+        threading.Thread(target=delete_transaction, args=(self.transaction_id,)).start()
+
+        # updating menus
+        Clock.schedule_once(partial(update_menus, self.transaction_data['Date'], None))
+
+        self.del_myself()
+
+    def edit_date_button_pressed(self, *args):
+        TopNotification(text='Will be added in new versions').open()
 
     def get_data_right_format(self) -> tuple:
         first_transaction_item = (

@@ -58,7 +58,7 @@
 
             TextInput:
                 id: note_input
-                text: 'notes'
+                text: root.transaction_data['Comment'] if root.transaction_data['Comment'] != '' else 'notes'
                 halign: 'center'
                 multiline: False
                 size_hint_y: .35
@@ -76,10 +76,15 @@
             MDBoxLayout:
                 orientation: 'vertical'
 
+
+
                 MDIconButton:
                     pos_hint: {'center_x': 0.5}
                     icon: 'delete'
                     md_bg_color: [.7, .3, .3, 1]
+
+                    on_release:
+                        root.delete_button_pressed()
 
                 MDLabel:
                     text: 'Delete'
@@ -88,12 +93,16 @@
             MDBoxLayout:
                 orientation: 'vertical'
 
+
+
                 MDIconButton:
                     pos_hint: {'center_x': 0.5}
                     icon: 'calendar'
                     md_bg_color: [.66, .66, .66, 1]
 
+                    on_release:
+                        root.edit_date_button_pressed()
+
                 MDLabel:
                     text: 'Edit date'
                     halign: 'center'
-

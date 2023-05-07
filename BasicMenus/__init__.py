@@ -1,4 +1,4 @@
-from BasicMenus.CustomWidgets import BoxLayoutButton
+from BasicMenus.CustomWidgets import BoxLayoutButton, TopNotification
 from BasicMenus.MenuForEditItemBase import MenuForEditItemBase
 from BasicMenus.MenuForTransactionAddingBase import MenuForTransactionAddingBase
 from BasicMenus.PopUpMenuBase import PopUpMenuBase
