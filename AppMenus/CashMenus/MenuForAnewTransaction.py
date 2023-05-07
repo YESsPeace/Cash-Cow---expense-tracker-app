@@ -1,3 +1,7 @@
+import threading
+from functools import partial
+
+from kivy.clock import Clock
 from kivy.graphics import Rectangle
 from kivy.graphics.context_instructions import Color
 from kivy.properties import NumericProperty, DictProperty, BooleanProperty
@@ -7,7 +11,7 @@ import config
 from AppMenus.other_func import calculate, update_menus
 from BasicMenus import PopUpMenuBase
 from BasicMenus.CustomWidgets import TopNotification
-from database import transaction_db_write
+from database import transaction_db_write, edit_transaction
 
 
 class menu_for_a_new_transaction(PopUpMenuBase):
@@ -140,19 +144,21 @@ class menu_for_a_new_transaction(PopUpMenuBase):
     def done_button_pressed(self):
         self.get_data_right_format()
 
-        if self.edit_transaction_mode is True:
-            print('self.edit_transaction_mode is True')
-            print(self.transaction_id)
-            print(*self.transaction_data.items(), sep='\n')
-
-            TopNotification(text='Transaction editing will be in future versions').open()
-            return
-
         if self.transaction_data['FromSUM'] <= 0 or self.transaction_data['ToSUM'] <= 0:
             TopNotification(text="Incorrect transaction sum").open()
             return
 
-        self.write_transaction()
+        if self.edit_transaction_mode is True:
+            # editing transaction data
+            edit_transaction(self.transaction_id, self.transaction_data)
+
+            # updating menus
+            update_menus(self.transaction_data['Date'])
+
+            self.del_myself()
+
+        else:
+            self.write_transaction()
 
     def write_transaction(self):
         # writing

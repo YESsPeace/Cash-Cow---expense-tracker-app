@@ -239,8 +239,6 @@ def delete_transaction(transaction_id: int) -> None:
     transaction_data = get_transaction_data_by_id(transaction_id)
 
     if not transaction_data is None:
-        print(*transaction_data.items(), sep='\n')
-
         cur.execute("DELETE FROM transaction_db WHERE id = ?", (transaction_id,))
 
         base.commit()
@@ -252,6 +250,42 @@ def delete_transaction(transaction_id: int) -> None:
                 item_id=account[0],
                 balance_difference=account[1]
             )
+
+
+def edit_transaction(transaction_id: int, transaction_data: dict) -> None:
+    base = sq.connect('AppDataBase.db')
+    cur = base.cursor()
+
+    if not type(transaction_id) is int:
+        print("# transaction_id is not int it's", type(transaction_id))
+        return
+
+    if not type(transaction_id) is int:
+        print("# transaction_data is not dict it's", type(transaction_data))
+        return
+
+    old_transaction_data = get_transaction_data_by_id(transaction_id)
+
+    cur.execute(
+        f"UPDATE transaction_db SET "
+        f"{'date = ?, type = ?, from_id = ?, to_id = ?, from_SUM = ?, from_currency = ?, to_SUM = ?, to_currency = ?, note = ?'} WHERE id = ?",
+        (transaction_data['Date'], transaction_data['Type'], transaction_data['From'], transaction_data['To'],
+         transaction_data['FromSUM'], transaction_data['FromCurrency'], transaction_data['ToSUM'],
+         transaction_data['ToCurrency'],
+         transaction_data['Comment'],
+         transaction_id))
+
+    base.commit()
+
+    for account in {old_transaction_data['From']: (old_transaction_data['FromSUM'] - transaction_data['FromSUM']),
+                    old_transaction_data['To']: -(old_transaction_data['ToSUM'] - transaction_data['FromSUM'])}.items():
+        accounts_and_savings_db_edit_balance(
+            db_name='savings_db' if account[0].split('_')[0] == 'savings' else 'accounts_db',
+            item_id=account[0],
+            balance_difference=account[1]
+        )
+
+    base.commit()
 
 
 """

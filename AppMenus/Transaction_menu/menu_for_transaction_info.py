@@ -26,10 +26,10 @@ class menu_for_transaction_info(PopUpMenuBase):
 
     def delete_button_pressed(self, *args):
         # deleting transaction
-        threading.Thread(target=delete_transaction, args=(self.transaction_id,)).start()
+        delete_transaction(self.transaction_id)
 
         # updating menus
-        Clock.schedule_once(partial(update_menus, self.transaction_data['Date'], None))
+        update_menus(self.transaction_data['Date'])
 
         self.del_myself()
 
