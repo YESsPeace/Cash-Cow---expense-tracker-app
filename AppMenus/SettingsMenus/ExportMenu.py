@@ -24,7 +24,7 @@ class ExportMenu(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.path = get_download_path()
-        print(self.path)
+        print(f'# [Downloads path] {self.path}')
 
     def import_button_clicked(self):
         self.open_file_manager()

@@ -9,7 +9,7 @@ import config
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Categories_menu.Menu_For_new_category.icon_choice_menu import icon_choice_menu
-from AppMenus.other_func import update_total_balance_in_UI, update_menus
+from AppMenus.other_func import update_menus
 from BasicMenus import MenuForEditItemBase
 from BasicMenus.CustomWidgets import TopNotification, BoxLayoutButton
 from database import account_db_add, savings_db_add, savings_db_edit, accounts_db_edit, db_data_delete
@@ -52,7 +52,6 @@ class menu_for_new_account(MenuForEditItemBase):
         elif self.item['type'] == 'savings':
             savings_db_add(self.item)
 
-        update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         TopNotification(text="Account created").open()
@@ -67,7 +66,6 @@ class menu_for_new_account(MenuForEditItemBase):
         elif self.item['type'] == 'savings':
             savings_db_edit(self.item)
 
-        update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         TopNotification(text="Account edited").open()
@@ -85,7 +83,6 @@ class menu_for_new_account(MenuForEditItemBase):
             item_id=self.item['ID'],
         )
 
-        update_total_balance_in_UI()
         update_menus(str(config.current_menu_date))
         self.quit_from_menu()
         TopNotification(text="Account deleted").open()

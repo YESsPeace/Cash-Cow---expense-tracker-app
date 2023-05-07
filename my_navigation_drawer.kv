@@ -1,7 +1,7 @@
 #: import webbrowser webbrowser
 
 <DrawerClickableItem>:
-    md_bg_color: [.16, .16, .16, 1]
+    md_bg_color: [.2, .2, .2, 1]
 
     MDLabel:
         text: root.button_name
@@ -24,13 +24,14 @@
         DrawerClickableItem:
             button_name: 'Settings'
             on_release:
-                app.root.open_menu_for_export_data()
+                app.root.ids.main_screen_manager.current = 'export'
                 root.set_state('close')
 
     MDBoxLayout:
         size_hint: 1, None
         adaptive_height: True
         orientation: 'vertical'
+        spacing: dp(5)
 
         MDBoxLayout:
             size_hint_y: None
@@ -41,11 +42,11 @@
                 text: 'About'
                 font_style: 'H6'
 
-        BoxLayoutButton:
+        MDCard:
+            size_hint_y: None
+            height: dp(50)
+            padding: dp(5)
             spacing: dp(5)
-
-            on_release:
-                webbrowser.open('https://github.com/YESsPeace/Cash-Cow---expense-tracker-app')
 
             MDIcon:
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -56,6 +57,7 @@
 
         BoxLayoutButton:
             spacing: dp(5)
+            md_bg_color: [.2, .2, .2, 1]
 
             on_release:
                 webbrowser.open('https://boosty.to/yesspeace/donate')
@@ -70,6 +72,7 @@
 
         BoxLayoutButton:
             spacing: dp(5)
+            md_bg_color: [.2, .2, .2, 1]
 
             on_release:
                 webbrowser.open('https://github.com/YESsPeace/Cash-Cow---expense-tracker-app')

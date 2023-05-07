@@ -32,7 +32,7 @@ class menu_for_choice_new_account_type(PopUpMenuBase):
 
         app = App.get_running_app()
 
-        app.root.get_screen('menu_for_new_account').ids.account_type_label.text = self.account_info['type']
+        app.root.ids.main_screen_manager.get_screen('menu_for_new_account').ids.account_type_label.text = self.account_info['type']
 
         self.del_myself()
 

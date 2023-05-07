@@ -4,7 +4,7 @@ from kivy.properties import NumericProperty, DictProperty, BooleanProperty
 from kivymd.uix.pickers import MDDatePicker
 
 import config
-from AppMenus.other_func import calculate, update_total_balance_in_UI, update_menus
+from AppMenus.other_func import calculate, update_menus
 from BasicMenus import PopUpMenuBase
 from BasicMenus.CustomWidgets import TopNotification
 from database import transaction_db_write
@@ -160,5 +160,4 @@ class menu_for_a_new_transaction(PopUpMenuBase):
         self.del_myself()
 
         # updating menus
-        update_total_balance_in_UI()
         update_menus(date_of_changes=self.transaction_data['Date'])

@@ -53,8 +53,11 @@ def load_month(self, date, menu):
         self.ids.top_bar.md_bg_color = [.33, .33, .33, 1]
 
 
-def update_menus(date_of_changes: str = None):
+def update_menus(date_of_changes: str = None, *args):
     app = App.get_running_app()
+
+    for menu_id in ['AccountsMenu_id', 'CategoriesMenu', 'Transaction_menu', 'BudgetMenu']:
+        getattr(app.root.ids.main.ids, menu_id).update_total_accounts_balance()
 
     app.root.ids.main.ids.AccountsMenu_id.ids.AccountsMenu_main_id.refresh_rv_data()
 
@@ -75,10 +78,3 @@ def update_menus(date_of_changes: str = None):
             if getattr(getattr(app.root.ids.main.ids, menu_id).ids, swiper_id).has_screen(date_of_changes):
                 getattr(getattr(app.root.ids.main.ids, menu_id).ids, swiper_id).get_screen(
                     date_of_changes).refresh_rv_data()
-
-
-def update_total_balance_in_UI():
-    app = App.get_running_app()
-
-    for menu_id in ['AccountsMenu_id', 'CategoriesMenu', 'Transaction_menu', 'BudgetMenu']:
-        getattr(app.root.ids.main.ids, menu_id).update_total_accounts_balance()

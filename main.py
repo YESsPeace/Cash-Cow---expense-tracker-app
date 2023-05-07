@@ -1,19 +1,17 @@
-from kivymd.uix.navigationdrawer import MDNavigationDrawer
-
-from BasicMenus.CustomWidgets import TopNotification, BoxLayoutButton
-from database import sql_start
-
-sql_start()
-
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import Clock, StringProperty
 from kivy.uix.screenmanager import SlideTransition
 from kivymd.app import MDApp
 from kivymd.uix.bottomnavigation import MDBottomNavigation
+from kivymd.uix.navigationdrawer import MDNavigationDrawer
 from kivymd.uix.screen import MDScreen
 
 import config
+from BasicMenus import TopNotification, BoxLayoutButton
+from database import sql_start
+
+sql_start()
 
 from AppMenus import *
 
@@ -126,14 +124,14 @@ class MainSrceen(MDScreen):
     def add_menu_for_new_account(self):
         app = App.get_running_app()
 
-        app.root.add_widget(
+        app.root.ids.main_screen_manager.add_widget(
             menu_for_new_account(
                 id='menu_for_new_account',
                 name='menu_for_new_account'
             ),
         )
 
-        app.root.current = 'menu_for_new_account'
+        app.root.ids.main_screen_manager.current = 'menu_for_new_account'
 
     def update_month_menu_group(self):
         month_screen_name = str(config.current_menu_date)[:-3]
@@ -182,10 +180,7 @@ class My_BottomNavigation(MDBottomNavigation):
 
 
 class Manager(MDScreen):
-    def open_menu_for_export_data(self):
-        if not self.ids.main_screen_manager.has_screen('export'):
-            self.ids.main_screen_manager.add_widget(ExportMenu(name='export'))
-        self.ids.main_screen_manager.current = 'export'
+    pass
 
 
 class MyNavigationDrawer(MDNavigationDrawer):
