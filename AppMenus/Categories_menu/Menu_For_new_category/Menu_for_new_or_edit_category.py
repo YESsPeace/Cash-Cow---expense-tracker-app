@@ -8,7 +8,7 @@ from database import db_data_delete, db_data_edit, db_data_add
 
 class menu_for_new_or_edit_category(MenuForEditItemBase):
     def __init__(self, *args, **kwargs):
-        self.item = config.category_item
+        self.item = config.category_item.copy()
 
         print(*self.item.items(), sep='\n')
 
@@ -16,6 +16,10 @@ class menu_for_new_or_edit_category(MenuForEditItemBase):
 
     def complete_pressed(self, *args):
         self.item['Name'] = self.ids.category_name_text_field.text
+
+        if len(self.item['Name']) == 0:
+            TopNotification(text="Incorrect name").open()
+            return
 
         if self.item.get('new') is True:
             self.create_category()

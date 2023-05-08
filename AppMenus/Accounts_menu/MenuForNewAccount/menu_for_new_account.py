@@ -33,6 +33,10 @@ class menu_for_new_account(MenuForEditItemBase):
 
         self.item['Description'] = self.ids.account_description_text_field.text
 
+        if len(self.item['Name']) == 0:
+            TopNotification(text="Incorrect name").open()
+            return
+
         if self.item.get('new') is True:
             self.create_account()
 
