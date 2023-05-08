@@ -1,7 +1,5 @@
 from AppMenus.Accounts_menu.AccountsMenu import AccountsMenu
 from AppMenus.Accounts_menu.AccountsMenu_main import AccountsMenu_main
-from AppMenus.Accounts_menu.AccountsMenu_debts import AccountsMenu_debts
-from AppMenus.Accounts_menu.AccountsMenu_stat import AccountsMenu_stat
 from AppMenus.Accounts_menu.MenuForNewAccount.balance_writer import balance_writer
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_choice_new_account_type import menu_for_choice_new_account_type
 from AppMenus.Accounts_menu.MenuForNewAccount.menu_for_new_account import menu_for_new_account

@@ -202,8 +202,6 @@ class MoneyStatApp(MDApp):
         # Accounts menu
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu.kv')
         Builder.load_file('AppMenus/Accounts_menu/accounts_menu_main.kv')
-        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_debts.kv')
-        Builder.load_file('AppMenus/Accounts_menu/accounts_menu_stat.kv')
 
         # MenuForNewAccount
         Builder.load_file('AppMenus/Accounts_menu/MenuForNewAccount/menu_for_choice_new_account_type.kv')
