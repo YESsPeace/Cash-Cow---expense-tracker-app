@@ -21,7 +21,8 @@ for more information about the school project.
 
 To install the application, simply download the
 appropriate file from
-the [latest release](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases)
+the [latest release](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases) or 
+click on this [link](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases/download/release/CashCow-1.0.apk)
 
 ## Features
 
@@ -102,7 +103,8 @@ ____
 
 # Установка
 
-Для того, чтобы установить приложения, просто скачайте соответсвующий файл из [последнего релиза](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases)
+Для того, чтобы установить приложения, просто скачайте соответсвующий файл из [последнего релиза](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases) или 
+кликнув на эту [ссылку](https://github.com/YESsPeace/Cash-Cow---expense-tracker-app/releases/download/release/CashCow-1.0.apk)
 
 # Функционал
 
